@@ -5,7 +5,6 @@
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(eigenbrot);
-
     QApplication app(argc, argv);
     EigenbrotWindow *mainWin = EigenbrotWindow::instance();
 #if defined(Q_OS_SYMBIAN)

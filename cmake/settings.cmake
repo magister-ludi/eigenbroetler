@@ -1,6 +1,14 @@
 # -*- cmake -*-
 # encoding: utf-8
 
+set(TOP ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(ARCHIVE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${TOP})
+set(EXTERNALS_DIR ${TOP}/external_dependencies)
+set(INCLUDE_DIR ${EXTERNALS_DIR}/include)
+
 if(UNIX)
   set(CMAKE_GENERATOR "Unix Makefiles")
   set(COMMON_FLAGS "-ansi -DSTDC_HEADERS -Wall -Werror -W -Wshadow -Wformat -Wpointer-arith -Wcast-align -Wwrite-strings")

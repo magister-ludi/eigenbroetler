@@ -11,12 +11,10 @@ set(${RubyLib}_Sources
   ${RubySource}/rb_complex_array.cpp
   )
 
-show(RUBY_INCLUDE_PATH)
-show(CPP_INCLUDE_PATH)
 include_directories(${RUBY_INCLUDE_PATH} ${CPP_INCLUDE_PATH})
 
 add_library(${RubyLib} SHARED ${${RubyLib}_Sources})
-target_link_libraries(${RubyLib} ${RUBY_LIBRARY} ${CppLibName})
+target_link_libraries(${RubyLib} ${RUBY_LIBRARY} ${QT_LIBRARIES} ${CppLibName})
 set_target_properties(${RubyLib}
   PROPERTIES
   COMPILE_FLAGS "-Wno-shadow"

@@ -25,4 +25,26 @@ describe ComplexArray, "construction" do
       end
     end
   end
+  it "should fail and set an error if trying to read a non-existent file" do
+    fname = "a non-existent file"
+    m = ComplexArray.new(fname)
+    m.valid?.should eq false
+    m.err.should eq "\"#{fname}\" doesn't appear to exist!"
+  end
+  it "should load a bitmapped image successfully" do
+    fname = File.join(File.dirname(__FILE__), 'about_icon.ppm')
+    m = ComplexArray.new(fname)
+    puts m.err unless m.valid?
+    m.valid?.should eq true
+    m.width.should eq 110
+    m.height.should eq 110
+  end
+  it "should load a FITS image successfully" do
+    fname = File.join(File.dirname(__FILE__), '5eb4572e81.fit')
+    m = ComplexArray.new(fname)
+    puts m.err unless m.valid?
+    m.valid?.should eq true
+    m.width.should eq 240
+    m.height.should eq 180
+  end
 end
