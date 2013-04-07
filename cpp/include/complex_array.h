@@ -3,7 +3,6 @@
 
 #include <complex>
 #include <QString>
-#include <QTextStream>
 
 typedef std::complex<double> Complex;
 

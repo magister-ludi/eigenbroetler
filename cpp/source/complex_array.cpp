@@ -41,27 +41,19 @@ ComplexArray::ComplexArray(QString const& source):
     //file(QFile::decodeName(source.toUtf8())),
     fft(false)
 {
-    if (!QFile::exists(file)) {
-        QTextStream err(&errString);
-        err << "\"" << file << "\" doesn't appear to exist!";
-        return;
-    }
     QFile datafile(file);
     if (!datafile.exists(file)) {
-        QTextStream err(&errString);
-        err << "\"" << datafile.fileName() << "\" doesn't appear to exist!";
+        errString = QString(QObject::tr("\"%1\" doesn't appear to exist!")).arg(datafile.fileName());
         return;
     }
     int const BUFFER_SIZE = 20;
     char buffer[BUFFER_SIZE];
     if (!datafile.open(QIODevice::ReadOnly)) {
-        QTextStream err(&errString);
-        err << "Couldn't open \"" << file.constData() << "\" for reading";
+        errString = QString(QObject::tr("Couldn't open \"%1\" for reading")).arg(file);
+        return;
     }
     if (BUFFER_SIZE != datafile.read(buffer, BUFFER_SIZE)) {
-        std::cout << "line " << __LINE__ << std::endl;
-        QTextStream err(&errString);
-        err << "\"" << file << "\", unable to determine file type";
+        errString = QString(QObject::tr("Unable to determine file type of \"%1\"")).arg(file);
         return;
     }
     datafile.close();
@@ -77,8 +69,7 @@ void ComplexArray::readImage()
     QImage img;
 
     if (!img.load(file)) {
-        QTextStream err(&errString);
-        err << "File \"" << file << "\" load failed: unsupported format?";
+        errString = QString(QObject::tr("File \"%1\" load failed: unsupported format?")).arg(file);
         return;
     }
     w = img.width();
@@ -110,20 +101,18 @@ void ComplexArray::readFITS()
     Complex *ptr;
     size_t ndata;
 
-    errString.clear();
-    QTextStream err(&errString);
     if (fits_open_file(&f, file.toUtf8().constData(), READONLY, &status)) {
-        err << "Can't open " << file << " for reading";
+        errString = QString(QObject::tr("Can't open \"%1\" for reading")).arg(file);
         return;
     }
     strcpy(key, "NAXIS");
     if (fits_read_key_lng(f, key, &naxis, comment, &status)) {
-        err << file << " has no NAXIS key";
+        errString = QString(QObject::tr("\"%1\" has no NAXIS key")).arg(file);
         return;
     }
     strcpy(key, "BITPIX");
     if (fits_read_key_lng(f, key, &bitpix, comment, &status)) {
-        err << file << " has no BITPIX key";
+        errString = QString(QObject::tr("\"%1\" has no BITPIX key")).arg(file);
         return;
     }
     axes = new long[naxis];
@@ -131,7 +120,7 @@ void ComplexArray::readFITS()
     for (long i = 0; i < naxis && i < 3; i++) {
         snprintf(key, 80, "NAXIS%ld", i + 1);
         if (fits_read_key_lng(f, key, &axes[i], comment, &status)) {
-            err << "Axis data missing for axis #" << i + 1 << " of " << naxis;
+            errString = QString(QObject::tr("Axis data missing for axis #%1 of %2")).arg(i + 1).arg(naxis);
             goto all_done;
         }
         switch (i) {
@@ -147,7 +136,7 @@ void ComplexArray::readFITS()
     ensure_capacity();
     lpData = new double[ndata];
     if (fits_read_img(f, TDOUBLE, 1, ndata, &nulval, lpData, &anynul, &status)) {
-        err << "The data in " << file << " are badly formatted";
+        errString = QString(QObject::tr("The data in \"%1\" are badly formatted")).arg(file);
         goto all_done;
     }
 

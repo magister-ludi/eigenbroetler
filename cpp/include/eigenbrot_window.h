@@ -4,33 +4,40 @@
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
+class QAction;
 class QCloseEvent;
+class QMdiArea;
+class QMenu;
 QT_END_NAMESPACE
 
 class EigenbrotWindow: public QMainWindow {
-    Q_OBJECT;
  public:
-    static EigenbrotWindow *instance();
-    ~EigenbrotWindow();
-protected:
-    void closeEvent(QCloseEvent *event);
- private:
     EigenbrotWindow();
+    ~EigenbrotWindow();
+ protected:
+    void closeEvent(QCloseEvent *event);
+private slots:
+    void newWindow();
+ private:
     EigenbrotWindow(EigenbrotWindow const&); // not implemented
     EigenbrotWindow& operator=(EigenbrotWindow const&); // not implemented
-    static EigenbrotWindow *win;
-};
 
-inline EigenbrotWindow *EigenbrotWindow::instance()
-{
-    if (!win)
-        win = new EigenbrotWindow();
-    return win;
-}
+    void constructActions();
+    void constructMenu();
+
+    QMdiArea *mdiArea;
+    QAction *newAction;
+    QAction *openAction;
+    QAction *saveAsAction;
+    QAction *exitAction;
+
+    QMenu *fileMenu;
+
+    Q_OBJECT
+};
 
 inline EigenbrotWindow::~EigenbrotWindow()
 {
-    win = NULL;
 }
 
 #endif /* EIGENBROT_WINDOW_INCLUDE */

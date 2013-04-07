@@ -1,4 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
+    <file>resources/eigenbg.png</file>
+    <file>resources/new.png</file>
+    <file>resources/open.png</file>
+    <file>resources/save.png</file>
 </qresource>
 </RCC>

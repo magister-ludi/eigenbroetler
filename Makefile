@@ -6,6 +6,7 @@ CURR_DIR := $(shell pwd)
 BUILDDIR := $(CURR_DIR)/build
 DEBUG_DIR := $(BUILDDIR)/Debug
 RELEASE_DIR := $(BUILDDIR)/Release
+WithRuby := True
 ifndef WithRuby
  WithRuby := False
 endif
