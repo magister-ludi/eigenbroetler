@@ -3,13 +3,16 @@
 #include <QImage>
 #include <QPainter>
 #include <QPaintEvent>
+#include <array_window.h>
+#include <iostream>
 
-Plotter::Plotter(int w, int h):
+Plotter::Plotter(int w, int h, ArrayWindow *listener):
     QWidget(NULL),
     pixmap(w, h, QImage::Format_ARGB32),
-    painter(new QPainter(&pixmap))
+    painter(new QPainter(&pixmap)),
+    owner(listener)
 {
-    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHint(QPainter::Antialiasing, false);
     painter->setRenderHint(QPainter::TextAntialiasing);
     painter->setBrush(Qt::NoBrush);
     setFixedSize(w, h);
@@ -17,8 +20,8 @@ Plotter::Plotter(int w, int h):
     setBackground(Qt::black);
     clear();
 
-    drawLine(0, 0, w, h);
-    drawLine(0, h, w, 0);
+    if (owner)
+        setMouseTracking(true);
 }
 
 Plotter::~Plotter()
@@ -80,4 +83,39 @@ QColor Plotter::getBackground() const
 void Plotter::drawLine(int x1, int y1, int x2, int y2)
 {
     painter->drawLine(x1, y1, x2, y2);
+}
+
+void Plotter::drawImage(int xx, int yy, QImage const& img, bool centred)
+{
+    if (centred) {
+        xx -= img.width();
+        yy -= img.height();
+    }
+    QRectF i_r(0, 0, img.width(), img.height());
+    QRectF to_r(xx, yy, img.width(), img.height());
+#if 0
+    // TODO: check whether adjustments are necessary
+    if (xx < 0) {
+        i_r.setLeft(-xx);
+        i_r.setWidth(i_r.getWidth() - xx);
+        to_r.setLeft(0);
+        to_r.setWidth(to_r.getWidth() - xx);
+        xx = 0;
+    }
+    if (yy < 0) {
+        i_r.setTop(-yy);
+        i_r.setHeight(i_r.getHeight() - yy);
+        to_r.setTop(0);
+        to_r.setHeight(to_r.getHeight() - yy);
+        yy = 0;
+    }
+#endif
+    painter->drawImage(to_r, img, i_r);
+}
+
+void Plotter::mouseMoveEvent(QMouseEvent *evt)
+{
+    if (owner)
+        owner->mouseData(this, evt);
+    evt->accept();
 }

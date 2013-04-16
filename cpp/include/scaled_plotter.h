@@ -5,15 +5,15 @@
 
 class ScaledPlotter: public Plotter {
  public:
-    ScaledPlotter(int w, int h);
+    ScaledPlotter(int w, int h, ArrayWindow *listener = NULL);
  private:
     ScaledPlotter(); // not implemented
     ScaledPlotter(ScaledPlotter const&); // not implemented
     ScaledPlotter& operator=(ScaledPlotter const&); // not implemented
 };
 
-inline ScaledPlotter::ScaledPlotter(int w, int h):
-                     Plotter(w, h)
+inline ScaledPlotter::ScaledPlotter(int w, int h, ArrayWindow *listener):
+                     Plotter(w, h, listener)
 {
 }
 

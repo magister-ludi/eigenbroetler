@@ -47,10 +47,11 @@ VALUE rb_complex_array_initialize(int argc, VALUE *argv, VALUE self)
 {
     Wrapper<ComplexArray> *w;
     Data_Get_Struct(self, Wrapper<ComplexArray>, w);
-    if (argc == 0) {
-        w->m = new ComplexArray;
-    }
-    else if (argc == 1) {
+    //if (argc == 0) {
+    //    w->m = new ComplexArray;
+    //}
+    //else if (argc == 1) {
+    if (argc == 1) {
         char const *fname = RSTRING_PTR(argv[0]);
         w->m = new ComplexArray(fname);
     }

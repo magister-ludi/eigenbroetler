@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     translator.load(QFile::decodeName(QString("eigenbrötler_de").toAscii()));
     app.installTranslator(&translator);
+
     EigenbrotWindow mainWin;
 #if defined(Q_OS_SYMBIAN)
     mainWin.showMaximized();

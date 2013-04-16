@@ -32,6 +32,7 @@ set(${CppLibName}_Sources
 )
 set(${CppLibName}_Headers
  ${TOP}/cpp/include/complex_array.h
+ ${TOP}/cpp/include/display_info.h
 )
 
 add_library(${CppLibName} SHARED ${${CppLibName}_Sources} ${${CppLibName}_Headers})
@@ -61,7 +62,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/eigenbrot_window.h
   ${TOP}/cpp/include/plotter.h
-  ${TOP}/cpp/include/scaled_plotter.h
+  #${TOP}/cpp/include/scaled_plotter.h
   )
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 

@@ -11,25 +11,30 @@ ifndef WithRuby
  WithRuby := False
 endif
 
+SUBDIR_CALL := $(MAKE)
+GENERATOR := "Unix Makefiles"
+#SUBDIR_CALL := ninja
+#GENERATOR := "Ninja"
+
 all:
 	$(MAKE) debug
 	$(MAKE) release
 
 debug:
 	$(MAKE) $(DEBUG_DIR)
-	cd $(DEBUG_DIR) && $(MAKE)
+	cd $(DEBUG_DIR) && $(SUBDIR_CALL)
 
 release:
 	$(MAKE) $(RELEASE_DIR)
-	cd $(RELEASE_DIR) && $(MAKE)
+	cd $(RELEASE_DIR) && $(SUBDIR_CALL)
 
 $(DEBUG_DIR):
 	@mkdir -p $@
-	cd $@ && cmake -DWithRuby=False -DCMAKE_BUILD_TYPE=Debug ../..
+	cd $@ && cmake -G $(GENERATOR) -DWithRuby=False -DCMAKE_BUILD_TYPE=Debug ../..
 
 $(RELEASE_DIR):
 	@mkdir -p $@
-	cd $@ && cmake -DWithRuby=$(WithRuby) -DCMAKE_BUILD_TYPE=Release ../..
+	cd $@ && cmake -G $(GENERATOR) -DWithRuby=$(WithRuby) -DCMAKE_BUILD_TYPE=Release ../..
 
 clean:
 	rm -rf eigenbrötler eigenbrötlerD

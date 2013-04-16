@@ -1,58 +1,46 @@
 
 #include <array_window_2d.h>
-#include <scaled_plotter.h>
-
 #include <QLineEdit>
-#include <QScrollArea>
-#include <QVBoxLayout>
+#include <QMouseEvent>
+#include <complex_array.h>
+#include <scaled_plotter.h>
 #include <iostream>
 
-ArrayWindow2D::ArrayWindow2D():
-    ArrayWindow()
+ArrayWindow2D::ArrayWindow2D(ComplexArray *cdata):
+    ArrayWindow(cdata)
 {
-   setContentsMargins (0, 0, 0, 0);
-   QVBoxLayout *verticalLayout = new QVBoxLayout(this);
-   verticalLayout->setContentsMargins (0, 0, 0, 0);
+    DisplayInfo::Palette img_palette = DisplayInfo::createPalette();
+    for (int i = 0; i < DisplayInfo::PALETTE_SIZE; ++i)
+        img_palette[i] = QColor(i, i, i).rgb();
+    QImage img = cdata->constructImage(DisplayInfo::REAL, DisplayInfo::LIN, img_palette);
+    left_plot->drawImage(0, 0, img);
+    img = cdata->constructImage(DisplayInfo::IMAG, DisplayInfo::LIN, img_palette);
+    right_plot->drawImage(0, 0, img);
 
-   QHBoxLayout *horizontalLayout = new QHBoxLayout();
-   horizontalLayout->setContentsMargins (0, 0, 0, 0);
-   verticalLayout->addLayout(horizontalLayout);
-
-   QVBoxLayout *pholder = new QVBoxLayout;
-   pholder->setAlignment(Qt::AlignTop | Qt::AlignRight);
-   horizontalLayout->addLayout(pholder);
-   palette_plot = new Plotter(40, 256);
-   pholder->addWidget(palette_plot);
-
-#define TESTSIZE 80
-
-   QWidget *plotLayout = new QWidget;
-   left_plot = new ScaledPlotter(TESTSIZE, TESTSIZE);
-   left_plot->setParent(plotLayout);
-   left_plot->move(0, 0);
-   right_plot = new ScaledPlotter(TESTSIZE, TESTSIZE);
-   right_plot->setParent(plotLayout);
-   right_plot->move(left_plot->width(), 0);
-
-   plotLayout->setFixedSize(left_plot->width() + right_plot->width(), left_plot->height());
-   QScrollArea *scrollArea = new QScrollArea;
-   scrollArea->setWidget(plotLayout);
-   horizontalLayout->addWidget(scrollArea);
-   scrollArea->setFrameStyle(QFrame::NoFrame);
-
-   QPalette status_palette;
-   QBrush brush(QColor(192, 255, 192, 255));
-   brush.setStyle(Qt::SolidPattern);
-   status_palette.setBrush(QPalette::Active, QPalette::Base, brush);
-   QLineEdit *status = new QLineEdit;
-   verticalLayout->addWidget(status);
-   status->setText(QString::fromUtf8("eigenbrötler up and running"));
-   status->setReadOnly(true);
-   status->setPalette(status_palette);
-   //status->setFrame(false);
+    palette_plot->setBackground(192, 192, 192);
+    palette_plot->clear();
+    palette_plot->setForeground(0, 0, 0);
+    for (int i = 0; i < DisplayInfo::PALETTE_SIZE; i += 64)
+        palette_plot->drawLine(0, i, palette_plot->width(), i);
+    for (int i = 0; i < DisplayInfo::PALETTE_SIZE; ++i) {
+        palette_plot->setForeground(img_palette[DisplayInfo::PALETTE_SIZE - i - 1]);
+        palette_plot->drawLine(10, i, palette_plot->width() - 10, i);
+    }
 }
 
 ArrayWindow2D::~ArrayWindow2D()
 {
 }
 
+void ArrayWindow2D::mouseData(QWidget const *w, QMouseEvent *evt)
+{
+    Complex const& val = d->value(evt->x(), w->height() - evt->y() + 1);
+    int xx = evt->x() - w->width() / 2;
+    int yy = w->height() / 2 - evt->y();
+
+    status->setText(QString().sprintf("(%d, %d): %+.2g %c i * %.2g",
+                                      xx, yy,
+                                      val.real(),
+                                      val.imag() < 0 ? '-' : '+',
+                                      fabs(val.imag())));
+}
