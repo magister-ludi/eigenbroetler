@@ -4,7 +4,6 @@
 #include <QMouseEvent>
 #include <complex_array.h>
 #include <scaled_plotter.h>
-#include <iostream>
 
 ArrayWindow2D::ArrayWindow2D(ComplexArray *cdata):
     ArrayWindow(cdata)

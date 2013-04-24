@@ -1,6 +1,7 @@
 #ifndef DISPLAY_INFO_INCLUDE
 #define DISPLAY_INFO_INCLUDE
 
+#include <global_defs.h>
 #include <QColor>
 #include <QVector>
 

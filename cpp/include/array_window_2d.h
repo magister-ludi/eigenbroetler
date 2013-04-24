@@ -1,6 +1,7 @@
 #ifndef ARRAY_WINDOW2D_INCLUDE
 #define ARRAY_WINDOW2D_INCLUDE
 
+#include <global_defs.h>
 #include <array_window.h>
 
 QT_BEGIN_NAMESPACE

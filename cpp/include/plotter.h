@@ -1,6 +1,7 @@
 #ifndef PLOTTER_INCLUDE
 #define PLOTTER_INCLUDE
 
+#include <global_defs.h>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE

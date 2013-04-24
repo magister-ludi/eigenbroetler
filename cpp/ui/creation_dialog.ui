@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>formulaDialog</class>
+ <widget class="QDialog" name="formulaDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>702</width>
+    <height>455</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Create image</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="Australia"/>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="mainWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>681</width>
+     <height>431</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="mainLayout">
+    <item>
+     <widget class="QLabel" name="formulaLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>For&amp;mula:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="formulaComboBox">
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="mainGridLayout" rowminimumheight="0,0" columnminimumwidth="0,0">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="sizeGroupBox">
+        <property name="title">
+         <string>Size</string>
+        </property>
+        <widget class="QWidget" name="sizeGridLayout_a">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>30</y>
+           <width>258</width>
+           <height>96</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="sizeVerticalLayout">
+          <item>
+           <layout class="QGridLayout" name="sizeGridLayout_b">
+            <item row="0" column="0">
+             <widget class="QLabel" name="widthLabel">
+              <property name="text">
+               <string>&amp;Width</string>
+              </property>
+              <property name="buddy">
+               <cstring>widthLineEdit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QCheckBox" name="squareCheckBox">
+              <property name="text">
+               <string>S&amp;quare</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="widthLineEdit">
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="heightLabel">
+              <property name="text">
+               <string>&amp;Height</string>
+              </property>
+              <property name="buddy">
+               <cstring>heightLineEdit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="heightLineEdit">
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="sizeVerticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QGroupBox" name="dimensionGroupBox">
+        <property name="title">
+         <string>Dimension</string>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>30</y>
+           <width>221</width>
+           <height>121</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="dimVerticalLayout">
+          <item>
+           <widget class="QRadioButton" name="oneDRadioButton">
+            <property name="text">
+             <string>&amp;1 dimension</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="twoDRadioButton">
+            <property name="text">
+             <string>&amp;2 dimensions</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="dimVerticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="multiGroupBox">
+        <property name="title">
+         <string>Multiple images</string>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget_4">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>30</y>
+           <width>241</width>
+           <height>141</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="multiVerticalLayout">
+          <item>
+           <layout class="QGridLayout" name="multiGridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="firstNLabel">
+              <property name="text">
+               <string>&amp;First:</string>
+              </property>
+              <property name="buddy">
+               <cstring>firstNLineEdit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="finalNLineEdit">
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="incrNLineEdit">
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="finalNLabel">
+              <property name="text">
+               <string>Fi&amp;nal:</string>
+              </property>
+              <property name="buddy">
+               <cstring>finalNLineEdit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="incrNabel">
+              <property name="text">
+               <string>In&amp;crement:</string>
+              </property>
+              <property name="buddy">
+               <cstring>incrNLineEdit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="firstNLineEdit">
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="multiviewCheckBox">
+              <property name="text">
+               <string>Mu&amp;ltiview window</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QGroupBox" name="buttonGroupBox">
+        <property name="title">
+         <string/>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>30</y>
+           <width>188</width>
+           <height>73</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="buttonHorizontalLayout">
+          <item>
+           <layout class="QVBoxLayout" name="buttonVerticalLayout">
+            <item>
+             <widget class="QDialogButtonBox" name="buttonBox">
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="standardButtons">
+               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="buttonVerticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Preferred</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>formulaComboBox</tabstop>
+  <tabstop>widthLineEdit</tabstop>
+  <tabstop>squareCheckBox</tabstop>
+  <tabstop>heightLineEdit</tabstop>
+  <tabstop>oneDRadioButton</tabstop>
+  <tabstop>twoDRadioButton</tabstop>
+  <tabstop>firstNLineEdit</tabstop>
+  <tabstop>finalNLineEdit</tabstop>
+  <tabstop>incrNLineEdit</tabstop>
+  <tabstop>multiviewCheckBox</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>oneDRadioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>698</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>twoDRadioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>122</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>697</x>
+     <y>135</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>squareCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>239</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widthLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>formulaComboBox</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>formulaChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>509</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>37</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>clicked(QAbstractButton*)</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>423</x>
+     <y>291</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>698</x>
+     <y>331</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>clicked(QAbstractButton*)</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>510</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>698</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>updateControls()</slot>
+  <slot>formulaChanged()</slot>
+ </slots>
+</ui>

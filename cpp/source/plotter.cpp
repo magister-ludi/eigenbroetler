@@ -4,7 +4,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <array_window.h>
-#include <iostream>
 
 Plotter::Plotter(int w, int h, ArrayWindow *listener):
     QWidget(NULL),

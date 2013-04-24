@@ -1,6 +1,7 @@
 #ifndef ARRAY_WINDOW_INCLUDE
 #define ARRAY_WINDOW_INCLUDE
 
+#include <global_defs.h>
 #include <QWidget>
 
 class ComplexArray;

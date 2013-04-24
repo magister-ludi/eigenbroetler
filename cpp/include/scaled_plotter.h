@@ -1,6 +1,7 @@
 #ifndef SCALED_PLOTTER_INCLUDE
 #define SCALED_PLOTTER_INCLUDE
 
+#include <global_defs.h>
 #include <plotter.h>
 
 class ScaledPlotter: public Plotter {

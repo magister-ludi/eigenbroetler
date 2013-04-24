@@ -1,7 +1,7 @@
 #ifndef COMPLEX_ARRAY_INCLUDE
 #define COMPLEX_ARRAY_INCLUDE
 
-#include <complex>
+#include <global_defs.h>
 #include <QString>
 #include <display_info.h>
 

@@ -12,7 +12,7 @@
 #include <QToolBar>
 #include <array_window_2d.h>
 #include <complex_array.h>
-#include <iostream>
+#include <formula_dialog.h>
 
 QString const EigenbrotWindow::app_owner("mao");
 QString const EigenbrotWindow::app_name(QString::fromUtf8("eigenbrötler"));
@@ -62,7 +62,6 @@ void EigenbrotWindow::constructActions()
     newAction->setShortcuts(QKeySequence::New);
     newAction->setStatusTip(tr("Create a new complex array"));
     connect(newAction, SIGNAL(triggered()), this, SLOT(newWindow()));
-    newAction->setEnabled(false);
 
     openAction = new QAction(QIcon(":/resources/open.png"), tr("&Open..."), this);
     openAction->setStatusTip(tr("Open an image file"));
@@ -98,7 +97,7 @@ void EigenbrotWindow::constructToolbars()
 
 void EigenbrotWindow::newWindow()
 {
-    // Placeholder code, until we have a formula parser...
+    FormulaDialog::create_image(this);
     //ArrayWindow2D *w = new ArrayWindow2D;
     //mdiArea->addSubWindow(w);
     //w->show();

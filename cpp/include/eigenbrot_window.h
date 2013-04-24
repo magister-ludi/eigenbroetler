@@ -1,6 +1,7 @@
 #ifndef EIGENBROT_WINDOW_INCLUDE
 #define EIGENBROT_WINDOW_INCLUDE
 
+#include <global_defs.h>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -9,6 +10,8 @@ class QCloseEvent;
 class QMdiArea;
 class QMenu;
 QT_END_NAMESPACE
+
+class ArrayWindow;
 
 class EigenbrotWindow: public QMainWindow {
  public:

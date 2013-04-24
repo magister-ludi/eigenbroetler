@@ -24,7 +24,7 @@ find_library(CFITSIO_LIBRARY cfitsio)
 find_library(FFTW3_LIBRARY fftw3)
 
 set(CPP_INCLUDE_PATH ${TOP}/cpp/include)
-include_directories(${CPP_INCLUDE_PATH} ${INCLUDE_DIR})
+include_directories(${CPP_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR})
 
 set(CppLibName ${CMAKE_PROJECT_NAME})
 set(${CppLibName}_Sources
@@ -47,23 +47,32 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/eigenbrot_window.cpp
+  ${TOP}/cpp/source/formula_dialog.cpp
   ${TOP}/cpp/source/main.cpp
   ${TOP}/cpp/source/plotter.cpp
   #${TOP}/cpp/source/scaled_plotter.cpp
   )
 set(${GuiApp}_Headers
-  ${TOP}/cpp/source/array_window.cpp
-  ${TOP}/cpp/source/array_window_2d.cpp
+  ${TOP}/cpp/include/array_window.h
+  ${TOP}/cpp/include/array_window_2d.h
+  ${TOP}/cpp/include/complex_array.h
+  ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbrot_window.h
+  ${TOP}/cpp/include/formula_dialog.h
+  ${TOP}/cpp/include/plotter.h
+  ${TOP}/cpp/include/scaled_plotter.h
   )
 
 qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/eigenbrot_window.h
+  ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/plotter.h
   #${TOP}/cpp/include/scaled_plotter.h
   )
+qt4_wrap_ui(${GuiApp}_Uifiles ${TOP}/cpp/ui/creation_dialog.ui)
+
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 
 add_definitions(-DQT_SHARED -DQT_WEBKIT -D_REENTRANT)
@@ -73,7 +82,7 @@ set(Languages de)
 foreach(language ${Languages})
   set(language_file cpp/i18n/eigenbrötler_${language}.ts)
   add_custom_command(OUTPUT ${language_file}
-                     COMMAND lupdate cpp -locations absolute -ts ${language_file}
+                     COMMAND lupdate build/Debug cpp -locations absolute -ts ${language_file}
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
   set(language_resource_file eigenbrötler_${language}.qm)
@@ -91,6 +100,7 @@ add_executable(${GuiApp}
                ${${GuiApp}_Sources}
                ${${GuiApp}_Headers}
                ${${GuiApp}_Mocfiles}
+               ${${GuiApp}_Uifiles}
                ${${GuiApp}_Resources})
 target_link_libraries(${GuiApp} ${CppLibName})
 show(Language_Resources)

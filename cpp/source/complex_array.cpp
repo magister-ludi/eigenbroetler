@@ -4,8 +4,6 @@
 #include <QFile>
 #include <QImage>
 
-#include <iostream>
-
 // This #include must go last: otherwise it screws up UNICODE stuff
 // in Visual Studio build.
 #include <fitsio.h>

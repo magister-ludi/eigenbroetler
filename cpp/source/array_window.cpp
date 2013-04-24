@@ -8,7 +8,6 @@
 #include <array_window_2d.h>
 #include <complex_array.h>
 #include <scaled_plotter.h>
-#include <iostream>
 
 uint ArrayWindow::anon_count = 0;
 
