@@ -9,12 +9,13 @@ QT_BEGIN_NAMESPACE
 class QImage;
 QT_END_NAMESPACE
 
-typedef std::complex<double> Complex;
+class Calculator;
 
 class ComplexArray {
  public:
     ComplexArray(int w, int h = 0);
     ComplexArray(QString const& source);
+    ComplexArray(Calculator& calc, int ww, int hh, int n);
     ComplexArray(ComplexArray const& ca);
     ~ComplexArray();
     ComplexArray& operator=(ComplexArray const& ca);

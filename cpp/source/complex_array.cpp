@@ -3,10 +3,13 @@
 #include <limits>
 #include <QFile>
 #include <QImage>
+#include <calculator.h>
 
 // This #include must go last: otherwise it screws up UNICODE stuff
 // in Visual Studio build.
 #include <fitsio.h>
+
+Calculator calculator;
 
 ComplexArray::ComplexArray():
     mem(0),
@@ -32,6 +35,36 @@ ComplexArray::ComplexArray(int ww, int hh):
     minMag(0)
 {
     ensure_capacity();
+}
+
+ComplexArray::ComplexArray(Calculator& calc, int ww, int hh, int n):
+    mem(0),
+    w(ww),
+    h(hh),
+    vals(NULL),
+    fft(false),
+    have_min_max(true),
+    maxCmp(-std::numeric_limits<double>::max()),
+    minCmp(std::numeric_limits<double>::max()),
+    maxMag(-std::numeric_limits<double>::max()),
+    minMag(std::numeric_limits<double>::max())
+{
+    ensure_capacity();
+    int const x_offs = ww >> 1;
+    int const y_offs = mh >> 1;
+    Complex *ptr = vals;
+    for (int j = 0; j < mh; ++j) {
+        int const y = j - y_offs;
+        for (int i = 0; i < ww; ++i) {
+            int const x = i - x_offs;
+            *ptr = calc.eval(x, y, n);
+            maxCmp = std::max(maxCmp, std::max(ptr->real(), ptr->imag()));
+            minCmp = std::min(minCmp, std::min(ptr->real(), ptr->imag()));
+            maxMag = std::max(maxMag, std::abs(*ptr));
+            minMag = std::min(minMag, atan2(ptr->imag(), ptr->real()));
+            ++ptr;
+        }
+    }
 }
 
 inline bool testFilestring(char const *data, char const *test)
@@ -294,7 +327,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
             Complex const *ptr = vals;
             for (int y = ymax - 1; y >= 0; --y) {
-                for (int x = 0; x < w; ++x) {
+               for (int x = 0; x < w; ++x) {
                     double const& v = ptr->real();
                     int const k = int(scaler(v - offset, power) * scaleFactor);
                     img.setPixel(x, y, k);

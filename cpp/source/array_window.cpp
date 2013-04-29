@@ -45,9 +45,11 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata):
     left_plot = new ScaledPlotter(cdata->width(), cdata->height(), this);
     left_plot->setParent(plotLayout);
     left_plot->move(0, 0);
+    left_plot->setCursor(Qt::CrossCursor);
     right_plot = new ScaledPlotter(cdata->width(), cdata->height(), this);
     right_plot->setParent(plotLayout);
     right_plot->move(left_plot->width(), 0);
+    right_plot->setCursor(Qt::CrossCursor);
 
     plotLayout->setFixedSize(left_plot->width() + right_plot->width(), left_plot->height());
     QScrollArea *scrollArea = new QScrollArea;
@@ -61,7 +63,7 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata):
     status_palette.setBrush(QPalette::Active, QPalette::Base, brush);
     status = new QLineEdit;
     verticalLayout->addWidget(status);
-    status->setText(QString::fromUtf8("eigenbrötler up and running"));
+    status->setText("");
     status->setReadOnly(true);
     status->setPalette(status_palette);
     //status->setFrame(false);

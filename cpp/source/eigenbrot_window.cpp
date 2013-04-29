@@ -97,10 +97,15 @@ void EigenbrotWindow::constructToolbars()
 
 void EigenbrotWindow::newWindow()
 {
-    FormulaDialog::create_image(this);
-    //ArrayWindow2D *w = new ArrayWindow2D;
-    //mdiArea->addSubWindow(w);
-    //w->show();
+    ComplexArray *a = FormulaDialog::create_image(this);
+    if (a) {
+        ArrayWindow *w = ArrayWindow::createWindow(a);
+        if (w) {
+            mdiArea->addSubWindow(w);
+            w->show();
+        }
+        // TODO: report errors
+    }
 }
 
 void EigenbrotWindow::readData()

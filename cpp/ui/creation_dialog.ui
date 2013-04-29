@@ -67,7 +67,7 @@
          </property>
          <layout class="QVBoxLayout" name="sizeVerticalLayout">
           <item>
-           <layout class="QGridLayout" name="sizeGridLayout_b">
+           <layout class="QGridLayout" name="sizeGridLayout">
             <item row="0" column="0">
              <widget class="QLabel" name="widthLabel">
               <property name="text">
@@ -194,7 +194,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="firstNLabel">
               <property name="text">
-               <string>&amp;First:</string>
+               <string>&amp;First value:</string>
               </property>
               <property name="buddy">
                <cstring>firstNLineEdit</cstring>
@@ -218,7 +218,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="finalNLabel">
               <property name="text">
-               <string>Fi&amp;nal:</string>
+               <string>Fi&amp;nal value:</string>
               </property>
               <property name="buddy">
                <cstring>finalNLineEdit</cstring>
@@ -409,33 +409,33 @@
   </connection>
   <connection>
    <sender>buttonBox</sender>
-   <signal>clicked(QAbstractButton*)</signal>
+   <signal>accepted()</signal>
    <receiver>formulaDialog</receiver>
-   <slot>reject()</slot>
+   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>291</y>
+     <x>488</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
-     <x>698</x>
-     <y>331</y>
+     <x>695</x>
+     <y>322</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
-   <signal>clicked(QAbstractButton*)</signal>
+   <signal>rejected()</signal>
    <receiver>formulaDialog</receiver>
-   <slot>accept()</slot>
+   <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>510</x>
-     <y>295</y>
+     <x>422</x>
+     <y>305</y>
     </hint>
     <hint type="destinationlabel">
-     <x>698</x>
-     <y>368</y>
+     <x>697</x>
+     <y>359</y>
     </hint>
    </hints>
   </connection>

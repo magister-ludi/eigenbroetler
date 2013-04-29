@@ -18,19 +18,45 @@ include(UseQt4)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(settings)
 
-#include(cfitsio_lib)
-
 find_library(CFITSIO_LIBRARY cfitsio)
 find_library(FFTW3_LIBRARY fftw3)
 
 set(CPP_INCLUDE_PATH ${TOP}/cpp/include)
 include_directories(${CPP_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR})
+###########################################################################
+set(flex_input ${TOP}/cpp/source/calculator_lexer.l)
+set(flex_output ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
+set(bison_input ${TOP}/cpp/source/calculator_parser.y)
+set(bison_cpp_output ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp)
+set(bison_h_output ${CMAKE_CURRENT_BINARY_DIR}/parser.hpp)
+add_custom_command(OUTPUT ${flex_output}
+  COMMAND flex -Cf -i -8 -o${flex_output} ${flex_input}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  DEPENDS ${flex_input}
+  )
+
+add_custom_command(OUTPUT ${bison_cpp_output} ${bison_h_output}
+  COMMAND bison ${bison_extra_defs} -d -o ${bison_cpp_output} ${bison_input}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  DEPENDS ${bison_input}
+  )
+
+set_source_files_properties(${flex_output}
+  PROPERTIES
+  COMPILE_FLAGS -Wno-sign-compare
+  )
+###########################################################################
 
 set(CppLibName ${CMAKE_PROJECT_NAME})
 set(${CppLibName}_Sources
+ ${bison_cpp_output}
+ ${flex_output}
+ ${TOP}/cpp/source/calculator.cpp
  ${TOP}/cpp/source/complex_array.cpp
 )
 set(${CppLibName}_Headers
+ ${bison_h_output}
+ ${TOP}/cpp/include/calculator.h
  ${TOP}/cpp/include/complex_array.h
  ${TOP}/cpp/include/display_info.h
 )
@@ -75,7 +101,8 @@ qt4_wrap_ui(${GuiApp}_Uifiles ${TOP}/cpp/ui/creation_dialog.ui)
 
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 
-add_definitions(-DQT_SHARED -DQT_WEBKIT -D_REENTRANT)
+#add_definitions(-DQT_SHARED -DQT_WEBKIT -D_REENTRANT)
+add_definitions(-DQT_SHARED -D_REENTRANT)
 
 set(Language_Resources )
 set(Languages de)

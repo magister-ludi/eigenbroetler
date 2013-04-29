@@ -5,7 +5,7 @@
 #include <QDialog>
 #include <ui_creation_dialog.h>
 
-class ArrayWindow;
+class ComplexArray;
 
 class FormulaDialog: public QDialog {
 public:
@@ -13,7 +13,12 @@ public:
     static QString const dim_name;
     static QString const width_name;
     static QString const height_name;
-    static ArrayWindow *create_image(QWidget *p);
+    static QString const form_name;
+    static QString const multi_name;
+    static QString const start_name;
+    static QString const stop_name;
+    static QString const incr_name;
+    static ComplexArray *create_image(QWidget *p);
 public slots:
     void accept();
 protected slots:
@@ -21,10 +26,12 @@ protected slots:
     void formulaChanged();
 private:
     FormulaDialog(QWidget *p);
+    ComplexArray *construct();
     FormulaDialog(); // not implemented
     FormulaDialog(FormulaDialog const&); // not implemented
     FormulaDialog& operator=(FormulaDialog const&); // not implemented
     Ui_formulaDialog ui;
+    bool stacked;
     Q_OBJECT
 };
 
