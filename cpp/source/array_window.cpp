@@ -11,9 +11,12 @@
 
 uint ArrayWindow::anon_count = 0;
 
-ArrayWindow *ArrayWindow::createWindow(ComplexArray *data)
+ArrayWindow *ArrayWindow::createWindow(ComplexArray *data,
+                                       DisplayInfo::ComplexComponent c,
+                                       DisplayInfo::Scale s,
+                                       DisplayInfo::ColourMap const& p)
 {
-    ArrayWindow *w = new ArrayWindow2D(data);
+    ArrayWindow *w = new ArrayWindow2D(data, c, s, p);
     if (w->getData()->isValid()) {
         return w;
     }
@@ -23,9 +26,13 @@ ArrayWindow *ArrayWindow::createWindow(ComplexArray *data)
     }
 }
 
-ArrayWindow::ArrayWindow(ComplexArray *cdata):
+ArrayWindow::ArrayWindow(ComplexArray *cdata,
+                         DisplayInfo::ComplexComponent c,
+                         DisplayInfo::Scale s):
     QWidget(),
-    d(cdata)
+    d(cdata),
+    cmp(c),
+    scl(s)
 {
     setContentsMargins (0, 0, 0, 0);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
@@ -38,15 +45,15 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata):
     QVBoxLayout *pholder = new QVBoxLayout;
     pholder->setAlignment(Qt::AlignTop | Qt::AlignRight);
     horizontalLayout->addLayout(pholder);
-    palette_plot = new Plotter(40, 256);
-    pholder->addWidget(palette_plot);
+    colour_map = new Plotter(40, 256);
+    pholder->addWidget(colour_map);
 
     plotLayout = new QWidget;
-    left_plot = new ScaledPlotter(cdata->width(), cdata->height(), this);
+    left_plot = new ScaledPlotter(d->width(), d->height(), this);
     left_plot->setParent(plotLayout);
     left_plot->move(0, 0);
     left_plot->setCursor(Qt::CrossCursor);
-    right_plot = new ScaledPlotter(cdata->width(), cdata->height(), this);
+    right_plot = new ScaledPlotter(d->width(), d->height(), this);
     right_plot->setParent(plotLayout);
     right_plot->move(left_plot->width(), 0);
     right_plot->setCursor(Qt::CrossCursor);
@@ -68,7 +75,7 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata):
     status->setPalette(status_palette);
     //status->setFrame(false);
 
-    QString title = cdata->source();
+    QString title = d->source();
     if (!title.isEmpty()) {
         int slash = title.lastIndexOf('/');
         if (slash >= 0)
@@ -83,4 +90,22 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata):
 ArrayWindow::~ArrayWindow()
 {
     delete d;
+}
+
+void ArrayWindow::setColourMap(DisplayInfo::ColourMap const& p)
+{
+    if (pal != p) {
+        pal = p;
+        colour_map->setBackground(192, 192, 192);
+        colour_map->clear();
+        colour_map->setForeground(0, 0, 0);
+        for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; i += 64)
+            colour_map->drawLine(0, i, colour_map->width(), i);
+        for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; ++i) {
+            colour_map->setForeground(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]);
+            colour_map->drawLine(10, i, colour_map->width() - 10, i);
+        }
+        colour_map->repaint();
+        redraw();
+    }
 }

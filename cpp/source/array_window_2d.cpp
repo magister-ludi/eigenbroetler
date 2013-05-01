@@ -5,26 +5,12 @@
 #include <complex_array.h>
 #include <scaled_plotter.h>
 
-ArrayWindow2D::ArrayWindow2D(ComplexArray *cdata):
-    ArrayWindow(cdata)
+ArrayWindow2D::ArrayWindow2D(ComplexArray *cdata, DisplayInfo::ComplexComponent c,
+                             DisplayInfo::Scale s,
+                             DisplayInfo::ColourMap const& p):
+    ArrayWindow(cdata, c, s)
 {
-    DisplayInfo::Palette img_palette = DisplayInfo::createPalette();
-    for (int i = 0; i < DisplayInfo::PALETTE_SIZE; ++i)
-        img_palette[i] = QColor(i, i, i).rgb();
-    QImage img = cdata->constructImage(DisplayInfo::REAL, DisplayInfo::LIN, img_palette);
-    left_plot->drawImage(0, 0, img);
-    img = cdata->constructImage(DisplayInfo::IMAG, DisplayInfo::LIN, img_palette);
-    right_plot->drawImage(0, 0, img);
-
-    palette_plot->setBackground(192, 192, 192);
-    palette_plot->clear();
-    palette_plot->setForeground(0, 0, 0);
-    for (int i = 0; i < DisplayInfo::PALETTE_SIZE; i += 64)
-        palette_plot->drawLine(0, i, palette_plot->width(), i);
-    for (int i = 0; i < DisplayInfo::PALETTE_SIZE; ++i) {
-        palette_plot->setForeground(img_palette[DisplayInfo::PALETTE_SIZE - i - 1]);
-        palette_plot->drawLine(10, i, palette_plot->width() - 10, i);
-    }
+    setColourMap(p);
 }
 
 ArrayWindow2D::~ArrayWindow2D()
@@ -42,4 +28,20 @@ void ArrayWindow2D::mouseData(QWidget const *w, QMouseEvent *evt)
                                       val.real(),
                                       val.imag() < 0 ? '-' : '+',
                                       fabs(val.imag())));
+}
+
+void ArrayWindow2D::redraw()
+{
+    QImage img = d->constructImage(cmp == DisplayInfo::REAL
+                                   ? DisplayInfo::REAL
+                                   : DisplayInfo::MAGN,
+                                   scl, pal);
+    left_plot->drawImage(0, 0, img);
+    img = d->constructImage(cmp == DisplayInfo::REAL
+                            ? DisplayInfo::IMAG
+                            : DisplayInfo::PHSE,
+                            DisplayInfo::LIN, pal);
+    right_plot->drawImage(0, 0, img);
+    left_plot->repaint();
+    right_plot->repaint();
 }

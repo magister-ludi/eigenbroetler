@@ -28,7 +28,7 @@ class ComplexArray {
     Complex const& value(int x, int y) const;
     Complex& value(int x, int y);
     QImage constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
-                          DisplayInfo::Palette const& palette, double power = 0) const;
+                          DisplayInfo::ColourMap const& colour_map, double power = 0) const;
  private:
     ComplexArray();
     void ensure_capacity();

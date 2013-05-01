@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 # Qt open source at http://qt-project.org/
-
+# cd ~/arbeitsplatz/projects/eigenbroetler && make debug >/dev/null && eigenbroetlerD
 # ########## Project setup ##########
 #project(eigenbrötler)
 project(eigenbroetler)
@@ -65,13 +65,14 @@ add_library(${CppLibName} SHARED ${${CppLibName}_Sources} ${${CppLibName}_Header
 target_link_libraries(${CppLibName} ${QT_LIBRARIES} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
 set_target_properties(${CppLibName}
   PROPERTIES
-  OUTPUT_NAME eigenbrötler
+  OUTPUT_NAME eigenbroetler
 )
 
 set(GuiApp ${CMAKE_PROJECT_NAME}_App)
 set(${GuiApp}_Sources
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
+  ${TOP}/cpp/source/display_info.cpp
   ${TOP}/cpp/source/eigenbrot_window.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
   ${TOP}/cpp/source/main.cpp
@@ -92,12 +93,13 @@ set(${GuiApp}_Headers
 qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
+  ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbrot_window.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/plotter.h
   #${TOP}/cpp/include/scaled_plotter.h
   )
-qt4_wrap_ui(${GuiApp}_Uifiles ${TOP}/cpp/ui/creation_dialog.ui)
+qt4_wrap_ui(${GuiApp}_Uifiles ${TOP}/cpp/ui/formula_dialog.ui)
 
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 
@@ -107,12 +109,12 @@ add_definitions(-DQT_SHARED -D_REENTRANT)
 set(Language_Resources )
 set(Languages de)
 foreach(language ${Languages})
-  set(language_file cpp/i18n/eigenbrötler_${language}.ts)
+  set(language_file cpp/i18n/eigenbroetler_${language}.ts)
   add_custom_command(OUTPUT ${language_file}
                      COMMAND lupdate build/Debug cpp -locations absolute -ts ${language_file}
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-  set(language_resource_file eigenbrötler_${language}.qm)
+  set(language_resource_file eigenbroetler_${language}.qm)
   add_custom_command(OUTPUT ${language_resource_file}
                      DEPENDS ${language_file}
                      COMMAND lrelease ${language_file} -qm ${language_resource_file}
@@ -136,7 +138,7 @@ add_dependencies(${GuiApp} ${Language_Resources})
 set_target_properties(${GuiApp}
   PROPERTIES
   DEBUG_POSTFIX D
-  OUTPUT_NAME eigenbrötler
+  OUTPUT_NAME eigenbroetler
 )
 
 if(WithRuby)

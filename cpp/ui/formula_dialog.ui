@@ -40,6 +40,9 @@
       <property name="text">
        <string>For&amp;mula:</string>
       </property>
+      <property name="buddy">
+       <cstring>formulaComboBox</cstring>
+      </property>
      </widget>
     </item>
     <item>
@@ -267,41 +270,25 @@
          <property name="geometry">
           <rect>
            <x>20</x>
-           <y>30</y>
-           <width>188</width>
-           <height>73</height>
+           <y>10</y>
+           <width>184</width>
+           <height>25</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="buttonHorizontalLayout">
           <item>
-           <layout class="QVBoxLayout" name="buttonVerticalLayout">
-            <item>
-             <widget class="QDialogButtonBox" name="buttonBox">
-              <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
-              </property>
-              <property name="standardButtons">
-               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="buttonVerticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Preferred</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
+           <widget class="QPushButton" name="cancelButton">
+            <property name="text">
+             <string>Cancel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="okButton">
+            <property name="text">
+             <string>OK</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -323,7 +310,6 @@
   <tabstop>finalNLineEdit</tabstop>
   <tabstop>incrNLineEdit</tabstop>
   <tabstop>multiviewCheckBox</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -408,34 +394,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
    <receiver>formulaDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>488</x>
-     <y>298</y>
+     <x>517</x>
+     <y>269</y>
     </hint>
     <hint type="destinationlabel">
-     <x>695</x>
-     <y>322</y>
+     <x>698</x>
+     <y>292</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
    <receiver>formulaDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>422</x>
-     <y>305</y>
+     <x>418</x>
+     <y>270</y>
     </hint>
     <hint type="destinationlabel">
-     <x>697</x>
-     <y>359</y>
+     <x>696</x>
+     <y>333</y>
     </hint>
    </hints>
   </connection>

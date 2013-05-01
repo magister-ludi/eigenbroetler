@@ -3,7 +3,7 @@
 
 #include <global_defs.h>
 #include <QDialog>
-#include <ui_creation_dialog.h>
+#include <ui_formula_dialog.h>
 
 class ComplexArray;
 
