@@ -168,11 +168,10 @@ void EigenbrotWindow::readData()
                          " *.jpg *.bmp *.gif);;All files (*.*)"));
     QSettings settings(app_owner, app_name);
     QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toAscii());
-    QFileDialog fd(this, tr("Read file"), dir, fileTypes);
-    fd.setFileMode(QFileDialog::ExistingFile);
-    if (fd.exec()) {
-        QStringList fileNames = fd.selectedFiles();
-        QString fileName = fileNames.at(0).toUtf8();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Read file"),
+                                                     dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
+    if (!fileName.isEmpty()) {
+        fileName = fileName.toUtf8();
         int slash = fileName.lastIndexOf('/');
         settings.setValue(last_read, fileName.left(slash + 1));
         ComplexArray *cdata = new ComplexArray(fileName);

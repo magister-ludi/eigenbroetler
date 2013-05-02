@@ -178,7 +178,7 @@
         <translation>Bilddateien (*.fits *.fit *.png *.tif *.jpg *.bmp *.gif);;Alle Dateien (*.*)</translation>
     </message>
     <message>
-        <location filename="../source/eigenbrot_window.cpp" line="171"/>
+        <location filename="../source/eigenbrot_window.cpp" line="174"/>
         <source>Read file</source>
         <translation>Datei lesen</translation>
     </message>
