@@ -4,5 +4,6 @@
     <file>resources/new.png</file>
     <file>resources/open.png</file>
     <file>resources/save.png</file>
+    <file>resources/eigen_icon.png</file>
 </qresource>
 </RCC>
