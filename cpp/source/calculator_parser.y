@@ -6,10 +6,8 @@
 extern Calculator calculator;
 extern int yylex();
 
-void yyerror(char const *s)
+void yyerror(char const *)
 {
-    std::cout << "Error trapped!" << std::endl;
-    std::cout << s << std::endl;
 }
 
 %}
@@ -88,5 +86,4 @@ expr:
 
 calclist: /* nothing */
         | expr TOK_EOL  { calculator.setExpression($1); }
-        /*| calclist error TOK_EOL { yyerrok; std::cout << "Error" << std::endl; } */
         ;

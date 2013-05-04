@@ -1036,12 +1036,15 @@ Expression Calculator::var_pi() const
 
 #include <cstdlib>
 
-bool Calculator::setFormula(std::string const& formula)
+bool Calculator::setFormula(QString const& formula)
 {
-    extern std::string dataString;
+    extern QString dataString;
     extern int readpos;
-    readpos = 0;
+    extern int lastlen;
+    readpos = lastlen = 0;
     dataString = formula + '\n';
+    frm.clear();
+    setExpression(NULL);
     if (yyparse()) {
         setExpression(NULL);
         std::cout << "Parse error:" << std::endl;
@@ -1051,6 +1054,7 @@ bool Calculator::setFormula(std::string const& formula)
         std::cout << '^' << std::endl;
         return false;
     }
+    frm = formula;
     return true;
 }
 
@@ -1061,7 +1065,7 @@ void Calculator::setExpression(Expression formula)
     expr = formula;
 }
 
-Complex Calculator::eval(int xx, int yy, int nn)
+Complex Calculator::eval(double xx, double yy, int nn)
 {
     if (!expr) {
         std::cout << "No formula has been set!" << std::endl;

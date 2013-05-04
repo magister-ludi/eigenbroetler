@@ -1,4 +1,7 @@
-/* -*- C -*- */
+/* -*- c -*- */
+
+%option noyywrap
+
 %{
 
 #include <string>
@@ -15,7 +18,7 @@
 #define YY_CHAR char
 #endif
 
-std::string dataString;
+QString dataString;
 
 #undef YY_INPUT
 #define YY_INPUT(buf, result, max_size) loadString(buf, result, max_size)
@@ -24,9 +27,9 @@ int readpos = 0, lastlen = 0;
 
 void loadString(char *buf, yy_size_t& result, yy_size_t max_size)
 {
-    if (readpos == 0) {
-        strncpy((char *) buf, dataString.c_str(), max_size);
-        result = std::min(dataString.length(), max_size);
+    if ((readpos + lastlen) == 0) {
+        strncpy((char *) buf, dataString.toAscii().data(), max_size);
+        result = std::min(yy_size_t(dataString.length()), max_size);
     }
     else {
         result = 0;
@@ -76,6 +79,8 @@ mod           {update(); return TOK_MOD; }
 real          {update(); return TOK_REAL;}
 imag          {update(); return TOK_IMAG;}
 sinh          {update(); return TOK_SINH;}
+pow           {update(); return TOK_POW;}
+\*\*          {update(); return TOK_POW;}
 cosh          {update(); return TOK_COSH;}
 tanh          {update(); return TOK_TANH;}
 sin           {update(); return TOK_SIN;}

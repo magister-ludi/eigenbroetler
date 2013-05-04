@@ -49,9 +49,9 @@ class Calculator {
  public:
     Calculator();
     ~Calculator();
-    bool setFormula(std::string const& formula);
-    char const *getFormula() const;
-    Complex eval(int x, int y, int n);
+    bool setFormula(QString const& formula);
+    QString const& getFormula() const;
+    Complex eval(double x, double y, int n);
     Expression cmp(Expression tst, Expression iftrue, Expression iffalse) const;
     Expression eq(Expression a1, Expression a2) const;
     Expression lt(Expression a1, Expression a2) const;
@@ -106,12 +106,12 @@ class Calculator {
     Complex r;
     Complex theta;
     Complex n;
-    std::string ftext;
+    QString frm;
 };
 
-inline char const *Calculator::getFormula() const
+inline QString const& Calculator::getFormula() const
 {
-    return ftext.c_str();
+    return frm;
 }
 
 #endif /* CALCULATOR_INCLUDE */
