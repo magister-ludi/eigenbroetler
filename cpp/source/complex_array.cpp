@@ -248,6 +248,82 @@ void ComplexArray::ensure_capacity()
     }
 }
 
+bool ComplexArray::save(QString const& filename)
+{
+    // save FITS format
+    fitsfile *aFITSfile;
+    int status = 0;
+    long axes[3];
+    char keyName[80];
+    char comment[80];
+    double *lpData = NULL;
+    double *real;
+    double *imag;
+    bool result = true;
+    int fft_val;
+    Complex *ptr;
+
+    axes[0] = w;
+    axes[1] = mh;
+    axes[2] = 2;
+    lpData = new double[2 * w * mh];
+    if (lpData == NULL)
+        return false;
+    real = lpData;
+    imag = lpData + w * mh;
+    ptr = vals;
+    // TODO: This looks strange. Check it.
+    for (int y = 0; y < mh; ++y) {
+        for (int x = 0; x < w; ++x) {
+            *(real++) = ptr->real();
+            *(imag++) = ptr->imag();
+            ++ptr;
+        }
+    }
+    //QFile ff(filename.toUtf8().constData());
+    QFile ff(filename);
+    ff.remove();
+
+    if (fits_create_file(&aFITSfile, filename.toUtf8().constData(), &status)) {
+        result = false;
+        goto all_done;
+    }
+
+    if (fits_create_img(aFITSfile, DOUBLE_IMG, 3, axes, &status)) {
+        result = false;
+        goto all_done;
+    }
+
+    if (fits_write_img(aFITSfile, TDOUBLE, 1, w * mh * 2, lpData, &status)) {
+        result = false;
+        goto all_done;
+    }
+
+    strcpy(keyName, "ISFFT");
+    strcpy(comment, "image in Fourier space?");
+    fft_val = fft ? 1 : 0;
+    if (fits_write_key(aFITSfile, TLOGICAL, keyName, &fft_val, comment, &status)) {
+        result = false;
+        goto all_done;
+    }
+    strcpy(comment, "CREATED BY IMAGE32");
+    if (fits_write_comment(aFITSfile, comment, &status)) {
+        result = false;
+        goto all_done;
+    }
+
+    if (fits_close_file(aFITSfile, &status)) {
+        result = false;
+        goto all_done;
+    }
+
+  all_done:
+    delete [] lpData;
+    if (result)
+        file = filename;
+    return result;
+}
+
 void ComplexArray::setMinMax()
 {
     if (!have_min_max) {
