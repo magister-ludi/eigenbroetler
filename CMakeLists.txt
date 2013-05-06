@@ -13,7 +13,7 @@ macro(show arg)
 endmacro(show arg)
 
 include(FindQt4)
-include(UseQt4)
+include(${QT_USE_FILE})
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(settings)
@@ -99,7 +99,9 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/plotter.h
   #${TOP}/cpp/include/scaled_plotter.h
   )
-qt4_wrap_ui(${GuiApp}_Uifiles ${TOP}/cpp/ui/formula_dialog.ui)
+qt4_wrap_ui(${GuiApp}_Uifiles
+  ${TOP}/cpp/ui/formula_dialog.ui
+  )
 
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 
@@ -111,7 +113,7 @@ set(Languages de)
 foreach(language ${Languages})
   set(language_file cpp/i18n/eigenbroetler_${language}.ts)
   add_custom_command(OUTPUT ${language_file}
-                     COMMAND lupdate build/Debug cpp -locations absolute -ts ${language_file}
+                     COMMAND lupdate ${CMAKE_CURRENT_BINARY_DIR} cpp -locations absolute -ts ${language_file}
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
   set(language_resource_file eigenbroetler_${language}.qm)
@@ -132,7 +134,6 @@ add_executable(${GuiApp}
                ${${GuiApp}_Uifiles}
                ${${GuiApp}_Resources})
 target_link_libraries(${GuiApp} ${CppLibName})
-show(Language_Resources)
 add_dependencies(${GuiApp} ${Language_Resources})
 
 set_target_properties(${GuiApp}
