@@ -30,6 +30,7 @@ class Plotter: public QWidget {
  protected:
     void paintEvent(QPaintEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
+    void leaveEvent(QEvent *event);
     QImage pixmap;
     QPainter *painter;
  private:

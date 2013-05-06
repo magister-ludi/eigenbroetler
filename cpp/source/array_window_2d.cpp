@@ -19,12 +19,16 @@ ArrayWindow2D::~ArrayWindow2D()
 
 void ArrayWindow2D::mouseData(QWidget const *w, QMouseEvent *evt)
 {
-    QPoint p(evt->x() - w->width() / 2, w->height() / 2 - evt->y() - 1);
-    Complex const& val = d->value(evt->x(), w->height() - evt->y() - 1);
-    status->setText(QString().sprintf("(%d, %d): RI: (%f, %f) MP: (%f, %f)",
-        p.x(), p.y(),
-        val.real(), val.imag(),
-        abs(val), atan2(val.imag(), val.real())));
+    if (evt) {
+        QPoint p(evt->x() - w->width() / 2, w->height() / 2 - evt->y() - 1);
+        Complex const& val = d->value(evt->x(), w->height() - evt->y() - 1);
+        status->setText(QString().sprintf("(%d, %d): RI: (%f, %f) MP: (%f, %f)",
+                                          p.x(), p.y(),
+                                          val.real(), val.imag(),
+                                          abs(val), atan2(val.imag(), val.real())));
+    }
+    else
+        status->setText("");
 }
 
 void ArrayWindow2D::redraw()

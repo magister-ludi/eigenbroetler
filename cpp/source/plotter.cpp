@@ -118,3 +118,9 @@ void Plotter::mouseMoveEvent(QMouseEvent *evt)
         owner->mouseData(this, evt);
     evt->accept();
 }
+
+void Plotter::leaveEvent(QEvent *)
+{
+    if (owner)
+        owner->mouseData(this, NULL);
+}
