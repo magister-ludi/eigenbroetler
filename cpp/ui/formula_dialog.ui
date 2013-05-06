@@ -53,6 +53,22 @@
      </widget>
     </item>
     <item>
+     <widget class="QLabel" name="errorLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="buddy">
+       <cstring>formulaComboBox</cstring>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QGridLayout" name="mainGridLayout" rowminimumheight="0,0" columnminimumwidth="0,0">
       <item row="0" column="0">
        <widget class="QGroupBox" name="sizeGroupBox">
@@ -266,27 +282,44 @@
         <property name="flat">
          <bool>true</bool>
         </property>
-        <widget class="QWidget" name="layoutWidget">
+        <widget class="QWidget" name="gridLayoutWidget">
          <property name="geometry">
           <rect>
-           <x>20</x>
+           <x>0</x>
            <y>10</y>
-           <width>184</width>
-           <height>25</height>
+           <width>160</width>
+           <height>80</height>
           </rect>
          </property>
-         <layout class="QHBoxLayout" name="buttonHorizontalLayout">
-          <item>
-           <widget class="QPushButton" name="cancelButton">
+         <layout class="QGridLayout" name="buttonGridLayout">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="helpButton">
             <property name="text">
-             <string>Cancel</string>
+             <string>&amp;Help</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="emptyLabel">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="cancelButton">
+            <property name="text">
+             <string>C&amp;ancel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
            <widget class="QPushButton" name="okButton">
             <property name="text">
-             <string>OK</string>
+             <string>&amp;OK</string>
+            </property>
+            <property name="default">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

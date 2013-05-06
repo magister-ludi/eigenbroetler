@@ -29,6 +29,7 @@ class ArrayWindow: public QWidget {
     ComplexArray *getData();
     ComplexArray const *getData() const;
     virtual void mouseData(QWidget const *w, QMouseEvent *evt) = 0;
+    void updateTitle();
  protected:
     ArrayWindow(ComplexArray *data, DisplayInfo::ComplexComponent c,
                 DisplayInfo::Scale s);

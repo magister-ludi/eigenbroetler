@@ -20,7 +20,6 @@ QString const EigenbrotWindow::app_owner("mao");
 QString const EigenbrotWindow::app_name(QString::fromUtf8("eigenbroetler"));
 QString const EigenbrotWindow::win_name(QString::fromUtf8("eigenbrötler"));
 
-QString const EigenbrotWindow::window_pos("pos");
 QString const EigenbrotWindow::window_size("size");
 QString const EigenbrotWindow::last_save("LastSave");
 QString const EigenbrotWindow::last_read("LastRead");
@@ -28,6 +27,7 @@ QString const EigenbrotWindow::last_read("LastRead");
 EigenbrotWindow::EigenbrotWindow()
 {
     setWindowTitle(win_name);
+    setWindowIcon(QIcon(QPixmap(":/resources/eigen_icon.png")));
 
     // 1. Set up the basic container
     mdiArea = new QMdiArea;
@@ -44,7 +44,6 @@ EigenbrotWindow::EigenbrotWindow()
     constructToolbars();
 
     QSettings const settings(app_owner, app_name);
-    move(settings.value(window_pos, QPoint(80, 80)).toPoint());
     resize(settings.value(window_size, QSize(800, 600)).toSize());
     statusBar()->showMessage(tr("Ready"));
 }
@@ -74,6 +73,8 @@ void EigenbrotWindow::constructActions()
     saveAsAction->setShortcut(tr("Ctrl+S"));
     saveAsAction->setStatusTip(tr("Save complex array to disk"));
     saveAsAction->setEnabled(false);
+    connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveData()));
+
     exitAction = new QAction(tr("E&xit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(QString(tr("Close %1")).arg(win_name));
@@ -191,6 +192,35 @@ void EigenbrotWindow::readData()
     }
 }
 
+void EigenbrotWindow::saveData()
+{
+    QMdiSubWindow *w = mdiArea->activeSubWindow();
+    if (w) {
+        ArrayWindow *a = dynamic_cast<ArrayWindow *>(w->widget());
+        if (a) {
+            ComplexArray *cdata = a->getData();
+            if (cdata->isValid()) {
+                QString fileTypes(tr("FITS Files (*.fits *.fit;;All files (*.*)"));
+                QSettings settings(app_owner, app_name);
+                QString dir = QFile::decodeName(settings.value(last_save, QString()).toString().toAscii());
+                QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"),
+                                                                dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
+                if (!fileName.isEmpty()) {
+                    fileName = fileName.toUtf8();
+                    int slash = fileName.lastIndexOf('/');
+                    settings.setValue(last_save, fileName.left(slash + 1));
+                    if (!cdata->save(fileName))
+                        QMessageBox::warning(this, "File save failed", cdata->errorString());
+                    else {
+                        a->updateTitle();
+                        setWindowTitle(QString(w->widget()->windowTitle()) + " - " + win_name);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void EigenbrotWindow::setComponent()
 {
     QMdiSubWindow *w = mdiArea->activeSubWindow();
@@ -222,13 +252,6 @@ void EigenbrotWindow::resizeEvent(QResizeEvent *evt)
     QMainWindow::resizeEvent(evt);
 }
 
-void EigenbrotWindow::moveEvent(QMoveEvent *evt)
-{
-    QSettings settings(app_owner, app_name);
-    settings.setValue(window_pos, evt->pos());
-    QMainWindow::moveEvent(evt);
-}
-
 void EigenbrotWindow::windowActivated(QMdiSubWindow *w)
 {
     if (w) {
@@ -240,11 +263,15 @@ void EigenbrotWindow::windowActivated(QMdiSubWindow *w)
                 riAction->setChecked(true);
             else
                 mpAction->setChecked(true);
+            saveAsAction->setEnabled(false);
+            saveAsAction->setEnabled(true);
             displayMenu->setEnabled(true);
         }
+        else {
+            saveAsAction->setEnabled(false);
+            displayMenu->setEnabled(false);
+        }
     }
-    else {
+    else
         setWindowTitle(win_name);
-        displayMenu->setEnabled(false);
-    }
 }

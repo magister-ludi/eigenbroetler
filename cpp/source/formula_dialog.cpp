@@ -40,6 +40,7 @@ FormulaDialog::FormulaDialog(QWidget *p):
     ui.multiviewCheckBox->setEnabled(false);
     ui.oneDRadioButton->setEnabled(false);
     ui.twoDRadioButton->setChecked(true);
+    ui.helpButton->setEnabled(false);
 
     for (int i = 0; i < num_formulae; ++i) {
         QString f = settings.value(form_name.arg(i), QString()).toString();
@@ -74,6 +75,25 @@ void FormulaDialog::updateControls()
 
 void FormulaDialog::formulaChanged()
 {
+    extern Calculator calculator;
+    QString const formula(ui.formulaComboBox->currentText());
+    if (calculator.setFormula(formula.toAscii().constData())) {
+        ui.okButton->setText("OK");
+        ui.okButton->setEnabled(true);
+        ui.errorLabel->setText("");
+    }
+    else {
+        //ui.okButton->setText("OK?");
+        ui.okButton->setEnabled(false);
+        int errpos = calculator.errorPos();
+        QString errText(QString("<b>") + formula.left(errpos)+ "</b>");
+        if (errpos == formula.length())
+            errText += tr(" (formula incomplete)");
+        else
+            errText += "<font color=\"#ff0000\">" + formula.mid(errpos) +
+                tr("</font>&nbsp;(parse failed at start of red text)");
+        ui.errorLabel->setText(errText);
+    }
 }
 
 static QString zip(QString const& s)
@@ -84,28 +104,33 @@ static QString zip(QString const& s)
 
 void FormulaDialog::accept()
 {
-    QDialog::accept();
-    EigenbrotWindow *eb = (EigenbrotWindow *) parent();
-    QSettings settings(eb->app_owner, eb->app_name);
-    settings.setValue(sq_name, ui.squareCheckBox->checkState() ? true : false);
-    settings.setValue(dim_name, ui.twoDRadioButton->isChecked());
-    settings.setValue(width_name, ui.widthLineEdit->text());
-    settings.setValue(height_name, ui.heightLineEdit->text());
+    extern Calculator calculator;
+    QString formula = ui.formulaComboBox->currentText();
+    if (calculator.setFormula(formula)) {
+        QDialog::accept();
+        EigenbrotWindow *eb = (EigenbrotWindow *) parent();
+        QSettings settings(eb->app_owner, eb->app_name);
+        settings.setValue(sq_name, ui.squareCheckBox->checkState() ? true : false);
+        settings.setValue(dim_name, ui.twoDRadioButton->isChecked());
+        settings.setValue(width_name, ui.widthLineEdit->text());
+        settings.setValue(height_name, ui.heightLineEdit->text());
 
-    settings.setValue(start_name, ui.firstNLineEdit->text());
-    settings.setValue(stop_name, ui.finalNLineEdit->text());
-    settings.setValue(incr_name, ui.incrNLineEdit->text());
-    settings.setValue(multi_name, ui.multiviewCheckBox->checkState() ? true : false);
+        settings.setValue(start_name, ui.firstNLineEdit->text());
+        settings.setValue(stop_name, ui.finalNLineEdit->text());
+        settings.setValue(incr_name, ui.incrNLineEdit->text());
+        settings.setValue(multi_name, ui.multiviewCheckBox->checkState() ? true : false);
 
-    std::map<QString, QString> frms;
-    frms[zip(ui.formulaComboBox->currentText())] = ui.formulaComboBox->currentText();
-    int item = 0;
-    settings.setValue(form_name.arg(item++), ui.formulaComboBox->currentText());
-    for (int i = 0; i < num_formulae && i < ui.formulaComboBox->count(); ++i) {
-        QString const key = zip(ui.formulaComboBox->itemText(i));
-        if (frms.find(key) == frms.end()) {
-            frms[key] = ui.formulaComboBox->itemText(i);
-            settings.setValue(form_name.arg(item++), ui.formulaComboBox->itemText(i));
+        std::map<QString, QString> frms;
+        frms[zip(formula)] = formula;
+        int item = 0;
+        settings.setValue(form_name.arg(item++), formula);
+        for (int i = 0; i < num_formulae && i < ui.formulaComboBox->count(); ++i) {
+            QString const key = zip(ui.formulaComboBox->itemText(i));
+            // TODO: check that the zip test works
+            if (frms.find(key) == frms.end()) {
+                frms[key] = ui.formulaComboBox->itemText(i);
+                settings.setValue(form_name.arg(item++), ui.formulaComboBox->itemText(i));
+            }
         }
     }
 }
@@ -113,7 +138,7 @@ void FormulaDialog::accept()
 ComplexArray *FormulaDialog::construct()
 {
     extern Calculator calculator;
-    if (calculator.setFormula(ui.formulaComboBox->currentText().toAscii().constData())) {
+    if (calculator.setFormula(ui.formulaComboBox->currentText())) {
         ComplexArray *d = new ComplexArray(calculator,
                                            ui.widthLineEdit->text().toInt(),
                                            ui.heightLineEdit->text().toInt(),

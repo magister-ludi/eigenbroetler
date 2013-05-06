@@ -1,5 +1,6 @@
 
 #include <array_window.h>
+#include <QBitmap>
 #include <QLineEdit>
 #include <QMouseEvent>
 #include <QScrollArea>
@@ -10,6 +11,12 @@
 #include <scaled_plotter.h>
 
 uint ArrayWindow::anon_count = 0;
+static QCursor *curs = NULL;
+
+static void cleanup()
+{
+    delete curs;
+}
 
 ArrayWindow *ArrayWindow::createWindow(ComplexArray *data,
                                        DisplayInfo::ComplexComponent c,
@@ -74,7 +81,19 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata,
     status->setReadOnly(true);
     status->setPalette(status_palette);
     //status->setFrame(false);
+    updateTitle();
 
+    if (curs == NULL) {
+        curs = new QCursor(QBitmap(":/resources/cross_map.pbm"),
+                           QBitmap(":/resources/cross_mask.pbm"));
+        atexit(cleanup);
+    }
+        left_plot->setCursor(*curs);
+        right_plot->setCursor(*curs);
+}
+
+void ArrayWindow::updateTitle()
+{
     QString title = d->source();
     if (!title.isEmpty()) {
         int slash = title.lastIndexOf('/');

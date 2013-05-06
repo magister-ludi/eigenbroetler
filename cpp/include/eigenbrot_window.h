@@ -21,7 +21,6 @@ class EigenbrotWindow: public QMainWindow {
     static QString const app_owner;
     static QString const app_name;
     static QString const win_name;
-    static QString const window_pos;
     static QString const window_size;
     static QString const last_save;
     static QString const last_read;
@@ -31,10 +30,10 @@ class EigenbrotWindow: public QMainWindow {
  protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void moveEvent(QMoveEvent *event);
  private slots:
         void newWindow();
         void readData();
+        void saveData();
         void setComponent();
         void setColourMap();
         void windowActivated(QMdiSubWindow *w);
