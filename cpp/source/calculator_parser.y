@@ -3,9 +3,6 @@
 %{
 #include <calculator.h>
 
-extern Calculator calculator;
-extern int yylex();
-
 void yyerror(char const *)
 {
 }
@@ -82,6 +79,8 @@ expr:
    | TOK_ATAN         '(' expr ')'         { $$ = calculator.atan_func($3); }
    | TOK_LN           '(' expr ')'         { $$ = calculator.ln_func($3); }
    | TOK_LOG          '(' expr ')'         { $$ = calculator.log_func($3); }
+   | TOK_TRUNC        '(' expr ')'         { $$ = calculator.trunc_func($3); }
+   | TOK_ROUND        '(' expr ')'         { $$ = calculator.round_func($3); }
    ;
 
 calclist: /* nothing */

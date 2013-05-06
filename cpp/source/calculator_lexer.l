@@ -17,34 +17,6 @@
 #undef YY_CHAR
 #define YY_CHAR char
 #endif
-
-QString dataString;
-
-#undef YY_INPUT
-#define YY_INPUT(buf, result, max_size) loadString(buf, result, max_size)
-
-int readpos = 0, lastlen = 0;
-
-void loadString(char *buf, yy_size_t& result, yy_size_t max_size)
-{
-    if ((readpos + lastlen) == 0) {
-        strncpy((char *) buf, dataString.toAscii().data(), max_size);
-        result = std::min(yy_size_t(dataString.length()), max_size);
-    }
-    else {
-        result = 0;
-    }
-}
-
-void update()
-{
-    readpos += lastlen;
-    lastlen = strlen((const char *) yytext);
-    //std::cout << "readpos = " << readpos << std::endl;
-    //std::cout << "lastlen = " << lastlen << std::endl;
-    //std::cout << "yytext = '" << (const char *) yytext << "'" << std::endl;
-}
-
 %}
 
 dreal    [0-9]*"."[0-9]+
@@ -64,65 +36,65 @@ number {ereal}|{dreal}|{integer}
 
 %%
 
-{nl}        { update(); return TOK_EOL; }
-{ws}        { update(); }
-{number}     { yylval.d = atof(yytext); update(); return TOK_NUMBER;}
+{nl}        { calculator.update(); return TOK_EOL; }
+{ws}        { calculator.update(); }
+{number}     { yylval.d = atof(yytext); calculator.update(); return TOK_NUMBER;}
 
     /* functions */
-rnd|rand      {update(); return TOK_RANDOM;}
-pi            {update(); return TOK_PI;}
-exp           {update(); return TOK_EXP;}
-sqrt          {update(); return TOK_SQRT; }
-abs           {update(); return TOK_ABS; }
-arg           {update(); return TOK_ARG; }
-mod           {update(); return TOK_MOD; }
-real          {update(); return TOK_REAL;}
-imag          {update(); return TOK_IMAG;}
-sinh          {update(); return TOK_SINH;}
-pow           {update(); return TOK_POW;}
-\*\*          {update(); return TOK_POW;}
-cosh          {update(); return TOK_COSH;}
-tanh          {update(); return TOK_TANH;}
-sin           {update(); return TOK_SIN;}
-cos           {update(); return TOK_COS;}
-tan           {update(); return TOK_TAN;}
-asinh         {update(); return TOK_ASINH;}
-acosh         {update(); return TOK_ACOSH;}
-atan2         {update(); return TOK_ATAN2;}
-atanh         {update(); return TOK_ATANH;}
-asin          {update(); return TOK_ASIN;}
-acos          {update(); return TOK_ACOS;}
-atan          {update(); return TOK_ATAN;}
-ln            {update(); return TOK_LN;}
-log           {update(); return TOK_LOG;}
-round         {update(); return TOK_ROUND;}
-trunc|truncate   {update(); return TOK_TRUNC;}
-frac|fraction    {update(); return TOK_FRAC;}
-if            {update(); return TOK_IF;}
+rnd|rand      {calculator.update(); return TOK_RANDOM;}
+pi            {calculator.update(); return TOK_PI;}
+exp           {calculator.update(); return TOK_EXP;}
+sqrt          {calculator.update(); return TOK_SQRT; }
+abs           {calculator.update(); return TOK_ABS; }
+arg           {calculator.update(); return TOK_ARG; }
+mod           {calculator.update(); return TOK_MOD; }
+real          {calculator.update(); return TOK_REAL;}
+imag          {calculator.update(); return TOK_IMAG;}
+sinh          {calculator.update(); return TOK_SINH;}
+pow           {calculator.update(); return TOK_POW;}
+\*\*          {calculator.update(); return TOK_POW;}
+cosh          {calculator.update(); return TOK_COSH;}
+tanh          {calculator.update(); return TOK_TANH;}
+sin           {calculator.update(); return TOK_SIN;}
+cos           {calculator.update(); return TOK_COS;}
+tan           {calculator.update(); return TOK_TAN;}
+asinh         {calculator.update(); return TOK_ASINH;}
+acosh         {calculator.update(); return TOK_ACOSH;}
+atan2         {calculator.update(); return TOK_ATAN2;}
+atanh         {calculator.update(); return TOK_ATANH;}
+asin          {calculator.update(); return TOK_ASIN;}
+acos          {calculator.update(); return TOK_ACOS;}
+atan          {calculator.update(); return TOK_ATAN;}
+ln            {calculator.update(); return TOK_LN;}
+log           {calculator.update(); return TOK_LOG;}
+round         {calculator.update(); return TOK_ROUND;}
+trunc|truncate   {calculator.update(); return TOK_TRUNC;}
+frac|fraction    {calculator.update(); return TOK_FRAC;}
+if            {calculator.update(); return TOK_IF;}
          /* values */
-e             {update(); return TOK_E;}
-i             {update(); return TOK_I;}
-x             {update(); return TOK_X;}
-y             {update(); return TOK_Y;}
-r             {update(); return TOK_R;}
-theta|phi     {update(); return TOK_THETA;}
-s             {update(); return TOK_S;}
-n             {update(); return TOK_N;}
+e             {calculator.update(); return TOK_E;}
+i             {calculator.update(); return TOK_I;}
+x             {calculator.update(); return TOK_X;}
+y             {calculator.update(); return TOK_Y;}
+r             {calculator.update(); return TOK_R;}
+theta|phi     {calculator.update(); return TOK_THETA;}
+s             {calculator.update(); return TOK_S;}
+n             {calculator.update(); return TOK_N;}
          /* comparisons and logic */
-==            {update(); return TOK_EQ;}
-{gt}          {update(); return TOK_GT;}
-{le}          {update(); return TOK_LE;}
-{lt}          {update(); return TOK_LT;}
-{ge}          {update(); return TOK_GE;}
-{ne}          {update(); return TOK_NE;}
-         /*{and}         {update(); return TOK_AND;} */
-         /*{or}          {update(); return TOK_OR;} */
-         /*{not}         {update(); return TOK_NOT;} */
-         /*p             {update(); return TOK_PIXEL;} */
-         /*fx            {update(); return TOK_FOURIERX;} */
-         /*fy            {update(); return TOK_FOURIERY;} */
-         /*f             {update(); return TOK_FOURIER;} */
-.             { update(); return yytext[0]; }
+==            {calculator.update(); return TOK_EQ;}
+{gt}          {calculator.update(); return TOK_GT;}
+{le}          {calculator.update(); return TOK_LE;}
+{lt}          {calculator.update(); return TOK_LT;}
+{ge}          {calculator.update(); return TOK_GE;}
+{ne}          {calculator.update(); return TOK_NE;}
+         /*{and}         {calculator.update(); return TOK_AND;} */
+         /*{or}          {calculator.update(); return TOK_OR;} */
+         /*{not}         {calculator.update(); return TOK_NOT;} */
+         /*p             {calculator.update(); return TOK_PIXEL;} */
+         /*fx            {calculator.update(); return TOK_FOURIERX;} */
+         /*fy            {calculator.update(); return TOK_FOURIERY;} */
+         /*f             {calculator.update(); return TOK_FOURIER;} */
+.             { calculator.update(); return yytext[0]; }
 
 %%
 // This just keeps the compiler  happy, because

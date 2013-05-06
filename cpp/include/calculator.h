@@ -37,13 +37,15 @@ inline Expression_base::~Expression_base()
     }
 }
 
-extern int yyparse();
-
 union YYSTYPE
 {
     Expression e;
     double d;
 };
+typedef size_t yy_size_t;
+#include <parser.hpp>
+
+extern int yyparse();
 
 class Calculator {
  public:
@@ -52,6 +54,7 @@ class Calculator {
     bool setFormula(QString const& formula);
     QString const& getFormula() const;
     Complex eval(double x, double y, int n);
+    int errorPos() const;
     Expression cmp(Expression tst, Expression iftrue, Expression iffalse) const;
     Expression eq(Expression a1, Expression a2) const;
     Expression lt(Expression a1, Expression a2) const;
@@ -94,11 +97,15 @@ class Calculator {
     Expression atan_func(Expression a) const;
     Expression ln_func(Expression a) const;
     Expression log_func(Expression a) const;
- private:
+    Expression trunc_func(Expression a) const;
+    Expression round_func(Expression a) const;
+private:
     Calculator(Calculator const&);
     Calculator& operator=(Calculator const&);
+    friend int yylex();
     friend int yyparse();
     void setExpression(Expression formula);
+    void update();
     Expression expr;
 
     Complex x;
@@ -107,11 +114,24 @@ class Calculator {
     Complex theta;
     Complex n;
     QString frm;
+    int readpos;
+    int lastlen;
 };
 
 inline QString const& Calculator::getFormula() const
 {
     return frm;
 }
+
+inline int Calculator::errorPos() const
+{
+    if (expr)
+        return -1; // no error
+    else
+        return readpos;
+}
+
+extern Calculator calculator;
+extern int yylex();
 
 #endif /* CALCULATOR_INCLUDE */

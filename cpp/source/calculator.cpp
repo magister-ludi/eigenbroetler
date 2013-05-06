@@ -922,6 +922,54 @@ Complex divide_class::eval() const
     return expr[0]->eval() / expr[1]->eval();
 }
 
+class trunc_class: public Expression_class<1> {
+public:
+    trunc_class(Expression a);
+    Complex eval() const;
+private: trunc_class();
+    trunc_class(trunc_class const &);
+    trunc_class & operator=(trunc_class const &);
+};
+
+trunc_class::trunc_class(Expression a)
+{
+    expr[0] = a;
+}
+
+Complex trunc_class::eval() const
+{
+    return int(expr[0]->eval().real());
+}
+
+Expression Calculator::trunc_func(Expression a) const
+{
+    return new trunc_class(a);
+};
+
+class round_class: public Expression_class<1> {
+public:
+    round_class(Expression a);
+    Complex eval() const;
+private: round_class();
+    round_class(round_class const &);
+    round_class & operator=(round_class const &);
+};
+
+round_class::round_class(Expression a)
+{
+    expr[0] = a;
+}
+
+Complex round_class::eval() const
+{
+    return round(expr[0]->eval().real());
+}
+
+Expression Calculator::round_func(Expression a) const
+{
+    return new round_class(a);
+};
+
 Calculator::Calculator():
     expr(NULL)
 {
@@ -1034,28 +1082,31 @@ Expression Calculator::var_pi() const
     return new reference_class(Constants::PI);
 }
 
-#include <cstdlib>
+struct yy_buffer_state;
+typedef yy_buffer_state *YY_BUFFER_STATE;
+void yy_switch_to_buffer (YY_BUFFER_STATE new_buffer);
+YY_BUFFER_STATE yy_scan_string(char const *);
+void yy_delete_buffer(YY_BUFFER_STATE b);
 
 bool Calculator::setFormula(QString const& formula)
 {
-    extern QString dataString;
-    extern int readpos;
-    extern int lastlen;
+    QString dataString = formula + "\n";
+    YY_BUFFER_STATE b = yy_scan_string(dataString.toAscii().data());
+    yy_switch_to_buffer(b);
     readpos = lastlen = 0;
-    dataString = formula + '\n';
     frm.clear();
+    bool result;
     setExpression(NULL);
     if (yyparse()) {
         setExpression(NULL);
-        std::cout << "Parse error:" << std::endl;
-        std::cout << formula << std::endl;
-        for (int i = 0; i < readpos; ++i)
-            std::cout << ' ';
-        std::cout << '^' << std::endl;
-        return false;
+        result = false;
     }
-    frm = formula;
-    return true;
+    else {
+        frm = formula;
+        result = true;
+    }
+    yy_delete_buffer(b);
+    return result;
 }
 
 void Calculator::setExpression(Expression formula)
@@ -1077,4 +1128,11 @@ Complex Calculator::eval(double xx, double yy, int nn)
     r = sqrt(x * x + y * y);
     theta = atan2(y, x);
     return expr->eval();
+}
+
+void Calculator::update()
+{
+    extern char *yytext;
+    readpos += lastlen;
+    lastlen = strlen((const char *) yytext);
 }
