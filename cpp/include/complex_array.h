@@ -27,6 +27,7 @@ class ComplexArray {
     QString const& errorString() const;
     Complex const& value(int x, int y) const;
     Complex& value(int x, int y);
+    bool save(QString const& filename);
     QImage constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
                           DisplayInfo::ColourMap const& colour_map, double power = 0) const;
  private:
@@ -78,12 +79,12 @@ inline QString const& ComplexArray::errorString() const
 
 inline Complex const& ComplexArray::value(int x, int y) const
 {
-    return vals[x * mh + y];
+    return vals[x + y * w];
 }
 
 inline Complex& ComplexArray::value(int x, int y)
 {
-    return vals[x * mh + y];
+    return vals[x + y * w];
 }
 
 inline QString const& ComplexArray::source() const
