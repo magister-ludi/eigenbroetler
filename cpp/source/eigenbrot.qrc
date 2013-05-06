@@ -5,5 +5,7 @@
     <file>resources/open.png</file>
     <file>resources/save.png</file>
     <file>resources/eigen_icon.png</file>
+    <file>resources/cross_map.pbm</file>
+    <file>resources/cross_mask.pbm</file>
 </qresource>
 </RCC>
