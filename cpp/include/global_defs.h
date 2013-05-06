@@ -3,6 +3,7 @@
 
 #include <complex>
 #include <iostream>
+#include <QString>
 
 typedef std::complex<double> Complex;
 
@@ -19,5 +20,10 @@ namespace NSComplex {
     Complex atan(const Complex & z);
     Complex atan2(const Complex & x, const Complex & y);
 };
+
+inline std::ostream& operator<<(std::ostream& o, QString const& s)
+{
+    return o << s.toAscii().data();
+}
 
 #endif /* GLOBAL_DEFS_INCLUDE */
