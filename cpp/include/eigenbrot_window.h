@@ -15,6 +15,7 @@ class QMenu;
 QT_END_NAMESPACE
 
 class ArrayWindow;
+class ComplexArray;
 
 class EigenbrotWindow: public QMainWindow {
  public:
@@ -36,18 +37,22 @@ class EigenbrotWindow: public QMainWindow {
         void saveData();
         void setComponent();
         void setColourMap();
+        void fft();
+        void about();
         void windowActivated(QMdiSubWindow *w);
 private:
     EigenbrotWindow(EigenbrotWindow const&); // not implemented
     EigenbrotWindow& operator=(EigenbrotWindow const&); // not implemented
 
+    void newWindow(ComplexArray *a);
     void loadSettings();
     void constructActions();
     void constructMenu();
     void constructToolbars();
+    void enableOperations(bool enable);
 
     QMdiArea *mdiArea;
-    // Actins for file menu
+    // Actions for file menu
     QAction *newAction;
     QAction *openAction;
     QAction *saveAsAction;
@@ -59,11 +64,20 @@ private:
     //QAction *powAction;
     QActionGroup *colourGroup;
     QList<QAction *> colourActions;
+    // Actions for Fourier menu
+    QAction *fftAction;
+    // Actions for help menu
+    QAction *helpAction;
+    QAction *aboutAction;
 
     QMenu *fileMenu;
     QMenu *displayMenu;
+    QMenu *fourierMenu;
+    QMenu *helpMenu;
     QToolBar *fileToolbar;
-    //QToolBar *editToolBar;
+    QToolBar *opsToolbar;
+    QList<QAction *> complexOps;
+    QList<QMenu *> complexMenus;
 
     Q_OBJECT
 };

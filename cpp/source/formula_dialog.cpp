@@ -98,8 +98,9 @@ void FormulaDialog::formulaChanged()
 
 static QString zip(QString const& s)
 {
+    static const QRegExp re("\\s");
     QString z(s);
-    return z.remove(QRegExp("\\s"));
+    return z.remove(re);
 }
 
 void FormulaDialog::accept()
@@ -126,7 +127,6 @@ void FormulaDialog::accept()
         settings.setValue(form_name.arg(item++), formula);
         for (int i = 0; i < num_formulae && i < ui.formulaComboBox->count(); ++i) {
             QString const key = zip(ui.formulaComboBox->itemText(i));
-            // TODO: check that the zip test works
             if (frms.find(key) == frms.end()) {
                 frms[key] = ui.formulaComboBox->itemText(i);
                 settings.setValue(form_name.arg(item++), ui.formulaComboBox->itemText(i));

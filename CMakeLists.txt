@@ -12,6 +12,14 @@ macro(show arg)
   message(STATUS "===== ${arg}: ${${arg}}")
 endmacro(show arg)
 
+set(EIGENBROT_VERSION_MAJOR 0)
+set(EIGENBROT_VERSION_MINOR 0)
+set(EIGENBROT_VERSION_PATCH 0)
+execute_process(COMMAND git log -1 "--format=format:\"%H\"%n" HEAD
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  OUTPUT_VARIABLE EIGENBROT_GIT_ID
+  ERROR_STRIP_TRAILING_WHITESPACE)
+
 include(FindQt4)
 include(${QT_USE_FILE})
 
@@ -46,30 +54,34 @@ set_source_files_properties(${flex_output}
   COMPILE_FLAGS -Wno-sign-compare
   )
 ###########################################################################
-
 set(CppLibName ${CMAKE_PROJECT_NAME})
 set(${CppLibName}_Sources
- ${bison_cpp_output}
- ${flex_output}
- ${TOP}/cpp/source/calculator.cpp
- ${TOP}/cpp/source/complex_array.cpp
-)
+  ${bison_cpp_output}
+  ${flex_output}
+  ${TOP}/cpp/source/calculator.cpp
+  ${TOP}/cpp/source/complex_array.cpp
+  )
 set(${CppLibName}_Headers
- ${bison_h_output}
- ${TOP}/cpp/include/calculator.h
- ${TOP}/cpp/include/complex_array.h
- ${TOP}/cpp/include/display_info.h
-)
+  ${bison_h_output}
+  ${TOP}/cpp/include/calculator.h
+  ${TOP}/cpp/include/complex_array.h
+  ${TOP}/cpp/include/display_info.h
+  )
 
 add_library(${CppLibName} SHARED ${${CppLibName}_Sources} ${${CppLibName}_Headers})
 target_link_libraries(${CppLibName} ${QT_LIBRARIES} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
 set_target_properties(${CppLibName}
   PROPERTIES
   OUTPUT_NAME eigenbroetler
-)
+  )
+
+set(version_file ${CMAKE_CURRENT_SOURCE_DIR}/cmake/eigenbrot_version.h.in)
+set(version_header ${CMAKE_CURRENT_BINARY_DIR}/eigenbrot_version.h)
+configure_file(${version_file} ${version_header} @ONLY)
 
 set(GuiApp ${CMAKE_PROJECT_NAME}_App)
 set(${GuiApp}_Sources
+  ${TOP}/cpp/source/about_dialog.cpp
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/display_info.cpp
@@ -80,6 +92,7 @@ set(${GuiApp}_Sources
   #${TOP}/cpp/source/scaled_plotter.cpp
   )
 set(${GuiApp}_Headers
+  ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/complex_array.h
@@ -88,9 +101,11 @@ set(${GuiApp}_Headers
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/plotter.h
   ${TOP}/cpp/include/scaled_plotter.h
+  ${version_header}
   )
 
 qt4_wrap_cpp(${GuiApp}_Mocfiles
+  ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/display_info.h
@@ -100,6 +115,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   #${TOP}/cpp/include/scaled_plotter.h
   )
 qt4_wrap_ui(${GuiApp}_Uifiles
+  ${TOP}/cpp/ui/about_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
   )
 
@@ -113,26 +129,26 @@ set(Languages de)
 foreach(language ${Languages})
   set(language_file cpp/i18n/eigenbroetler_${language}.ts)
   add_custom_command(OUTPUT ${language_file}
-                     COMMAND lupdate ${CMAKE_CURRENT_BINARY_DIR} cpp -locations absolute -ts ${language_file}
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    COMMAND lupdate ${CMAKE_CURRENT_BINARY_DIR} cpp -locations absolute -ts ${language_file}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
   set(language_resource_file eigenbroetler_${language}.qm)
   add_custom_command(OUTPUT ${language_resource_file}
-                     DEPENDS ${language_file}
-                     COMMAND lrelease ${language_file} -qm ${language_resource_file}
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    DEPENDS ${language_file}
+    COMMAND lrelease ${language_file} -qm ${language_resource_file}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   add_custom_target(${language}_qm_target
-                    DEPENDS ${language_resource_file}
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    DEPENDS ${language_resource_file}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   list(APPEND Language_Resources ${language}_qm_target)
 endforeach(language ${Languages})
 
 add_executable(${GuiApp}
-               ${${GuiApp}_Sources}
-               ${${GuiApp}_Headers}
-               ${${GuiApp}_Mocfiles}
-               ${${GuiApp}_Uifiles}
-               ${${GuiApp}_Resources})
+  ${${GuiApp}_Sources}
+  ${${GuiApp}_Headers}
+  ${${GuiApp}_Mocfiles}
+  ${${GuiApp}_Uifiles}
+  ${${GuiApp}_Resources})
 target_link_libraries(${GuiApp} ${CppLibName})
 add_dependencies(${GuiApp} ${Language_Resources})
 
@@ -140,7 +156,7 @@ set_target_properties(${GuiApp}
   PROPERTIES
   DEBUG_POSTFIX D
   OUTPUT_NAME eigenbroetler
-)
+  )
 
 if(WithRuby)
   include(ruby_lib)

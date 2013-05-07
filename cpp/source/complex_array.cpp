@@ -75,8 +75,9 @@ inline bool testFilestring(char const *data, char const *test)
 ComplexArray::ComplexArray(QString const& file_name):
     mem(0),
     vals(NULL),
-    file(QFile::decodeName(file_name.toAscii())),
-    //file(QFile::decodeName(file_name.toUtf8())),
+    //TODO: check which of these is correct.
+    //file(QFile::decodeName(file_name.toAscii())),
+    file(QFile::decodeName(file_name.toUtf8())),
     fft(false),
     have_min_max(true)
 {
@@ -103,12 +104,29 @@ ComplexArray::ComplexArray(QString const& file_name):
         readImage();
 }
 
+ComplexArray::ComplexArray(ComplexArray const& ca):
+    mem(0),
+    w(ca.w),
+    h(ca.h),
+    vals(NULL),
+    fft(ca.fft),
+    have_min_max(ca.have_min_max),
+    maxCmp(ca.maxCmp),
+    minCmp(ca.minCmp),
+    maxMag(ca.maxMag),
+    minMag(ca.minMag)
+{
+    ensure_capacity();
+    memcpy(vals, ca.vals, mem * sizeof(Complex));
+}
+
+//    ComplexArray& ComplexArray::operator=(ComplexArray const& ca);
+
 inline uchar rgb2grey(QRgb const& rgb)
 {
     static double const RED_INTENSITY = 0.30;
     static double const GREEN_INTENSITY = 0.59;
     static double const BLUE_INTENSITY = 0.11;
-    // rgb <-> #AARRGGBB
     return uchar(
                  ((rgb >> 16) & 0xff) *  RED_INTENSITY +
                  ((rgb >> 8) & 0xff) *  GREEN_INTENSITY +
@@ -219,7 +237,6 @@ void ComplexArray::readFITS()
             ++imag;
         }
     }
-    //TODO: setMinMax();
     strcpy(key, "ISFFT");
     int fftFlag;
     if (fits_read_key(f, TLOGICAL, key, &fftFlag, comment, &status)) {
@@ -232,10 +249,6 @@ void ComplexArray::readFITS()
     delete [] axes;
 }
 
-//    ComplexArray::ComplexArray(ComplexArray const& ca);
-
-//    ComplexArray& ComplexArray::operator=(ComplexArray const& ca);
-
 void ComplexArray::ensure_capacity()
 {
     mh = h ? h : 1;
@@ -243,8 +256,7 @@ void ComplexArray::ensure_capacity()
     if (req > mem) {
         delete [] vals;
         mem = req;
-        //TODO: vals = (Complex *) fftw_malloc(a * sizeof(Complex));
-        vals = new Complex[req];
+        vals = (Complex *) fftw_malloc(req * sizeof(Complex));
     }
 }
 
@@ -254,14 +266,14 @@ bool ComplexArray::save(QString const& filename)
     fitsfile *aFITSfile;
     int status = 0;
     long axes[3];
-    char keyName[80];
+    char key[80];
     char comment[80];
     double *lpData = NULL;
     double *real;
     double *imag;
     bool result = true;
-    int fft_val;
     Complex *ptr;
+    int fft_val;
 
     axes[0] = w;
     axes[1] = mh;
@@ -280,7 +292,6 @@ bool ComplexArray::save(QString const& filename)
             ++ptr;
         }
     }
-    //QFile ff(filename.toUtf8().constData());
     QFile ff(filename);
     ff.remove();
 
@@ -299,14 +310,14 @@ bool ComplexArray::save(QString const& filename)
         goto all_done;
     }
 
-    strcpy(keyName, "ISFFT");
+    strcpy(key, "ISFFT");
     strcpy(comment, "image in Fourier space?");
     fft_val = fft ? 1 : 0;
-    if (fits_write_key(aFITSfile, TLOGICAL, keyName, &fft_val, comment, &status)) {
+    if (fits_write_key(aFITSfile, TLOGICAL, key, &fft_val, comment, &status)) {
         result = false;
         goto all_done;
     }
-    strcpy(comment, "CREATED BY IMAGE32");
+    strcpy(comment, "CREATED BY AN EIGENBROETLER");
     if (fits_write_comment(aFITSfile, comment, &status)) {
         result = false;
         goto all_done;
@@ -493,4 +504,37 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
         break;
     }
     return img;
+}
+
+ComplexArray *ComplexArray::dft(bool recentre) const
+{
+    ComplexArray *trf = new ComplexArray(*this);
+    trf->have_min_max = false;
+    double const scale = 1.0 / sqrt(double(mh * w));
+    Complex *ptr = trf->vals;
+    if (recentre) {
+        for (int y = 0; y < mh; ++y) {
+            for (int x = 0; x < w; ++x) {
+                if ((y & 1) == (x & 1))
+                    *ptr *= -1.0;
+                ++ptr;
+            }
+        }
+    }
+    fftw_plan p = fftw_plan_dft_2d(trf->mh, trf->w,
+                                   (fftw_complex *) trf->vals,
+                                   (fftw_complex *) trf->vals,
+                                   fft ? FFTW_FORWARD : FFTW_BACKWARD,
+                                   FFTW_ESTIMATE);
+    fftw_execute(p);
+    fftw_destroy_plan(p);
+    ptr = trf->vals;
+    for (int y = 0; y < mh; ++y) {
+        for (int x = 0; x < w; ++x) {
+            *ptr *= (recentre && (y & 1) == (x & 1)) ? -scale : scale;
+            ++ptr;
+        }
+    }
+    trf->setMinMax();
+    return trf;
 }

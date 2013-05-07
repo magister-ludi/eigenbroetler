@@ -2,7 +2,6 @@
 #define FORMULA_DIALOG_INCLUDE
 
 #include <global_defs.h>
-#include <QDialog>
 #include <ui_formula_dialog.h>
 
 class ComplexArray;

@@ -4,7 +4,12 @@
     <file>resources/new.png</file>
     <file>resources/open.png</file>
     <file>resources/save.png</file>
+    <file>resources/fft.png</file>
     <file>resources/eigen_icon.png</file>
+    <file>resources/icon_49.png</file>
+    <file>resources/lacrymshift.png</file>
+    <file>resources/egz4.png</file>
+    <file>resources/um2.png</file>
     <file>resources/cross_map.pbm</file>
     <file>resources/cross_mask.pbm</file>
 </qresource>

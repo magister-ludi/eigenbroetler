@@ -3,6 +3,7 @@
 
 #include <global_defs.h>
 #include <QString>
+#include <fftw3.h>
 #include <display_info.h>
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +24,7 @@ class ComplexArray {
     int width() const;
     int height() const;
     bool isValid() const;
+    bool isFFT() const;
     QString const& source() const;
     QString const& errorString() const;
     Complex const& value(int x, int y) const;
@@ -30,6 +32,7 @@ class ComplexArray {
     bool save(QString const& filename);
     QImage constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
                           DisplayInfo::ColourMap const& colour_map, double power = 0) const;
+    ComplexArray *dft(bool recentre) const;
  private:
     ComplexArray();
     void ensure_capacity();
@@ -54,7 +57,7 @@ class ComplexArray {
 
 inline ComplexArray::~ComplexArray()
 {
-    delete [] vals;
+    fftw_free(vals);
 }
 
 inline int ComplexArray::width() const
@@ -70,6 +73,11 @@ inline int ComplexArray::height() const
 inline bool ComplexArray::isValid() const
 {
     return errorString().isEmpty();
+}
+
+inline bool ComplexArray::isFFT() const
+{
+    return fft;
 }
 
 inline QString const& ComplexArray::errorString() const

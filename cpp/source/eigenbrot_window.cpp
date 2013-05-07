@@ -12,6 +12,7 @@
 #include <QSettings>
 #include <QStatusBar>
 #include <QToolBar>
+#include <about_dialog.h>
 #include <array_window_2d.h>
 #include <complex_array.h>
 #include <formula_dialog.h>
@@ -45,7 +46,18 @@ EigenbrotWindow::EigenbrotWindow()
 
     QSettings const settings(app_owner, app_name);
     resize(settings.value(window_size, QSize(800, 600)).toSize());
+    enableOperations(false);
     statusBar()->showMessage(tr("Ready"));
+}
+
+void EigenbrotWindow::enableOperations(bool enable)
+{
+    QList<QAction *>::iterator op;
+    for (op = complexOps.begin(); op != complexOps.end(); ++op)
+        (*op)->setEnabled(enable);
+    QList<QMenu *>::iterator menu;
+    for (menu = complexMenus.begin(); menu != complexMenus.end(); ++menu)
+        (*menu)->setEnabled(enable);
 }
 
 void EigenbrotWindow::closeEvent(QCloseEvent *evt)
@@ -60,6 +72,7 @@ void EigenbrotWindow::closeEvent(QCloseEvent *evt)
 
 void EigenbrotWindow::constructActions()
 {
+    // File actions
     newAction = new QAction(QIcon(":/resources/new.png"), tr("&New..."), this);
     newAction->setShortcuts(QKeySequence::New);
     newAction->setStatusTip(tr("Create a new complex array"));
@@ -72,7 +85,7 @@ void EigenbrotWindow::constructActions()
     saveAsAction = new QAction(QIcon(":/resources/save.png"), tr("&Save as..."), this);
     saveAsAction->setShortcut(tr("Ctrl+S"));
     saveAsAction->setStatusTip(tr("Save complex array to disk"));
-    saveAsAction->setEnabled(false);
+    complexOps << saveAsAction;
     connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveData()));
 
     exitAction = new QAction(tr("E&xit"), this);
@@ -80,6 +93,7 @@ void EigenbrotWindow::constructActions()
     exitAction->setStatusTip(QString(tr("Close %1")).arg(win_name));
     connect(exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
+    // Display actions
     componentGroup = new QActionGroup(this);
     componentGroup->setExclusive(true);
     riAction = new QAction(tr("&Real/imaginary"), this);
@@ -116,6 +130,20 @@ void EigenbrotWindow::constructActions()
         colourGroup->addAction(act);
         connect(act, SIGNAL(triggered()), this, SLOT(setColourMap()));
     }
+
+    // Basic actions
+    // Fourier actions
+    fftAction = new QAction(QIcon(":/resources/fft.png"), tr("&FFT"), this);
+    fftAction->setShortcut(tr("Ctrl+F"));
+    fftAction->setStatusTip(tr("Create discrete Fourier transform"));
+    connect(fftAction, SIGNAL(triggered()), this, SLOT(fft()));
+    complexOps << fftAction;
+     // help actions
+    helpAction = new QAction(tr("&Help"), this);
+    helpAction->setEnabled(false);
+    aboutAction = new QAction(tr("A&bout ") + win_name, this);
+    aboutAction->setStatusTip(aboutAction->text());
+    connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 }
 
 void EigenbrotWindow::constructMenu()
@@ -131,26 +159,42 @@ void EigenbrotWindow::constructMenu()
     displayMenu->addSeparator()->setText(tr("Components"));
     displayMenu->addAction(riAction);
     displayMenu->addAction(mpAction);
-    displayMenu->setEnabled(false);
+    complexMenus << displayMenu;
     displayMenu->addSeparator();
     QMenu *coloursMenu = displayMenu->addMenu(tr("&Colours"));
     QList<QAction *>::const_iterator a;
     for (a = colourActions.begin(); a != colourActions.end(); ++a)
         coloursMenu->addAction(*a);
     //displayMenu->addAction(powAction);
+
+    fourierMenu = menuBar()->addMenu(tr("&Fourier"));
+    fourierMenu->addAction(fftAction);
+    complexMenus << fourierMenu;
+
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    helpMenu->addAction(helpAction);
+    helpMenu->addAction(aboutAction);
 }
 
 void EigenbrotWindow::constructToolbars()
 {
-    fileToolbar = addToolBar(tr("File"));
+    fileToolbar = addToolBar("File");
     fileToolbar->addAction(newAction);
     fileToolbar->addAction(openAction);
     fileToolbar->addAction(saveAsAction);
+
+    opsToolbar = addToolBar("Operations");
+    opsToolbar->addAction(fftAction);
 }
 
 void EigenbrotWindow::newWindow()
 {
     ComplexArray *a = FormulaDialog::create_image(this);
+    newWindow(a);
+}
+
+void EigenbrotWindow::newWindow(ComplexArray *a)
+{
     if (a) {
         QString p = colourGroup->checkedAction()->text();
         ArrayWindow *w = ArrayWindow::createWindow(a, DisplayInfo::REAL, DisplayInfo::LIN,
@@ -159,7 +203,6 @@ void EigenbrotWindow::newWindow()
             mdiArea->addSubWindow(w);
             w->show();
         }
-        // TODO: report errors
     }
 }
 
@@ -170,7 +213,7 @@ void EigenbrotWindow::readData()
     QSettings settings(app_owner, app_name);
     QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toAscii());
     QString fileName = QFileDialog::getOpenFileName(this, tr("Read file"),
-                                                     dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
+                                                    dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
     if (!fileName.isEmpty()) {
         fileName = fileName.toUtf8();
         int slash = fileName.lastIndexOf('/');
@@ -181,14 +224,14 @@ void EigenbrotWindow::readData()
             delete cdata;
         }
         else {
-        QString p = colourGroup->checkedAction()->text();
-        ArrayWindow *w = ArrayWindow::createWindow(cdata, DisplayInfo::REAL, DisplayInfo::LIN,
-                                                   DisplayInfo::instance().getColourMap(p));
+            QString p = colourGroup->checkedAction()->text();
+            ArrayWindow *w = ArrayWindow::createWindow(cdata, DisplayInfo::REAL, DisplayInfo::LIN,
+                                                       DisplayInfo::instance().getColourMap(p));
             mdiArea->addSubWindow(w);
             w->show();
-            displayMenu->setEnabled(true);
+            enableOperations(true);
             riAction->setChecked(true);
-       }
+        }
     }
 }
 
@@ -263,15 +306,30 @@ void EigenbrotWindow::windowActivated(QMdiSubWindow *w)
                 riAction->setChecked(true);
             else
                 mpAction->setChecked(true);
-            saveAsAction->setEnabled(false);
-            saveAsAction->setEnabled(true);
-            displayMenu->setEnabled(true);
+            enableOperations(true);
         }
         else {
-            saveAsAction->setEnabled(false);
-            displayMenu->setEnabled(false);
+            enableOperations(false);
         }
     }
     else
         setWindowTitle(win_name);
+}
+
+void EigenbrotWindow::fft()
+{
+    QMdiSubWindow *w = mdiArea->activeSubWindow();
+    if (w) {
+        ArrayWindow *a = dynamic_cast<ArrayWindow *>(w->widget());
+        if (a) {
+            ComplexArray *da = a->getData()->dft(true);
+            newWindow(da);
+        }
+    }
+}
+
+void EigenbrotWindow::about()
+{
+    AboutDialog dlg(this);
+    dlg.exec();
 }
