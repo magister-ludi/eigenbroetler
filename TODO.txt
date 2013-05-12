@@ -1,0 +1,7 @@
+Tasks
+-----
+ - Add image export
+ - expand available operations
+ - add image stacks
+ - add construction/display of multiple images
+ - add pixel operations to calculator
