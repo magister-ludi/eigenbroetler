@@ -2,7 +2,6 @@
 # encoding: utf-8
 
 # ########## Project setup ##########
-#project(eigenbrötler)
 project(eigenbroetler)
 cmake_minimum_required(VERSION 2.8)
 
@@ -153,6 +152,5 @@ add_dependencies(${GuiApp} ${Language_Resources})
 
 set_target_properties(${GuiApp}
   PROPERTIES
-  DEBUG_POSTFIX D
   OUTPUT_NAME eigenbroetler
   )
