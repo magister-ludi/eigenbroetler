@@ -19,6 +19,6 @@ See the file [BUILD.txt](BUILD.txt) for instructions on building the library
 and the application.
 
 eigenbrötler was designed and written by Michael Oldfield and Kieran
-Larkin. It is published under the [LICENCE.txt](MIT LICENCE). We would
+Larkin. It is published under the [MIT LICENCE](LICENCE.txt). We would
 like to encourage its use, and welcome any feedback (particularly constructive
 feedback).
