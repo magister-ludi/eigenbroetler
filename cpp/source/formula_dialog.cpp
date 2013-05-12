@@ -5,7 +5,7 @@
 #include <QVector>
 #include <calculator.h>
 #include <complex_array.h>
-#include <eigenbrot_window.h>
+#include <eigenbroetler_window.h>
 
 QString const FormulaDialog::sq_name("FormulaDialog/square_image");
 QString const FormulaDialog::dim_name("FormulaDialog/image_dimension");
@@ -23,7 +23,7 @@ FormulaDialog::FormulaDialog(QWidget *p):
     QDialog(p)
 {
     ui.setupUi(this);
-    EigenbrotWindow *eb = (EigenbrotWindow *) p;
+    EigenbroetlerWindow *eb = (EigenbroetlerWindow *) p;
     QSettings settings(eb->app_owner, eb->app_name);
     ui.squareCheckBox->setCheckState(settings.value(sq_name, false).toBool() ? Qt::Checked : Qt::Unchecked);
     ui.twoDRadioButton->setChecked(settings.value(dim_name, true).toBool());
@@ -109,7 +109,7 @@ void FormulaDialog::accept()
     QString formula = ui.formulaComboBox->currentText();
     if (calculator.setFormula(formula)) {
         QDialog::accept();
-        EigenbrotWindow *eb = (EigenbrotWindow *) parent();
+        EigenbroetlerWindow *eb = (EigenbroetlerWindow *) parent();
         QSettings settings(eb->app_owner, eb->app_name);
         settings.setValue(sq_name, ui.squareCheckBox->checkState() ? true : false);
         settings.setValue(dim_name, ui.twoDRadioButton->isChecked());

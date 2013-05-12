@@ -12,12 +12,13 @@ class QCloseEvent;
 class QMdiArea;
 class QMdiSubWindow;
 class QMenu;
+class QSignalMapper;
 QT_END_NAMESPACE
 
 class ArrayWindow;
 class ComplexArray;
 
-class EigenbrotWindow: public QMainWindow {
+class EigenbroetlerWindow: public QMainWindow {
  public:
     static QString const app_owner;
     static QString const app_name;
@@ -26,8 +27,8 @@ class EigenbrotWindow: public QMainWindow {
     static QString const last_save;
     static QString const last_read;
 
-    EigenbrotWindow();
-    ~EigenbrotWindow();
+    EigenbroetlerWindow();
+    ~EigenbroetlerWindow();
  protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
@@ -36,20 +37,26 @@ class EigenbrotWindow: public QMainWindow {
         void readData();
         void saveData();
         void setComponent();
+        void toggleComponents();
+        void setScale();
         void setColourMap();
         void fft();
         void about();
         void windowActivated(QMdiSubWindow *w);
+        void updateWindowMenu();
 private:
-    EigenbrotWindow(EigenbrotWindow const&); // not implemented
-    EigenbrotWindow& operator=(EigenbrotWindow const&); // not implemented
+    EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
+    EigenbroetlerWindow& operator=(EigenbroetlerWindow const&); // not implemented
 
     void newWindow(ComplexArray *a);
     void loadSettings();
     void constructActions();
     void constructMenu();
     void constructToolbars();
-    void enableOperations(bool enable);
+    void resetGUI();
+    //void toggleComponentActions();
+    ArrayWindow *getArrayWindow(QMdiSubWindow *w);
+    ArrayWindow const *getArrayWindow(QMdiSubWindow const *w) const;
 
     QMdiArea *mdiArea;
     // Actions for file menu
@@ -61,28 +68,46 @@ private:
     QActionGroup *componentGroup;
     QAction *riAction;
     QAction *mpAction;
-    //QAction *powAction;
+    QAction *toggleAction;
+    QActionGroup *scaleGroup;
+    QAction *linAction;
+    QAction *logAction;
+    QAction *powAction;
+    // Actions for setting colour map
     QActionGroup *colourGroup;
     QList<QAction *> colourActions;
+    QAction *colourmapAction;
     // Actions for Fourier menu
     QAction *fftAction;
-    // Actions for help menu
+     // Actions for window menu
+    QAction *closeAction;
+    QAction *closeAllAction;
+    QAction *tileAction;
+    QAction *cascadeAction;
+    QAction *nextAction;
+    QAction *previousAction;
+    QAction *separatorAction;
+    QSignalMapper *windowMapper;
+     // Actions for help menu
     QAction *helpAction;
     QAction *aboutAction;
 
     QMenu *fileMenu;
     QMenu *displayMenu;
+    QMenu *colourMenu;
     QMenu *fourierMenu;
+    QMenu *windowMenu;
     QMenu *helpMenu;
     QToolBar *fileToolbar;
     QToolBar *opsToolbar;
-    QList<QAction *> complexOps;
-    QList<QMenu *> complexMenus;
+    QToolBar *displayToolbar;
+    QList<QAction *> disabledActions;
+    QList<QWidget *> disabledWidgets;
 
     Q_OBJECT
 };
 
-inline EigenbrotWindow::~EigenbrotWindow()
+inline EigenbroetlerWindow::~EigenbroetlerWindow()
 {
 }
 

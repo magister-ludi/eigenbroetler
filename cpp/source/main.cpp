@@ -3,7 +3,7 @@
 #include <QFile>
 #include <QTextCodec>
 #include <QTranslator>
-#include <eigenbrot_window.h>
+#include <eigenbroetler_window.h>
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     translator.load(QFile::decodeName(QString("eigenbroetler_de").toAscii()));
     app.installTranslator(&translator);
 
-    EigenbrotWindow mainWin;
+    EigenbroetlerWindow mainWin;
 #if defined(Q_OS_SYMBIAN)
     mainWin.showMaximized();
 #else

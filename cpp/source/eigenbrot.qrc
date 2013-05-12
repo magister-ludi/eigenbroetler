@@ -5,6 +5,11 @@
     <file>resources/open.png</file>
     <file>resources/save.png</file>
     <file>resources/fft.png</file>
+    <file>resources/colours.png</file>
+    <file>resources/toggle.png</file>
+    <file>resources/lin.png</file>
+    <file>resources/log.png</file>
+    <file>resources/root.png</file>
     <file>resources/eigen_icon.png</file>
     <file>resources/icon_49.png</file>
     <file>resources/lacrymshift.png</file>

@@ -16,7 +16,8 @@ class DisplayInfo: public QObject {
     };
     enum Scale {
         LIN,
-        LOG
+        LOG,
+        POW
     };
     static int const COLOURMAP_SIZE = 256;
 

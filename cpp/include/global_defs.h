@@ -21,6 +21,7 @@ namespace NSComplex {
     Complex atan2(const Complex & x, const Complex & y);
 };
 
+// TODO: for debugging, will be removed
 inline std::ostream& operator<<(std::ostream& o, QString const& s)
 {
     return o << s.toAscii().data();

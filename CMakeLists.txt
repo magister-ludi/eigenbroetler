@@ -85,7 +85,7 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/display_info.cpp
-  ${TOP}/cpp/source/eigenbrot_window.cpp
+  ${TOP}/cpp/source/eigenbroetler_window.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
   ${TOP}/cpp/source/main.cpp
   ${TOP}/cpp/source/plotter.cpp
@@ -97,7 +97,7 @@ set(${GuiApp}_Headers
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/complex_array.h
   ${TOP}/cpp/include/display_info.h
-  ${TOP}/cpp/include/eigenbrot_window.h
+  ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/plotter.h
   ${TOP}/cpp/include/scaled_plotter.h
@@ -109,13 +109,14 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/display_info.h
-  ${TOP}/cpp/include/eigenbrot_window.h
+  ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/plotter.h
   #${TOP}/cpp/include/scaled_plotter.h
   )
 qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
+  ${TOP}/cpp/ui/close_subwindow_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
   )
 

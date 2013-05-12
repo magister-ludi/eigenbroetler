@@ -61,7 +61,7 @@ ComplexArray::ComplexArray(Calculator& calc, int ww, int hh, int n):
             maxCmp = std::max(maxCmp, std::max(ptr->real(), ptr->imag()));
             minCmp = std::min(minCmp, std::min(ptr->real(), ptr->imag()));
             maxMag = std::max(maxMag, std::abs(*ptr));
-            minMag = std::min(minMag, atan2(ptr->imag(), ptr->real()));
+            minMag = std::min(minMag, std::abs(*ptr));
             ++ptr;
         }
     }
@@ -380,7 +380,7 @@ inline bool testEqual(double a, double b)
 }
 
 QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
-                                    DisplayInfo::ColourMap const& colour_map, double power) const
+                                    DisplayInfo::ColourMap const& colour_map, int inv_power) const
 {
     QImage img(w, h, QImage::Format_Indexed8);
     if (!have_min_max) {
@@ -390,14 +390,21 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
     img.setColorTable(colour_map);
 
     double (*scaler)(double x, double p) = scaleLinear;
-    switch (scl) {
-    case DisplayInfo::LIN:
-        scaler = scaleLinear;
-        break;
-    case DisplayInfo::LOG:
-        scaler = scaleLogarithmic;
-        break;
-    }
+    if (inv_power == 0)
+        inv_power = 1;
+    double power = 1.0 / fabs(inv_power);
+    if (cmp == DisplayInfo::MAGN)
+        switch (scl) {
+        case DisplayInfo::LIN:
+            scaler = scaleLinear;
+            break;
+        case DisplayInfo::LOG:
+            scaler = scaleLogarithmic;
+            break;
+        case DisplayInfo::POW:
+            scaler = scaleRoot;
+            break;
+        }
     int const ymax = h; // TODO: adjust for 1D
     double minValue;
     double maxValue;
@@ -423,7 +430,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             for (int y = ymax - 1; y >= 0; --y) {
                 for (int x = 0; x < w; ++x) {
                     double const& v = ptr->real();
-                    int const k = int(round(scaler(v - offset, power) * scaleFactor)) & 0xff;
+                    int const k = int(scaler(v - offset, power) * scaleFactor) & 0xff;
                     img.setPixel(x, y, k);
                     ++ptr;
                 }
@@ -449,7 +456,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             for (int y = ymax - 1; y >= 0; --y) {
                 for (int x = 0; x < w; ++x) {
                     double const& v = ptr->imag();
-                    int const k = int(round(scaler(v - offset, power) * scaleFactor)) & 0xff;
+                    int const k = int(scaler(v - offset, power) * scaleFactor) & 0xff;
                     img.setPixel(x, y, k);
                     ++ptr;
                 }
@@ -469,7 +476,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             for (int y = ymax - 1; y >= 0; --y) {
                 for (int x = 0; x < w; ++x) {
                     double const& v = atan2(ptr->imag(), ptr->real());
-                    int const k = int(round(scaler(v - offset, power) * scaleFactor)) & 0xff;
+                    int const k = int(scaler(v - offset, power) * scaleFactor) & 0xff;
                     img.setPixel(x, y, k);
                     ++ptr;
                 }
@@ -480,14 +487,14 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
         {
             minValue = minMag;
             maxValue = maxMag;
+            offset = scl == DisplayInfo::LOG ? 1 : 0;
             if (testEqual(maxValue, minValue)) {
                 scaleFactor = (DisplayInfo::COLOURMAP_SIZE >> 1) - 1;
                 offset = 0;
-                minValue -= offset;
-                maxValue -= offset;
+                maxValue = minValue;
             }
             else {
-                offset = minValue;
+                offset = minValue - offset;
                 scaleFactor = (DisplayInfo::COLOURMAP_SIZE - 1) /
                     (scaler(maxValue - offset, power) - scaler(minValue - offset, power));
             }
@@ -495,7 +502,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             for (int y = ymax - 1; y >= 0; --y) {
                 for (int x = 0; x < w; ++x) {
                     double const& v = std::abs(*ptr);
-                    int const k = int(round(scaler(v - offset, power) * scaleFactor)) & 0xff;
+                    int const k = int(scaler(v - offset, power) * scaleFactor) & 0xff;
                     img.setPixel(x, y, k);
                     ++ptr;
                 }
@@ -535,6 +542,7 @@ ComplexArray *ComplexArray::dft(bool recentre) const
             ++ptr;
         }
     }
+    trf->fft = !fft;
     trf->setMinMax();
     return trf;
 }

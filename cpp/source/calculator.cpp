@@ -1119,7 +1119,7 @@ void Calculator::setExpression(Expression formula)
 Complex Calculator::eval(double xx, double yy, int nn)
 {
     if (!expr) {
-        std::cout << "No formula has been set!" << std::endl;
+        std::cerr << "No formula has been set!" << std::endl;
         exit(EXIT_FAILURE);
     }
     x = xx;
