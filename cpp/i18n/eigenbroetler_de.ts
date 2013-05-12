@@ -496,19 +496,16 @@
     <name>aboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.ui" line="36"/>
-        <location filename="../../build/Debug/ui_about_dialog.h" line="171"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="106"/>
-        <location filename="../../build/Debug/ui_about_dialog.h" line="175"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="194"/>
-        <location filename="../../build/Debug/ui_about_dialog.h" line="176"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -517,31 +514,26 @@
     <name>closeSubwindowDialog</name>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="14"/>
-        <location filename="../../build/Debug/ui_close_subwindow_dialog.h" line="114"/>
         <source>Close window</source>
         <translation>Fenster schließen</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="45"/>
-        <location filename="../../build/Debug/ui_close_subwindow_dialog.h" line="116"/>
         <source>Don&apos;t ask a&amp;gain</source>
         <translation>Nicht wieder anfragen</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="80"/>
-        <location filename="../../build/Debug/ui_close_subwindow_dialog.h" line="117"/>
         <source>C&amp;ancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="87"/>
-        <location filename="../../build/Debug/ui_close_subwindow_dialog.h" line="118"/>
         <source>&amp;Don&apos;t save</source>
         <translation>&amp;Nicht speichern</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="94"/>
-        <location filename="../../build/Debug/ui_close_subwindow_dialog.h" line="119"/>
         <source>&amp;Save</source>
         <translation>&amp;Speichern</translation>
     </message>
@@ -550,103 +542,86 @@
     <name>formulaDialog</name>
     <message>
         <location filename="../ui/formula_dialog.ui" line="14"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="311"/>
         <source>Create image</source>
         <translation>Datensatz erzeugen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="41"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="312"/>
         <source>For&amp;mula:</source>
         <translation>For&amp;mel:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="76"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="314"/>
         <source>Size</source>
         <translation>Bildgröße</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="93"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="315"/>
         <source>&amp;Width</source>
         <translation>&amp;Breite</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="103"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="316"/>
         <source>S&amp;quare</source>
         <translation>&amp;Quadradisch</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="117"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="317"/>
         <source>&amp;Height</source>
         <translation>&amp;Höhe</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="153"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="318"/>
         <source>Dimension</source>
         <translation>Dimensionen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="168"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="319"/>
         <source>&amp;1 dimension</source>
         <translation>&amp;1 Dimension</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="175"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="320"/>
         <source>&amp;2 dimensions</source>
         <translation>&amp;2 Dimensionen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="199"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="321"/>
         <source>Multiple images</source>
         <translation>Mehrfachmodus</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="216"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="322"/>
         <source>&amp;First value:</source>
         <translation>&amp;Anfangswert:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="240"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="323"/>
         <source>Fi&amp;nal value:</source>
         <translation>E&amp;ndwert:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="250"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="324"/>
         <source>In&amp;crement:</source>
         <translation>&amp;Zuwachs:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="267"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="325"/>
         <source>Mu&amp;ltiview window</source>
         <translation>Ge&amp;stapelte Bilder</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="298"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="327"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="312"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="329"/>
         <source>C&amp;ancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="319"/>
-        <location filename="../../build/Debug/ui_formula_dialog.h" line="330"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>

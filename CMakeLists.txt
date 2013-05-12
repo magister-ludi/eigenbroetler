@@ -1,8 +1,6 @@
 # -*- cmake -*-
 # encoding: utf-8
 
-# Qt open source at http://qt-project.org/
-# cd ~/arbeitsplatz/projects/eigenbroetler && make debug >/dev/null && eigenbroetlerD
 # ########## Project setup ##########
 #project(eigenbrötler)
 project(eigenbroetler)
@@ -13,7 +11,7 @@ macro(show arg)
 endmacro(show arg)
 
 set(EIGENBROT_VERSION_MAJOR 0)
-set(EIGENBROT_VERSION_MINOR 0)
+set(EIGENBROT_VERSION_MINOR 1)
 set(EIGENBROT_VERSION_PATCH 0)
 execute_process(COMMAND git log -1 "--format=format:\"%H\"%n" HEAD
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -158,7 +156,3 @@ set_target_properties(${GuiApp}
   DEBUG_POSTFIX D
   OUTPUT_NAME eigenbroetler
   )
-
-if(WithRuby)
-  include(ruby_lib)
-endif(WithRuby)

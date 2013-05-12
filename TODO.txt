@@ -5,3 +5,4 @@ Tasks
  - add image stacks
  - add construction/display of multiple images
  - add pixel operations to calculator
+ - add GUI code to display 1D complex data

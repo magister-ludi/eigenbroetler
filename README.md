@@ -15,4 +15,10 @@ The library and application have been compiled and tested on 64-bit and
 on Macintosh and Windows, but this has not yet been tested: we have no
 doubt that fixes will be required for this to succeed.
 
-eigenbrötler was designed and written by Michael Oldfield and Kieran Larkin.
+See the file [BUILD.txt](BUILD.txt) for instructions on building the library
+and the application.
+
+eigenbrötler was designed and written by Michael Oldfield and Kieran
+Larkin. It is published under the [LICENCE.txt](MIT LICENCE). We would
+like to encourage its use, and welcome any feedback (particularly constructive
+feedback).
