@@ -317,21 +317,30 @@ void EigenbroetlerWindow::constructToolbars()
 
 void EigenbroetlerWindow::newWindow()
 {
-    ComplexArray *a = FormulaDialog::create_image(this);
-    newWindow(a);
+    bool stack;
+    QList<ComplexArray *> a = FormulaDialog::create_image(this, stack);
+    newWindow(a, stack);
 }
 
-void EigenbroetlerWindow::newWindow(ComplexArray *a)
+void EigenbroetlerWindow::newWindow(QList<ComplexArray *>& a, bool stack)
 {
-    if (a) {
-        DisplayInfo::ComplexComponent cmp = a->isFFT() ? DisplayInfo::MAGN : DisplayInfo::REAL;
-        DisplayInfo::Scale scl = a->isFFT() ? DisplayInfo::LOG : DisplayInfo::LIN;
-        QString p = colourGroup->checkedAction()->text();
-        ArrayWindow *w = ArrayWindow::createWindow(a, cmp, scl,
-                                                   DisplayInfo::instance().getColourMap(p));
-        if (w) {
-            mdiArea->addSubWindow(w);
-            w->show();
+    if (!a.isEmpty()) {
+        if (stack && a.size() > 1)
+            QMessageBox::warning(this, tr("Implementation warning"),
+                                 tr("Image stacks are not implemented yet\n"
+                                    "Using multiple windows instead"),
+                                 QMessageBox::Ok, QMessageBox::Ok);
+        QList<ComplexArray *>::iterator it;
+        for (it = a.begin(); it != a.end(); ++it) {
+            DisplayInfo::ComplexComponent cmp = (*it)->isFFT() ? DisplayInfo::MAGN : DisplayInfo::REAL;
+            DisplayInfo::Scale scl = (*it)->isFFT() ? DisplayInfo::LOG : DisplayInfo::LIN;
+            QString p = colourGroup->checkedAction()->text();
+            ArrayWindow *w = ArrayWindow::createWindow(*it, cmp, scl,
+                                                       DisplayInfo::instance().getColourMap(p));
+            if (w) {
+                mdiArea->addSubWindow(w);
+                w->show();
+            }
         }
     }
 }
@@ -353,8 +362,11 @@ void EigenbroetlerWindow::readData()
             QMessageBox::warning(this, "File load failed", cdata->errorString());
             delete cdata;
         }
-        else
-            newWindow(cdata);
+        else {
+            QList<ComplexArray *> arr;
+            arr << cdata;
+            newWindow(arr, false);
+        }
     }
 }
 
@@ -449,8 +461,9 @@ void EigenbroetlerWindow::fft()
 {
     ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
     if (a) {
-        ComplexArray *da = a->getData()->dft(true);
-        newWindow(da);
+        QList<ComplexArray *> da;
+        da << a->getData()->dft(true);
+        newWindow(da, false);
     }
 }
 
