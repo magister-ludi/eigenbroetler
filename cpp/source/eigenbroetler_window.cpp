@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QFileDialog>
+#include <QImageReader>
 #include <QInputDialog>
 #include <QMdiArea>
 #include <QMdiSubWindow>
@@ -122,6 +123,11 @@ void EigenbroetlerWindow::constructActions()
     disabledActions << saveAsAction;
     connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveData()));
 
+    exportAction = new QAction(QIcon(":/resources/export.png"), tr("&Export..."), this);
+    exportAction->setStatusTip(tr("Save display images to disk"));
+    disabledActions << exportAction;
+    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportImages()));
+
     exitAction = new QAction(tr("E&xit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(QString(tr("Close %1")).arg(win_name));
@@ -231,6 +237,7 @@ void EigenbroetlerWindow::constructMenu()
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAsAction);
+    fileMenu->addAction(exportAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
@@ -303,6 +310,7 @@ void EigenbroetlerWindow::constructToolbars()
     fileToolbar->addAction(newAction);
     fileToolbar->addAction(openAction);
     fileToolbar->addAction(saveAsAction);
+    fileToolbar->addAction(exportAction);
 
     opsToolbar = addToolBar("Operations");
     opsToolbar->addAction(fftAction);
@@ -338,8 +346,13 @@ void EigenbroetlerWindow::newWindow(ComplexArray *a)
 
 void EigenbroetlerWindow::readData()
 {
-    QString fileTypes(tr("Image Files (*.fits *.fit *.png *.tif"
-                         " *.jpg *.bmp *.gif);;All files (*.*)"));
+    QList<QByteArray> formats = QImageReader::supportedImageFormats();
+    QList<QByteArray>::iterator fmt;
+    QString fileTypes(tr("Image Files (*.fits *.fit"));
+    for (fmt = formats.begin(); fmt != formats.end(); ++fmt)
+        fileTypes += QString(" *.") + *fmt;
+    fileTypes += tr(";;All files (*.*)");
+
     QSettings settings(app_owner, app_name);
     QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toAscii());
     QString fileName = QFileDialog::getOpenFileName(this, tr("Read file"),
@@ -372,6 +385,13 @@ ArrayWindow const *EigenbroetlerWindow::getArrayWindow(QMdiSubWindow const *w) c
     if (w)
         a = dynamic_cast<ArrayWindow *>(w->widget());
     return a;
+}
+
+void EigenbroetlerWindow::exportImages()
+{
+    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
+    if (a)
+        a->exportComponents();
 }
 
 void EigenbroetlerWindow::saveData()

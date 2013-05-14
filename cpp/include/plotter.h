@@ -27,6 +27,7 @@ class Plotter: public QWidget {
 
     void drawLine(int x1, int y1, int x2, int y2);
     void drawImage(int x, int y, QImage const& img, bool centred = false);
+    QImage const& getImage() const;
  protected:
     void paintEvent(QPaintEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
@@ -52,6 +53,11 @@ inline void Plotter::setForeground(int r, int g, int b)
 inline void Plotter::setBackground(int r, int g, int b)
 {
     setBackground(QColor(r, g, b));
+}
+
+inline QImage const& Plotter::getImage() const
+{
+    return pixmap;
 }
 
 #endif /* PLOTTER_INCLUDE */
