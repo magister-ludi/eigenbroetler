@@ -57,74 +57,6 @@ Expression_class<N>::Expression_class():
 {
 }
 
-#define FUNCTION0(fn)                                   \
-    class fn##_class: public Expression_class<0> {      \
-    public:                                             \
-    fn##_class();                                       \
-    Complex eval() const;                               \
-    private:                                            \
-    fn##_class(fn##_class const&);                      \
-    fn##_class& operator=(fn##_class const&);           \
-    };                                                  \
-    fn##_class::fn##_class()                            \
-    {                                                   \
-    }                                                   \
-    Complex fn##_class::eval() const                    \
-    {                                                   \
-        return fn();                                    \
-    }                                                   \
-    Expression Calculator::fn##_func() const            \
-    {                                                   \
-        return new fn##_class();                        \
-    }
-
-#define FUNCTION1(fn)                                           \
-    class fn##_class: public Expression_class<1> {              \
-    public:                                                     \
-    fn##_class(Expression a);                                   \
-    Complex eval() const;                                       \
-    private:                                                    \
-    fn##_class();                                               \
-    fn##_class(fn##_class const&);                              \
-    fn##_class& operator=(fn##_class const&);                   \
-    };                                                          \
-    fn##_class::fn##_class(Expression a)                        \
-    {                                                           \
-        expr[0] = a;                                            \
-    }                                                           \
-    Complex fn##_class::eval() const                            \
-    {                                                           \
-        return fn(expr[0]->eval());                             \
-    }                                                           \
-    Expression Calculator::fn##_func(Expression a) const        \
-    {                                                           \
-        return new fn##_class(a);                               \
-    }
-
-#define FUNCTION2(fn)                                                   \
-    class fn##_class: public Expression_class<2> {                      \
-    public:                                                             \
-    fn##_class(Expression a1, Expression a2);                           \
-    Complex eval() const;                                               \
-    private:                                                            \
-    fn##_class();                                                       \
-    fn##_class(fn##_class const&);                                      \
-    fn##_class& operator=(fn##_class const&);                           \
-    };                                                                  \
-    fn##_class::fn##_class(Expression a1, Expression a2)                \
-    {                                                                   \
-        expr[0] = a1;                                                   \
-        expr[1] = a2;                                                   \
-    }                                                                   \
-    Complex fn##_class::eval() const                                    \
-    {                                                                   \
-        return fn(expr[0]->eval(), expr[1]->eval());                    \
-    }                                                                   \
-    Expression Calculator::fn##_func(Expression a1, Expression a2) const \
-    {                                                                   \
-        return new fn##_class(a1, a2);                                  \
-    }
-
 class sqrt_class: public Expression_class<1> {
 public: sqrt_class(Expression a);
     Complex eval() const;
@@ -1064,6 +996,9 @@ Expression Calculator::var_theta() const
 
 Expression Calculator::var_n() const
 {
+    // Is this good? I don't know.
+    Calculator *non_const = const_cast<Calculator *>(this);
+    non_const->counter_used = true;
     return new reference_class(n);
 }
 
@@ -1097,6 +1032,7 @@ bool Calculator::setFormula(QString const& formula)
     frm.clear();
     bool result;
     setExpression(NULL);
+    counter_used = false;
     if (yyparse()) {
         setExpression(NULL);
         result = false;

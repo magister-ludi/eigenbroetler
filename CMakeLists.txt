@@ -81,6 +81,7 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/about_dialog.cpp
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
+  ${TOP}/cpp/source/array_window_dialogs.cpp
   ${TOP}/cpp/source/display_info.cpp
   ${TOP}/cpp/source/eigenbroetler_window.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
@@ -92,6 +93,7 @@ set(${GuiApp}_Headers
   ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
+  ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/complex_array.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
@@ -105,6 +107,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
+  ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h

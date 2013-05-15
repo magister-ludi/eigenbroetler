@@ -9,6 +9,7 @@ QT_BEGIN_NAMESPACE
 class QAction;
 class QActionGroup;
 class QCloseEvent;
+template<typename T>class QList;
 class QMdiArea;
 class QMdiSubWindow;
 class QMenu;
@@ -45,11 +46,12 @@ class EigenbroetlerWindow: public QMainWindow {
         void about();
         void windowActivated(QMdiSubWindow *w);
         void updateWindowMenu();
+        void setActiveSubwindow(QWidget *w);
 private:
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
     EigenbroetlerWindow& operator=(EigenbroetlerWindow const&); // not implemented
 
-    void newWindow(ComplexArray *a);
+    void newWindow(QList<ComplexArray *>& a, bool stack);
     void loadSettings();
     void constructActions();
     void constructMenu();
