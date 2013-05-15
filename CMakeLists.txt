@@ -114,6 +114,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
 qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
+  ${TOP}/cpp/ui/export_components_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
   )
 

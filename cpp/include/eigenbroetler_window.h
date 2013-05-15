@@ -37,6 +37,7 @@ class EigenbroetlerWindow: public QMainWindow {
         void newWindow();
         void readData();
         void saveData();
+        void exportImages();
         void setComponent();
         void toggleComponents();
         void setScale();
@@ -64,6 +65,7 @@ private:
     QAction *newAction;
     QAction *openAction;
     QAction *saveAsAction;
+    QAction *exportAction;
     QAction *exitAction;
     // Actions for display menu
     QActionGroup *componentGroup;

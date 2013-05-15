@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QScrollArea>
 #include <QSettings>
 #include <QVBoxLayout>
@@ -32,8 +33,35 @@ CloseSubwindowDialog::CloseSubwindowDialog(QWidget *p, QString const& name):
 CloseSubwindowDialog::~CloseSubwindowDialog()
 {
     QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
-    ui.dontaskCheckBox->isChecked();
     settings.setValue("ask_on_unsaved", !ui.dontaskCheckBox->isChecked());
+}
+
+ExportDialog::ExportDialog(QWidget *p, QString const& left, QString const& right):
+    QDialog(p)
+{
+    ui.setupUi(this);
+    ui.leftCheckBox->setText(left);
+    ui.rightCheckBox->setText(right);
+    QString leftClean = left.toLower().remove('&');
+    QString rightClean = right.toLower().remove('&');
+    ui.bothCheckBox->setText(QString(tr("%1 and %2 &combined")).
+                             arg(leftClean.left(1).toUpper() + leftClean.mid(1)).arg(rightClean));
+    left_name = QString("ExportDialog/") + leftClean;
+    right_name = QString("ExportDialog/") + rightClean;
+    both_name = QString("ExportDialog/") + leftClean + "-" + rightClean;
+    QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
+    ui.leftCheckBox->setChecked(settings.value(left_name, true).toBool());
+    ui.rightCheckBox->setChecked(settings.value(right_name, true).toBool());
+    ui.bothCheckBox->setChecked(settings.value(both_name, true).toBool());
+}
+
+void ExportDialog::accept()
+{
+    QDialog::accept();
+    QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
+    settings.setValue(left_name, ui.leftCheckBox->isChecked());
+    settings.setValue(right_name, ui.rightCheckBox->isChecked());
+    settings.setValue(both_name, ui.bothCheckBox->isChecked());
 }
 
 static void cleanup()
@@ -211,4 +239,67 @@ bool ArrayWindow::saveData()
         }
     }
     return false;
+}
+
+#include <QImageReader>
+#include <QImageWriter>
+
+void ArrayWindow::exportComponents()
+{
+    if (d->isValid()) {
+        ExportDialog expt(this,
+                          cmp == DisplayInfo::REAL ? tr("&Real") : tr("&Magnitude"),
+                          cmp == DisplayInfo::REAL ? tr("&Imaginary") : tr("&Phase"));
+        if (expt.exec() == QDialog::Accepted && expt.result()) {
+            QString lext = cmp == DisplayInfo::REAL ? "real" : "magn";
+            QString rext = cmp == DisplayInfo::REAL ? "imag" : "phas";
+            int cmp_result = expt.result();
+            QList<QByteArray> formats = QImageWriter::supportedImageFormats();
+            QList<QByteArray>::iterator fmt;
+
+            QString fileTypes(tr("Bitmap Files ("));
+            for (fmt = formats.begin(); fmt != formats.end(); ++fmt)
+                fileTypes += QString(" *.") + *fmt;
+            fileTypes += tr(";;All files (*.*)");
+            QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
+            QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save,
+                                                           QString()).toString().toAscii());
+            QString fileName = QFileDialog::getSaveFileName(this, tr("Export file"),
+                                                            dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
+            if (!fileName.isEmpty()) {
+                fileName = fileName.toUtf8();
+                int slash = fileName.lastIndexOf('/');
+                settings.setValue(EigenbroetlerWindow::last_save, fileName.left(slash + 1));
+                 QFileInfo fi(fileName);
+                 QString fmt_str = fi.suffix();
+                 QString ext(fmt_str);
+                 QString base;
+                 if (fmt_str.isEmpty()) {
+                     ext = fmt_str = "png"; // Force PNG if no extension
+                     ext.prepend('.');
+                     base = fileName;
+                 }
+                 else {
+                     ext.prepend('.');
+                     base = fileName.left(fileName.length() - ext.length());
+                 }
+                 QString err;
+                 if (cmp_result & 1) {
+                     QImage const& im = left_plot->getImage();
+                     im.save(base + "-" + lext + ext, fmt_str.toAscii().data());
+                 }
+                 if (cmp_result & 2) {
+                     QImage const& im = right_plot->getImage();
+                     im.save(base + "-" + rext + ext, fmt_str.toAscii().data());
+                 }
+                 if (cmp_result & 4) {
+                     QImage combined(2 * left_plot->width(), left_plot->height(), QImage::Format_ARGB32);
+                     QPainter p(&combined);
+                     p.drawImage(0, 0, left_plot->getImage());
+                     p.drawImage(left_plot->width(), 0, right_plot->getImage());
+                     combined.save(base + "-" + lext + "-" + rext + ext, fmt_str.toAscii().data());
+                 }
+            }
+        }
+    }
 }
