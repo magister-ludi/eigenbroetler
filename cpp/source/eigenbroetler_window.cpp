@@ -33,6 +33,7 @@ EigenbroetlerWindow::EigenbroetlerWindow()
     setWindowIcon(QIcon(QPixmap(":/resources/eigen_icon.png")));
 
     windowMapper = new QSignalMapper(this);
+    connect(windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubwindow(QWidget*)));
     // 1. Set up the basic container
     mdiArea = new QMdiArea;
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -287,7 +288,7 @@ void EigenbroetlerWindow::updateWindowMenu()
     QList<QMdiSubWindow *> window_list = mdiArea->subWindowList();
     separatorAction->setVisible(!window_list.isEmpty());
 
-    QList<QMdiSubWindow *>::const_iterator w;
+    QList<QMdiSubWindow *>::iterator w;
     for (w = window_list.begin(); w != window_list.end(); ++w) {
         QWidget const *wd = dynamic_cast<QWidget const *>((*w)->widget());
         int i = w - window_list.begin();
@@ -333,21 +334,28 @@ void EigenbroetlerWindow::newWindow()
 void EigenbroetlerWindow::newWindow(QList<ComplexArray *>& a, bool stack)
 {
     if (!a.isEmpty()) {
-        if (stack && a.size() > 1)
-            QMessageBox::warning(this, tr("Implementation warning"),
-                                 tr("Image stacks are not implemented yet\n"
-                                    "Using multiple windows instead"),
-                                 QMessageBox::Ok, QMessageBox::Ok);
-        QList<ComplexArray *>::iterator it;
-        for (it = a.begin(); it != a.end(); ++it) {
-            DisplayInfo::ComplexComponent cmp = (*it)->isFFT() ? DisplayInfo::MAGN : DisplayInfo::REAL;
-            DisplayInfo::Scale scl = (*it)->isFFT() ? DisplayInfo::LOG : DisplayInfo::LIN;
-            QString p = colourGroup->checkedAction()->text();
-            ArrayWindow *w = ArrayWindow::createWindow(*it, cmp, scl,
+        DisplayInfo::ComplexComponent cmp = a.at(0)->isFFT() ? DisplayInfo::MAGN : DisplayInfo::REAL;
+        DisplayInfo::Scale scl = a.at(0)->isFFT() ? DisplayInfo::LOG : DisplayInfo::LIN;
+        QString p = colourGroup->checkedAction()->text();
+        if (stack && a.size() > 1) {
+            ArrayWindow *w = ArrayWindow::createWindow(a, cmp, scl,
                                                        DisplayInfo::instance().getColourMap(p));
             if (w) {
                 mdiArea->addSubWindow(w);
                 w->show();
+            }
+        }
+        else {
+            while (!a.isEmpty()) {
+                QList<ComplexArray *> arg;
+                arg << a.at(0);
+                a.pop_front();
+                ArrayWindow *w = ArrayWindow::createWindow(arg, cmp, scl,
+                                                           DisplayInfo::instance().getColourMap(p));
+                if (w) {
+                    mdiArea->addSubWindow(w);
+                    w->show();
+                }
             }
         }
     }
@@ -477,12 +485,19 @@ void EigenbroetlerWindow::windowActivated(QMdiSubWindow *)
     resetGUI();
 }
 
+void EigenbroetlerWindow::setActiveSubwindow(QWidget *w)
+{
+    if (w)
+        mdiArea->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w));
+}
+
 void EigenbroetlerWindow::fft()
 {
     ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
     if (a) {
         QList<ComplexArray *> da;
-        da << a->getData()->dft(true);
+        for (int i = 0; i < a->numDataSets(); ++i)
+            da << a->getData(i)->dft(true);
         newWindow(da, false);
     }
 }

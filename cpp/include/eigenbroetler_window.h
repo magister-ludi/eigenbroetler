@@ -46,6 +46,7 @@ class EigenbroetlerWindow: public QMainWindow {
         void about();
         void windowActivated(QMdiSubWindow *w);
         void updateWindowMenu();
+        void setActiveSubwindow(QWidget *w);
 private:
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
     EigenbroetlerWindow& operator=(EigenbroetlerWindow const&); // not implemented

@@ -169,7 +169,10 @@ QList<ComplexArray *> FormulaDialog::create_image(QWidget *p, bool& stack)
     FormulaDialog dlg(p);
     if (dlg.exec() == QDialog::Accepted) {
         stack = dlg.ui.multiviewCheckBox->checkState();
-        return dlg.construct();
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        QList<ComplexArray *> arr = dlg.construct();
+        QApplication::restoreOverrideCursor();
+        return arr;
     }
     else
         return QList<ComplexArray *>();
