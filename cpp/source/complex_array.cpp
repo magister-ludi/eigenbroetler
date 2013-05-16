@@ -546,3 +546,84 @@ ComplexArray *ComplexArray::dft(bool recentre) const
     trf->setMinMax();
     return trf;
 }
+
+ComplexArray *ComplexArray::xdft(bool recentre) const
+{
+    ComplexArray *trf = new ComplexArray(*this);
+    double const scale = 1.0 / sqrt(double(w));
+    Complex *ptr = trf->vals;
+    if (recentre) {
+        for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                //std::cout << "(" << x << ", " << y << "): " << (
+                if (x & 1)
+                    *ptr *= -1;
+                ++ptr;
+            }
+        }
+    }
+    int const rank = 1;                 /* Tranform dimension is 1 */
+    int const nd = trf->w;              /* Size of tranform */
+    int const howmany = trf->h;         /* Number of transforms is h */
+    int const stride = 1;
+    int const dist = trf->w;
+    fftw_plan p = fftw_plan_many_dft(rank, &nd, howmany,
+                                     /*  in -> */ (fftw_complex *) trf->vals, NULL, stride, dist,
+                                     /* out -> */ (fftw_complex *) trf->vals, NULL, stride, dist,
+                                     fft ? FFTW_FORWARD : FFTW_BACKWARD,
+                                     FFTW_ESTIMATE);
+    fftw_execute(p);
+    fftw_destroy_plan(p);
+    trf->fft = !fft;
+    ptr = trf->vals;
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            *ptr *= ((x & 1) && recentre) ? -scale : scale;
+            ++ptr;
+        }
+    }
+    trf->have_min_max = false;
+    trf->setMinMax();
+    return trf;
+}
+
+ComplexArray *ComplexArray::ydft(bool recentre) const
+{
+    ComplexArray *trf = new ComplexArray(*this);
+    if (h > 1) {
+        double const scale = 1.0 / sqrt(double(h));
+        Complex *ptr = trf->vals;
+        if (recentre) {
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    if (y & 1)
+                        *ptr *= -1;
+                    ++ptr;
+                }
+            }
+        }
+        int const rank = 1;                  /* Tranform dimension is 1 */
+        int const nd = trf->h;               /* Size of tranform */
+        int const howmany = trf->w;          /* Number of transforms is w */
+        int const stride = trf->w;
+        int const dist = 1;
+        fftw_plan p = fftw_plan_many_dft(rank, &nd, howmany,
+                                         /*  in -> */ (fftw_complex *) trf->vals, NULL, stride, dist,
+                                         /* out -> */ (fftw_complex *) trf->vals, NULL, stride, dist,
+                                         fft ? FFTW_FORWARD : FFTW_BACKWARD,
+                                         FFTW_ESTIMATE);
+        fftw_execute(p);
+        fftw_destroy_plan(p);
+        trf->fft = !fft;
+        ptr = trf->vals;
+        for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                *ptr *= ((y & 1) && recentre) ? -scale : scale;
+                ++ptr;
+            }
+        }
+        trf->have_min_max = false;
+        trf->setMinMax();
+    }
+    return trf;
+}

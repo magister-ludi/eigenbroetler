@@ -2,14 +2,18 @@
 #include <array_window.h>
 #include <QBitmap>
 #include <QFileDialog>
+#include <QImageWriter>
+#include <QKeyEvent>
 #include <QLineEdit>
 #include <QMessageBox>
-#include <QMouseEvent>
+#include <QPainter>
 #include <QScrollArea>
 #include <QSettings>
+#include <QTextStream>
 #include <QVBoxLayout>
 
 #include <array_window_2d.h>
+#include <array_window_dialogs.h>
 #include <complex_array.h>
 #include <eigenbroetler_window.h>
 #include <scaled_plotter.h>
@@ -17,37 +21,18 @@
 uint ArrayWindow::anon_count = 0;
 static QCursor *curs = NULL;
 
-QString const CloseSubwindowDialog::ask_on_unsaved("ask_on_unsaved");
-
-CloseSubwindowDialog::CloseSubwindowDialog(QWidget *p, QString const& name):
-    QDialog(p),
-    save_requested(false)
-{
-    ui.setupUi(this);
-    QSettings const settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
-    ui.dontaskCheckBox->setChecked(!settings.value("ask_on_unsaved", true).toBool());
-    ui.instructionLabel->setText(QString(tr("Window <b>%1</b> has not been saved. Save now?")).arg(name));
-}
-
-CloseSubwindowDialog::~CloseSubwindowDialog()
-{
-    QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
-    ui.dontaskCheckBox->isChecked();
-    settings.setValue("ask_on_unsaved", !ui.dontaskCheckBox->isChecked());
-}
-
 static void cleanup()
 {
     delete curs;
 }
 
-ArrayWindow *ArrayWindow::createWindow(ComplexArray *data,
+ArrayWindow *ArrayWindow::createWindow(QList<ComplexArray *>& data,
                                        DisplayInfo::ComplexComponent c,
                                        DisplayInfo::Scale s,
                                        DisplayInfo::ColourMap const& p)
 {
     ArrayWindow *w = new ArrayWindow2D(data, c, s, p);
-    if (w->getData()->isValid()) {
+    if (!w->dlist.isEmpty()) {
         return w;
     }
     else {
@@ -56,13 +41,15 @@ ArrayWindow *ArrayWindow::createWindow(ComplexArray *data,
     }
 }
 
-ArrayWindow::ArrayWindow(ComplexArray *cdata,
+ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
                          DisplayInfo::ComplexComponent c,
                          DisplayInfo::Scale s):
     QWidget(),
-    d(cdata),
     cmp(c),
-    scl(s)
+    scl(s),
+    index(0),
+                   left_plot(NULL),
+                   right_plot(NULL)
 {
     setContentsMargins (0, 0, 0, 0);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
@@ -75,20 +62,27 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata,
     QVBoxLayout *pholder = new QVBoxLayout;
     pholder->setAlignment(Qt::AlignTop | Qt::AlignRight);
     horizontalLayout->addLayout(pholder);
-    colour_map = new Plotter(40, 256);
-    pholder->addWidget(colour_map);
+    colour_map_display = new Plotter(40, 256);
+    pholder->addWidget(colour_map_display);
 
+    QList<ComplexArray *>::iterator dt;
+    for (dt = cdata.begin(); dt != cdata.end(); ++dt) {
+        DataSet *set = new DataSet;
+        set->d = *dt;
+        dlist << set;
+    }
     plotLayout = new QWidget;
-    left_plot = new ScaledPlotter(d->width(), d->height(), this);
+    left_plot = new ScaledPlotter(dlist.at(index)->d->width(), dlist.at(index)->d->height(), this);
+    right_plot = new ScaledPlotter(dlist.at(index)->d->width(), dlist.at(index)->d->height(), this);
     left_plot->setParent(plotLayout);
     left_plot->move(0, 0);
     left_plot->setCursor(Qt::CrossCursor);
-    right_plot = new ScaledPlotter(d->width(), d->height(), this);
     right_plot->setParent(plotLayout);
-    right_plot->move(left_plot->width(), 0);
+    right_plot->move(left_plot->width(), index);
     right_plot->setCursor(Qt::CrossCursor);
 
-    plotLayout->setFixedSize(left_plot->width() + right_plot->width(), left_plot->height());
+    plotLayout->setFixedSize(left_plot->width() + right_plot->width(),
+                             left_plot->height());
     QScrollArea *scrollArea = new QScrollArea;
     scrollArea->setWidget(plotLayout);
     horizontalLayout->addWidget(scrollArea);
@@ -98,7 +92,7 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata,
     QBrush brush(QColor(192, 255, 192, 255));
     brush.setStyle(Qt::SolidPattern);
     status_palette.setBrush(QPalette::Active, QPalette::Base, brush);
-    status = new QLineEdit*[2];
+
     status[0] = new QLineEdit;
     status[1] = new QLineEdit;
     // Reduce font size for satus info. Might be too small?
@@ -123,27 +117,34 @@ ArrayWindow::ArrayWindow(ComplexArray *cdata,
                            QBitmap(":/resources/cross_mask.pbm"));
         atexit(cleanup);
     }
-        left_plot->setCursor(*curs);
-        right_plot->setCursor(*curs);
+    left_plot->setCursor(*curs);
+    right_plot->setCursor(*curs);
+    plotLayout->setCursor(*curs);
 }
 
 void ArrayWindow::updateTitle()
 {
-    QString title = d->source();
+    QString title = dlist.at(index)->d->source();
     if (!title.isEmpty()) {
         int slash = title.lastIndexOf('/');
         if (slash >= 0)
-            title = title.mid(slash + 1);
+            if (title_base.isEmpty())
+                title_base = title.mid(slash + 1);
     }
     else {
-        setWindowTitle(title.sprintf("eigenbrot_%04u", ++anon_count));
+        if (title_base.isEmpty())
+            title_base.sprintf("eigenbrot_%04u", ++anon_count);
     }
+    if (dlist.length() > 1)
+        title = QString(tr("%1 (%2 of %3)").arg(title_base).arg(index + 1).arg(dlist.length()));
+    else
+        title = title_base;
     setWindowTitle(title);
 }
 
 void ArrayWindow::closeEvent(QCloseEvent *evt)
 {
-    if (!d->source().isEmpty())
+    if (!dlist.at(index)->d->source().isEmpty())
         evt->accept();
     else {
         QSettings const settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
@@ -168,47 +169,187 @@ void ArrayWindow::closeEvent(QCloseEvent *evt)
 
 ArrayWindow::~ArrayWindow()
 {
-    delete [] status;
-    delete d;
+    QList<DataSet *>::iterator d;
+    for (d = dlist.begin(); d != dlist.end(); ++d)
+        delete *d;
 }
 
 void ArrayWindow::setColourMap(DisplayInfo::ColourMap const& p)
 {
     if (pal != p) {
         pal = p;
-        colour_map->setBackground(192, 192, 192);
-        colour_map->clear();
-        colour_map->setForeground(0, 0, 0);
+        colour_map_display->setBackground(192, 192, 192);
+        colour_map_display->clear();
+        colour_map_display->setForeground(0, 0, 0);
         for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; i += 64)
-            colour_map->drawLine(0, i, colour_map->width(), i);
+            colour_map_display->drawLine(0, i, colour_map_display->width(), i);
         for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; ++i) {
-            colour_map->setForeground(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]);
-            colour_map->drawLine(10, i, colour_map->width() - 10, i);
+            colour_map_display->setForeground(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]);
+            colour_map_display->drawLine(10, i, colour_map_display->width() - 10, i);
         }
-        colour_map->repaint();
+        colour_map_display->repaint();
         redraw();
     }
 }
 
 bool ArrayWindow::saveData()
 {
-    if (d->isValid()) {
-        QString fileTypes(tr("FITS Files (*.fits *.fit);;All files (*.*)"));
+    QString fileTypes(tr("FITS Files (*.fits *.fit);;All files (*.*)"));
+    QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
+    QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save, QString()).toString().toAscii());
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"),
+                                                    dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
+    if (!fileName.isEmpty()) {
+        fileName = fileName.toUtf8();
+        int slash = fileName.lastIndexOf('/');
+        settings.setValue(EigenbroetlerWindow::last_save, fileName.left(slash + 1));
+        QFileInfo fi(fileName);
+        QString ext = fi.suffix();
+        QString base;
+        if (ext.isEmpty()) {
+            ext = ".fits"; // Force FITS if no extension
+            base = fileName;
+        }
+        else {
+            ext.prepend('.');
+            base = fileName.left(fileName.length() - ext.length());
+        }
+        QList<DataSet *>::iterator set;
+        for (set = dlist.begin(); set != dlist.end(); ++set) {
+            QString count;
+            if (dlist.length() > 1) {
+                QTextStream str(&count);
+                str << '_';
+                str.setFieldWidth(2);
+                str.setPadChar('0');
+                str << (set - dlist.begin() + 1);
+            }
+            QString saveName = base + count + ext;
+            if (!(*set)->d->save(saveName)) {
+                QMessageBox::warning(this, QString(tr("File save failed: %1")).arg(saveName),
+                                     (*set)->d->errorString());
+                return false;
+            }
+        }
+        updateTitle();
+        return true;
+    }
+    return false;
+}
+
+void ArrayWindow::exportComponents()
+{
+    ExportDialog expt(this, cmp);
+    if (expt.exec() == QDialog::Accepted && expt.result()) {
+        QString lext = cmp == DisplayInfo::REAL ? "real" : "magn";
+        QString rext = cmp == DisplayInfo::REAL ? "imag" : "phas";
+        int cmp_result = expt.result();
+        QList<QByteArray> formats = QImageWriter::supportedImageFormats();
+        QList<QByteArray>::iterator fmt;
+
+        QString fileTypes(tr("Bitmap Files ("));
+        for (fmt = formats.begin(); fmt != formats.end(); ++fmt)
+            fileTypes += QString(" *.") + *fmt;
+        fileTypes += tr(";;All files (*.*)");
         QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
-        QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save, QString()).toString().toAscii());
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"),
+        QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save,
+                                                       QString()).toString().toAscii());
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Export file"),
                                                         dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
         if (!fileName.isEmpty()) {
             fileName = fileName.toUtf8();
             int slash = fileName.lastIndexOf('/');
             settings.setValue(EigenbroetlerWindow::last_save, fileName.left(slash + 1));
-            if (!d->save(fileName))
-                QMessageBox::warning(this, "File save failed", d->errorString());
+            QFileInfo fi(fileName);
+            QString fmt_str = fi.suffix();
+            QString ext(fmt_str);
+            QString base;
+            if (fmt_str.isEmpty()) {
+                ext = fmt_str = "png"; // Force PNG if no extension
+                ext.prepend('.');
+                base = fileName;
+            }
             else {
-                updateTitle();
-                return true;
+                ext.prepend('.');
+                base = fileName.left(fileName.length() - ext.length());
+            }
+            QList<DataSet *>::const_iterator set;
+            for (set = dlist.begin(); set != dlist.end(); ++set) {
+                QString count;
+                if (dlist.length() > 1) {
+                    QTextStream str(&count);
+                    str << '_';
+                    str.setFieldWidth(2);
+                    str.setPadChar('0');
+                    str << (set - dlist.begin() + 1);
+                }
+                 if (cmp_result & 1) {
+                     QImage const& im = (*set)->left;
+                     im.save(base + "-" + lext + count + ext, fmt_str.toAscii().data());
+                 }
+                 if (cmp_result & 2) {
+                     QImage const& im = (*set)->right;
+                     im.save(base + "-" + rext + count + ext, fmt_str.toAscii().data());
+                 }
+                 if (cmp_result & 4) {
+                     QImage combined(2 * (*set)->left.width(),
+                                     (*set)->left.height(),
+                                     QImage::Format_ARGB32);
+                     QPainter p(&combined);
+                     p.drawImage(0, 0, (*set)->left);
+                     p.drawImage((*set)->left.width(), 0, (*set)->right);
+                     combined.save(base + "-" + lext + "-" + rext + count + ext, fmt_str.toAscii().data());
+                 }
             }
         }
     }
-    return false;
 }
+
+void ArrayWindow::setViewIndex(int idx, bool force)
+{
+    if ((force || idx != index) && idx >= 0 && idx < dlist.length()) {
+        index = idx;
+        left_plot->drawImage(0, 0, dlist.at(index)->left);
+        right_plot->drawImage(0, 0, dlist.at(index)->right);
+        left_plot->repaint();
+        right_plot->repaint();
+        updateTitle();
+    }
+}
+
+void ArrayWindow::keyPressEvent(QKeyEvent * e)
+{
+    int const ch = e->key();
+    int const len = dlist.length();
+    switch (ch) {
+    case Qt::Key_0:
+        setViewIndex(9);
+        e->accept();
+        return;
+    case Qt::Key_1:
+    case Qt::Key_2:
+    case Qt::Key_3:
+    case Qt::Key_4:
+    case Qt::Key_5:
+    case Qt::Key_6:
+    case Qt::Key_7:
+    case Qt::Key_8:
+    case Qt::Key_9:
+        setViewIndex(ch - Qt::Key_1);
+        e->accept();
+        return;
+    case Qt::Key_Minus:
+    case Qt::Key_Less:
+        setViewIndex((len + index - 1) % len);
+        e->accept();
+        return;
+    case Qt::Key_Plus:
+    case Qt::Key_Greater:
+    case Qt::Key_Space:
+        setViewIndex((index + 1) % len);
+        e->accept();
+        return;
+    }
+    e->ignore();
+}
+

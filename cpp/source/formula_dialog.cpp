@@ -35,11 +35,10 @@ FormulaDialog::FormulaDialog(QWidget *p):
     ui.finalNLineEdit->setText(settings.value(stop_name, QString().setNum(5)).toString());
     ui.incrNLineEdit->setText(settings.value(incr_name, QString().setNum(1)).toString());
     ui.multiviewCheckBox->setCheckState(settings.value(multi_name, false).toBool() ? Qt::Checked : Qt::Unchecked);
-    // TODO: fix calculations, and remove next lines
-    ui.multiGroupBox->setEnabled(false);
-    ui.multiviewCheckBox->setEnabled(false);
+    // TODO: fix 1D arrays, and remove next lines
     ui.oneDRadioButton->setEnabled(false);
     ui.twoDRadioButton->setChecked(true);
+    // TODO: fix help, and remove next line
     ui.helpButton->setEnabled(false);
 
     for (int i = 0; i < num_formulae; ++i) {
@@ -81,9 +80,10 @@ void FormulaDialog::formulaChanged()
         ui.okButton->setText("OK");
         ui.okButton->setEnabled(true);
         ui.errorLabel->setText("");
+        ui.multiGroupBox->setEnabled(calculator.counterUsed());
     }
     else {
-        //ui.okButton->setText("OK?");
+        ui.multiGroupBox->setEnabled(false);
         ui.okButton->setEnabled(false);
         int errpos = calculator.errorPos();
         QString errText(QString("<b>") + formula.left(errpos)+ "</b>");
@@ -135,30 +135,45 @@ void FormulaDialog::accept()
     }
 }
 
-ComplexArray *FormulaDialog::construct()
+QList<ComplexArray *> FormulaDialog::construct()
 {
     extern Calculator calculator;
+    QList<ComplexArray *> d;
     if (calculator.setFormula(ui.formulaComboBox->currentText())) {
-        ComplexArray *d = new ComplexArray(calculator,
-                                           ui.widthLineEdit->text().toInt(),
-                                           ui.heightLineEdit->text().toInt(),
-                                           // TODO: fix n evaluation
-                                           0);
-        if (d) {
-            if (d->isValid())
-                return d;
-            else
-                delete d;
+        int nStart = 0;
+        int nStop = 0;
+        int nStep = 1;
+        if (calculator.counterUsed()) {
+            nStart = ui.firstNLineEdit->text().toInt();
+            nStop = ui.finalNLineEdit->text().toInt();
+            nStep = ui.incrNLineEdit->text().toInt();
+        }
+        for (int n = nStart; n <= nStop; n += nStep) {
+            ComplexArray *nd = new ComplexArray(calculator,
+                                                ui.widthLineEdit->text().toInt(),
+                                                ui.heightLineEdit->text().toInt(),
+                                                n);
+            if (nd) {
+                if (nd->isValid())
+                    d << nd;
+                else
+                    delete nd;
+            }
         }
     }
-    return NULL;
+    return d;
 }
 
-ComplexArray *FormulaDialog::create_image(QWidget *p)
+QList<ComplexArray *> FormulaDialog::create_image(QWidget *p, bool& stack)
 {
     FormulaDialog dlg(p);
-    if (dlg.exec() == QDialog::Accepted)
-        return dlg.construct();
+    if (dlg.exec() == QDialog::Accepted) {
+        stack = dlg.ui.multiviewCheckBox->checkState();
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        QList<ComplexArray *> arr = dlg.construct();
+        QApplication::restoreOverrideCursor();
+        return arr;
+    }
     else
-        return NULL;
+        return QList<ComplexArray *>();
 }

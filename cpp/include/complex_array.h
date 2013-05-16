@@ -33,6 +33,8 @@ class ComplexArray {
     QImage constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
                           DisplayInfo::ColourMap const& colour_map, int inv_power = -1) const;
     ComplexArray *dft(bool recentre) const;
+    ComplexArray *xdft(bool recentre) const;
+    ComplexArray *ydft(bool recentre) const;
  private:
     ComplexArray();
     void ensure_capacity();

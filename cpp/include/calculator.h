@@ -55,6 +55,7 @@ class Calculator {
     QString const& getFormula() const;
     Complex eval(double x, double y, int n);
     int errorPos() const;
+    bool counterUsed() const;
     Expression cmp(Expression tst, Expression iftrue, Expression iffalse) const;
     Expression eq(Expression a1, Expression a2) const;
     Expression lt(Expression a1, Expression a2) const;
@@ -116,6 +117,7 @@ private:
     QString frm;
     int readpos;
     int lastlen;
+    bool counter_used;
 };
 
 inline QString const& Calculator::getFormula() const
@@ -129,6 +131,11 @@ inline int Calculator::errorPos() const
         return -1; // no error
     else
         return readpos;
+}
+
+inline bool Calculator::counterUsed() const
+{
+    return counter_used;
 }
 
 extern Calculator calculator;

@@ -2,7 +2,6 @@
 # encoding: utf-8
 
 # ########## Project setup ##########
-#project(eigenbrötler)
 project(eigenbroetler)
 cmake_minimum_required(VERSION 2.8)
 
@@ -82,6 +81,7 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/about_dialog.cpp
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
+  ${TOP}/cpp/source/array_window_dialogs.cpp
   ${TOP}/cpp/source/display_info.cpp
   ${TOP}/cpp/source/eigenbroetler_window.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
@@ -93,6 +93,7 @@ set(${GuiApp}_Headers
   ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
+  ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/complex_array.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
@@ -106,6 +107,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
+  ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
@@ -115,6 +117,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
 qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
+  ${TOP}/cpp/ui/export_components_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
   )
 
@@ -153,6 +156,5 @@ add_dependencies(${GuiApp} ${Language_Resources})
 
 set_target_properties(${GuiApp}
   PROPERTIES
-  DEBUG_POSTFIX D
   OUTPUT_NAME eigenbroetler
   )

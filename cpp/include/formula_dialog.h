@@ -3,6 +3,7 @@
 
 #include <global_defs.h>
 #include <ui_formula_dialog.h>
+#include <QList>
 
 class ComplexArray;
 
@@ -17,7 +18,7 @@ public:
     static QString const start_name;
     static QString const stop_name;
     static QString const incr_name;
-    static ComplexArray *create_image(QWidget *p);
+    static QList<ComplexArray *> create_image(QWidget *p, bool& stack);
 public slots:
     void accept();
 protected slots:
@@ -25,7 +26,7 @@ protected slots:
     void formulaChanged();
 private:
     FormulaDialog(QWidget *p);
-    ComplexArray *construct();
+    QList<ComplexArray *> construct();
     FormulaDialog(); // not implemented
     FormulaDialog(FormulaDialog const&); // not implemented
     FormulaDialog& operator=(FormulaDialog const&); // not implemented
