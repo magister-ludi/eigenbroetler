@@ -141,7 +141,7 @@ QList<ComplexArray *> FormulaDialog::construct()
     QList<ComplexArray *> d;
     if (calculator.setFormula(ui.formulaComboBox->currentText())) {
         int nStart = 0;
-        int nStop = 1;
+        int nStop = 0;
         int nStep = 1;
         if (calculator.counterUsed()) {
             nStart = ui.firstNLineEdit->text().toInt();
