@@ -20,7 +20,7 @@ class ArrayWindow;
 class ComplexArray;
 
 class EigenbroetlerWindow: public QMainWindow {
- public:
+public:
     static QString const app_owner;
     static QString const app_name;
     static QString const win_name;
@@ -30,27 +30,29 @@ class EigenbroetlerWindow: public QMainWindow {
 
     EigenbroetlerWindow();
     ~EigenbroetlerWindow();
- protected:
+protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
- private slots:
-        void newWindow();
-        void readData();
-        void saveData();
-        void exportImages();
-        void setComponent();
-        void toggleComponents();
-        void setScale();
-        void setColourMap();
-        void fft();
-        void about();
-        void windowActivated(QMdiSubWindow *w);
-        void updateWindowMenu();
-        void setActiveSubwindow(QWidget *w);
+private slots:
+    void newWindow();
+    void readData();
+    void saveData();
+    void exportImages();
+    void setComponent();
+    void toggleComponents();
+    void setScale();
+    void setColourMap();
+    void fft();
+    void fftx();
+    void ffty();
+    void about();
+    void windowActivated(QMdiSubWindow *w);
+    void updateWindowMenu();
+    void setActiveSubwindow(QWidget *w);
 private:
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
     EigenbroetlerWindow& operator=(EigenbroetlerWindow const&); // not implemented
-
+    friend class WindowList;
     void newWindow(QList<ComplexArray *>& a, bool stack);
     void loadSettings();
     void constructActions();
@@ -63,11 +65,16 @@ private:
 
     QMdiArea *mdiArea;
     // Actions for file menu
-    QAction *newAction;
     QAction *openAction;
     QAction *saveAsAction;
     QAction *exportAction;
     QAction *exitAction;
+    // Actions for basic operations
+    QAction *newAction;
+    // Actions for Fourier menu
+    QAction *fftAction;
+    QAction *fftxAction;
+    QAction *fftyAction;
     // Actions for display menu
     QActionGroup *componentGroup;
     QAction *riAction;
@@ -81,9 +88,7 @@ private:
     QActionGroup *colourGroup;
     QList<QAction *> colourActions;
     QAction *colourmapAction;
-    // Actions for Fourier menu
-    QAction *fftAction;
-     // Actions for window menu
+    // Actions for window menu
     QAction *closeAction;
     QAction *closeAllAction;
     QAction *tileAction;
@@ -92,14 +97,15 @@ private:
     QAction *previousAction;
     QAction *separatorAction;
     QSignalMapper *windowMapper;
-     // Actions for help menu
+    // Actions for help menu
     QAction *helpAction;
     QAction *aboutAction;
 
     QMenu *fileMenu;
+    QMenu *basicOpsMenu;
+    QMenu *fourierMenu;
     QMenu *displayMenu;
     QMenu *colourMenu;
-    QMenu *fourierMenu;
     QMenu *windowMenu;
     QMenu *helpMenu;
     QToolBar *fileToolbar;

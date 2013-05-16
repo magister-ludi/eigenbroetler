@@ -109,11 +109,6 @@ void EigenbroetlerWindow::closeEvent(QCloseEvent *evt)
 void EigenbroetlerWindow::constructActions()
 {
     // File actions
-    newAction = new QAction(QIcon(":/resources/new.png"), tr("&New..."), this);
-    newAction->setShortcuts(QKeySequence::New);
-    newAction->setStatusTip(tr("Create a new complex array"));
-    connect(newAction, SIGNAL(triggered()), this, SLOT(newWindow()));
-
     openAction = new QAction(QIcon(":/resources/open.png"), tr("&Open..."), this);
     openAction->setStatusTip(tr("Open an image file"));
     connect(openAction, SIGNAL(triggered()), this, SLOT(readData()));
@@ -133,8 +128,28 @@ void EigenbroetlerWindow::constructActions()
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(QString(tr("Close %1")).arg(win_name));
     connect(exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
+    // Basic actions
+    newAction = new QAction(QIcon(":/resources/new.png"), tr("&New..."), this);
+    newAction->setShortcuts(QKeySequence::New);
+    newAction->setStatusTip(tr("Create a new complex array"));
+    connect(newAction, SIGNAL(triggered()), this, SLOT(newWindow()));
 
-    // Display actions
+    // Fourier actions
+    fftAction = new QAction(QIcon(":/resources/fft.png"), tr("2D &FFT"), this);
+    fftAction->setShortcut(tr("Ctrl+F"));
+    fftAction->setStatusTip(tr("2D discrete Fourier transform"));
+    connect(fftAction, SIGNAL(triggered()), this, SLOT(fft()));
+    disabledActions << fftAction;
+    fftxAction = new QAction(tr("1D FFT (&X direction)"), this);
+    fftxAction->setStatusTip(tr("1D discrete Fourier transform in X direction"));
+    connect(fftxAction, SIGNAL(triggered()), this, SLOT(fftx()));
+    disabledActions << fftxAction;
+    fftyAction = new QAction(tr("1D FFT (&Y direction)"), this);
+    fftyAction->setStatusTip(tr("1D discrete Fourier transform in Y direction"));
+    connect(fftyAction, SIGNAL(triggered()), this, SLOT(ffty()));
+    disabledActions << fftyAction;
+
+    // Settings actions
     // 1. components
     componentGroup = new QActionGroup(this);
     componentGroup->setExclusive(true);
@@ -195,13 +210,6 @@ void EigenbroetlerWindow::constructActions()
     colourmapAction->setStatusTip(tr("Choose colour map"));
     connect(colourmapAction, SIGNAL(triggered()), this, SLOT(setColourMap()));
     disabledActions << colourmapAction;
-    // Basic actions
-    // Fourier actions
-    fftAction = new QAction(QIcon(":/resources/fft.png"), tr("&FFT"), this);
-    fftAction->setShortcut(tr("Ctrl+F"));
-    fftAction->setStatusTip(tr("Create discrete Fourier transform"));
-    connect(fftAction, SIGNAL(triggered()), this, SLOT(fft()));
-    disabledActions << fftAction;
     // window actions
     closeAction = new QAction(tr("&Close window"), this);
     closeAction->setStatusTip(tr("Close active window"));
@@ -235,14 +243,22 @@ void EigenbroetlerWindow::constructActions()
 void EigenbroetlerWindow::constructMenu()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAsAction);
     fileMenu->addAction(exportAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
-    displayMenu = menuBar()->addMenu(tr("&Display"));
+    basicOpsMenu = menuBar()->addMenu(tr("&Basic"));
+    basicOpsMenu->addAction(newAction);
+
+    fourierMenu = menuBar()->addMenu(tr("&Fourier"));
+    fourierMenu->addAction(fftAction);
+    fourierMenu->addAction(fftxAction);
+    fourierMenu->addAction(fftyAction);
+    disabledWidgets << fourierMenu;
+
+    displayMenu = menuBar()->addMenu(tr("&Settings"));
     disabledWidgets << displayMenu;
     displayMenu->addAction(colourmapAction);
     colourMenu = new QMenu(tr("Colour maps"), this);
@@ -256,10 +272,6 @@ void EigenbroetlerWindow::constructMenu()
     displayMenu->addAction(linAction);
     displayMenu->addAction(logAction);
     displayMenu->addAction(powAction);
-
-    fourierMenu = menuBar()->addMenu(tr("&Fourier"));
-    fourierMenu->addAction(fftAction);
-    disabledWidgets << fourierMenu;
 
     windowMenu = menuBar()->addMenu(tr("&Window"));
     updateWindowMenu();
@@ -308,12 +320,12 @@ void EigenbroetlerWindow::updateWindowMenu()
 void EigenbroetlerWindow::constructToolbars()
 {
     fileToolbar = addToolBar("File");
-    fileToolbar->addAction(newAction);
     fileToolbar->addAction(openAction);
     fileToolbar->addAction(saveAsAction);
     fileToolbar->addAction(exportAction);
 
     opsToolbar = addToolBar("Operations");
+    opsToolbar->addAction(newAction);
     opsToolbar->addAction(fftAction);
 
     displayToolbar = addToolBar("Display");
@@ -498,7 +510,29 @@ void EigenbroetlerWindow::fft()
         QList<ComplexArray *> da;
         for (int i = 0; i < a->numDataSets(); ++i)
             da << a->getData(i)->dft(true);
-        newWindow(da, false);
+        newWindow(da, true);
+    }
+}
+
+void EigenbroetlerWindow::fftx()
+{
+    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
+    if (a) {
+        QList<ComplexArray *> da;
+        for (int i = 0; i < a->numDataSets(); ++i)
+            da << a->getData(i)->xdft(true);
+        newWindow(da, true);
+    }
+}
+
+void EigenbroetlerWindow::ffty()
+{
+    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
+    if (a) {
+        QList<ComplexArray *> da;
+        for (int i = 0; i < a->numDataSets(); ++i)
+            da << a->getData(i)->ydft(true);
+        newWindow(da, true);
     }
 }
 
