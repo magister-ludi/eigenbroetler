@@ -82,9 +82,11 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/array_window_dialogs.cpp
+  ${TOP}/cpp/source/data_selector.cpp
   ${TOP}/cpp/source/display_info.cpp
   ${TOP}/cpp/source/eigenbroetler_window.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
+  ${TOP}/cpp/source/get_images.cpp
   ${TOP}/cpp/source/main.cpp
   ${TOP}/cpp/source/plotter.cpp
   #${TOP}/cpp/source/scaled_plotter.cpp
@@ -95,9 +97,11 @@ set(${GuiApp}_Headers
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/complex_array.h
+  ${TOP}/cpp/include/data_selector.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
+  ${TOP}/cpp/include/get_images.h
   ${TOP}/cpp/include/plotter.h
   ${TOP}/cpp/include/scaled_plotter.h
   ${version_header}
@@ -111,6 +115,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
+  ${TOP}/cpp/include/get_images.h
   ${TOP}/cpp/include/plotter.h
   #${TOP}/cpp/include/scaled_plotter.h
   )
