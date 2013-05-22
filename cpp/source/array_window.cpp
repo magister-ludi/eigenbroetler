@@ -69,6 +69,7 @@ ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
     for (dt = cdata.begin(); dt != cdata.end(); ++dt) {
         DataSet *set = new DataSet;
         set->d = *dt;
+        alist << *dt;
         dlist << set;
     }
     plotLayout = new QWidget;
@@ -231,6 +232,7 @@ bool ArrayWindow::saveData()
                 return false;
             }
         }
+        title_base.clear(); // force recalculation of title
         updateTitle();
         return true;
     }

@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef ARRAY_WINDOW_INCLUDE
 #define ARRAY_WINDOW_INCLUDE
 
@@ -16,7 +17,7 @@ class Plotter;
 class ScaledPlotter;
 
 class ArrayWindow: public QWidget {
- public:
+public:
     static ArrayWindow *createWindow(QList<ComplexArray *>& data,
                                      DisplayInfo::ComplexComponent c,
                                      DisplayInfo::Scale s,
@@ -27,14 +28,15 @@ class ArrayWindow: public QWidget {
     DisplayInfo::ComplexComponent getComponent() const;
     DisplayInfo::Scale getScale(int& pow) const;
     void setColourMap(DisplayInfo::ColourMap const& p);
-    ComplexArray *getData(int i);
-    ComplexArray const *getData(int i) const;
+    QList<ComplexArray const *> getData() const;
     virtual void mouseData(QWidget const *w, QMouseEvent *evt) = 0;
     void updateTitle();
     bool saveData();
     void exportComponents();
     int numDataSets() const;
- protected:
+    QString const& baseTitle() const;
+    int currentIndex() const;
+protected:
     class DataSet {
     public:
         DataSet();
@@ -64,7 +66,8 @@ class ArrayWindow: public QWidget {
     ScaledPlotter *right_plot;
     QLineEdit *status[2];
     QList<DataSet *> dlist;
- private:
+    QList<ComplexArray const *> alist;
+private:
     ArrayWindow(); // not imlemented
     ArrayWindow(ArrayWindow const&); // not imlemented
     ArrayWindow& operator=(ArrayWindow const&); // not imlemented
@@ -100,14 +103,9 @@ inline DisplayInfo::ComplexComponent ArrayWindow::getComponent() const
     return cmp;
 }
 
-inline ComplexArray *ArrayWindow::getData(int i)
+inline QList<ComplexArray const *> ArrayWindow::getData() const
 {
-    return dlist.at(i)->d;
-}
-
-inline ComplexArray const *ArrayWindow::getData(int i) const
-{
-    return dlist.at(i)->d;
+    return alist;
 }
 
 inline int ArrayWindow::numDataSets() const
@@ -116,8 +114,18 @@ inline int ArrayWindow::numDataSets() const
 }
 
 inline ArrayWindow::DataSet::DataSet():
-                   d(NULL)
+    d(NULL)
 {
+}
+
+inline QString const& ArrayWindow::baseTitle() const
+{
+    return title_base;
+}
+
+inline int ArrayWindow::currentIndex() const
+{
+    return index;
 }
 
 #endif /* ARRAY_WINDOW_INCLUDE */
