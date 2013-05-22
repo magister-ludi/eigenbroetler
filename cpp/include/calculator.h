@@ -56,7 +56,8 @@ public:
     public:
         ImageData();
         ~ImageData();
-        ComplexArray const *c;
+        QList<ComplexArray const *> c;
+        int curr;
         bool owned;
         enum adjust {
             TRUNCATE,
@@ -79,6 +80,7 @@ public:
     bool counterUsed() const;
     Expression cmp(Expression tst, Expression iftrue, Expression iffalse) const;
     Expression pixel(int img, Expression xpos, Expression ypos) const;
+    Expression pixel(int img, Expression layer, Expression xpos, Expression ypos) const;
     Expression eq(Expression a1, Expression a2) const;
     Expression lt(Expression a1, Expression a2) const;
     Expression gt(Expression a1, Expression a2) const;

@@ -18,11 +18,10 @@ void yyerror(char const *)
 %token TOK_SIN TOK_COS TOK_TAN TOK_ASINH TOK_ACOSH TOK_ATAN2
 %token TOK_ATANH TOK_ASIN TOK_ACOS TOK_ATAN TOK_LN TOK_LOG
 %token TOK_ROUND TOK_TRUNC TOK_FRAC
-
+%token TOK_PXL
 %token  TOK_E TOK_I TOK_X TOK_Y TOK_R TOK_THETA TOK_S TOK_N
 
 %nonassoc  TOK_EQ TOK_GT TOK_LE TOK_LT TOK_GE TOK_NE
-// TOK_AND TOK_OR TOK_NOT
 
 %left '+' '-'
 %left '*' '/'
@@ -45,6 +44,10 @@ expr:
    | expr '*' expr                         { $$ = calculator.multiply($1, $3); }
    | expr '/' expr                         { $$ = calculator.divide($1, $3); }
    | expr TOK_POW expr                     { $$ = calculator.pow_func($1, $3); }
+   | TOK_PXL TOK_NUMBER '(' expr ',' expr ')'
+                                           { $$ = calculator.pixel(int($2), 0, $4, $6); }
+   | TOK_PXL TOK_NUMBER '(' expr ',' expr ',' expr ')'
+                                           { $$ = calculator.pixel(int($2), $4, $6, $8); }
    | '(' expr ')'                          { $$ = $2; }
    | '-' expr %prec TOK_UMINUS             { $$ = calculator.neg($2); }
    | '+' expr %prec TOK_UPLUS              { $$ = $2; }
