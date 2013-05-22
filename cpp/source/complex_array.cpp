@@ -2,6 +2,7 @@
 #include <complex_array.h>
 #include <limits>
 #include <QFile>
+#include <QFileInfo>
 #include <QImage>
 #include <calculator.h>
 
@@ -77,7 +78,7 @@ ComplexArray::ComplexArray(QString const& file_name):
     vals(NULL),
     //TODO: check which of these is correct.
     //file(QFile::decodeName(file_name.toAscii())),
-    file(QFile::decodeName(file_name.toUtf8())),
+    file(QFileInfo(QFile::decodeName(file_name.toUtf8())).absoluteFilePath()),
     fft(false),
     have_min_max(true)
 {
