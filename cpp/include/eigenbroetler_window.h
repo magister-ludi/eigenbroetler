@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef EIGENBROT_WINDOW_INCLUDE
 #define EIGENBROT_WINDOW_INCLUDE
 
@@ -28,8 +29,10 @@ public:
     static QString const last_save;
     static QString const last_read;
 
-    EigenbroetlerWindow();
+    static EigenbroetlerWindow *instance();
     ~EigenbroetlerWindow();
+    static QString getFileName(QWidget *p);
+    void loadImage(QString const& filename);
 protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
@@ -50,19 +53,20 @@ private slots:
     void updateWindowMenu();
     void setActiveSubwindow(QWidget *w);
 private:
+    EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
     EigenbroetlerWindow& operator=(EigenbroetlerWindow const&); // not implemented
-    friend class WindowList;
+    friend class DataSelector;
     void newWindow(QList<ComplexArray *>& a, bool stack);
     void loadSettings();
     void constructActions();
     void constructMenu();
     void constructToolbars();
     void resetGUI();
-    //void toggleComponentActions();
     ArrayWindow *getArrayWindow(QMdiSubWindow *w);
     ArrayWindow const *getArrayWindow(QMdiSubWindow const *w) const;
 
+    static EigenbroetlerWindow *eb;
     QMdiArea *mdiArea;
     // Actions for file menu
     QAction *openAction;
@@ -117,8 +121,16 @@ private:
     Q_OBJECT
 };
 
+inline EigenbroetlerWindow *EigenbroetlerWindow::instance()
+{
+    if (eb == NULL)
+        eb = new EigenbroetlerWindow;
+    return eb;
+}
+
 inline EigenbroetlerWindow::~EigenbroetlerWindow()
 {
+    std::cout << "Bye bye, I'm off" << std::endl;
 }
 
 #endif /* EIGENBROT_WINDOW_INCLUDE */

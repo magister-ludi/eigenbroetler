@@ -28,6 +28,8 @@ QString const EigenbroetlerWindow::window_size("size");
 QString const EigenbroetlerWindow::last_save("LastSave");
 QString const EigenbroetlerWindow::last_read("LastRead");
 
+EigenbroetlerWindow *EigenbroetlerWindow::eb = NULL;
+
 EigenbroetlerWindow::EigenbroetlerWindow()
 {
     setWindowIcon(QIcon(QPixmap(":/resources/eigen_icon.png")));
@@ -373,7 +375,7 @@ void EigenbroetlerWindow::newWindow(QList<ComplexArray *>& a, bool stack)
     }
 }
 
-void EigenbroetlerWindow::readData()
+QString EigenbroetlerWindow::getFileName(QWidget *p)
 {
     QList<QByteArray> formats = QImageReader::supportedImageFormats();
     QList<QByteArray>::iterator fmt;
@@ -384,22 +386,38 @@ void EigenbroetlerWindow::readData()
 
     QSettings settings(app_owner, app_name);
     QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toAscii());
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Read file"),
+    QString fileName = QFileDialog::getOpenFileName(p, tr("Read file"),
                                                     dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
     if (!fileName.isEmpty()) {
+#if defined(Q_OS_WIN)
+        fileName = fileName.toUtf8().toLower();
+#else
         fileName = fileName.toUtf8();
+#endif
         int slash = fileName.lastIndexOf('/');
         settings.setValue(last_read, fileName.left(slash + 1));
-        ComplexArray *cdata = new ComplexArray(fileName);
-        if (!cdata->isValid()) {
-            QMessageBox::warning(this, "File load failed", cdata->errorString());
-            delete cdata;
-        }
-        else {
-            QList<ComplexArray *> arr;
-            arr << cdata;
-            newWindow(arr, false);
-        }
+    }
+    return fileName;
+}
+
+void EigenbroetlerWindow::readData()
+{
+    QString fileName = getFileName(this);
+    if (!fileName.isEmpty())
+        loadImage(fileName);
+}
+
+void EigenbroetlerWindow::loadImage(QString const& filename)
+{
+    ComplexArray *cdata = new ComplexArray(filename);
+    if (!cdata->isValid()) {
+        QMessageBox::warning(this, "File load failed", cdata->errorString());
+        delete cdata;
+    }
+    else {
+        QList<ComplexArray *> arr;
+        arr << cdata;
+        newWindow(arr, false);
     }
 }
 
@@ -509,7 +527,7 @@ void EigenbroetlerWindow::fft()
     if (a) {
         QList<ComplexArray *> da;
         for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData(i)->dft(true);
+            da << a->getData()[i]->dft(true);
         newWindow(da, true);
     }
 }
@@ -520,7 +538,7 @@ void EigenbroetlerWindow::fftx()
     if (a) {
         QList<ComplexArray *> da;
         for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData(i)->xdft(true);
+            da << a->getData()[i]->xdft(true);
         newWindow(da, true);
     }
 }
@@ -531,7 +549,7 @@ void EigenbroetlerWindow::ffty()
     if (a) {
         QList<ComplexArray *> da;
         for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData(i)->ydft(true);
+            da << a->getData()[i]->ydft(true);
         newWindow(da, true);
     }
 }
