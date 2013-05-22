@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef ARRAY_WINDOW2D_INCLUDE
 #define ARRAY_WINDOW2D_INCLUDE
 

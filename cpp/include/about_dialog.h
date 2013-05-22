@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef ABOUT_DIALOG_INCLUDE
 #define ABOUT_DIALOG_INCLUDE
 

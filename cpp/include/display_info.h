@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef DISPLAY_INFO_INCLUDE
 #define DISPLAY_INFO_INCLUDE
 

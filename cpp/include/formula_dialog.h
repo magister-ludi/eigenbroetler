@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef FORMULA_DIALOG_INCLUDE
 #define FORMULA_DIALOG_INCLUDE
 

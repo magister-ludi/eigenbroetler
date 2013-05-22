@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef ARRAY_WINDOW_DIALOGS_INCLUDE
 #define ARRAY_WINDOW_DIALOGS_INCLUDE
 

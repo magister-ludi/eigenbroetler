@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef PLOTTER_INCLUDE
 #define PLOTTER_INCLUDE
 

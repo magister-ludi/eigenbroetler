@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef SCALED_PLOTTER_INCLUDE
 #define SCALED_PLOTTER_INCLUDE
 
