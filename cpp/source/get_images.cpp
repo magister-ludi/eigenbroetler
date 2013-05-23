@@ -166,9 +166,10 @@ void GetImageDialog::accept()
             Calculator::ImageData::TRUNCATE : Calculator::ImageData::WRAP;
         if (v.canConvert(QVariant::String)) {
             // file name
-            d->c << new ComplexArray(v.toString());
+            QString errStr;
+            d->c << ComplexArray::readFileData(v.toString(), errStr, true)[0];
             if (!d->c.last()->isValid())
-                err += d->c.last()->errorString() + "\n";
+                err += errStr + "\n";
             d->owned = true;
             d->curr = 0;
         }

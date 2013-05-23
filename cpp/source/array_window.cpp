@@ -129,8 +129,9 @@ void ArrayWindow::updateTitle()
     if (!title.isEmpty()) {
         int slash = title.lastIndexOf('/');
         if (slash >= 0)
-            if (title_base.isEmpty())
-                title_base = title.mid(slash + 1);
+            title_base = title.mid(slash + 1);
+        else
+            title_base = title;
     }
     else {
         if (title_base.isEmpty())

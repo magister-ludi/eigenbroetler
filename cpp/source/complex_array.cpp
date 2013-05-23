@@ -73,6 +73,58 @@ inline bool testFilestring(char const *data, char const *test)
     return memcmp(data, test, strlen(test)) == 0;
 }
 
+QList<ComplexArray *> ComplexArray::readFileData(QString const& file_name, QString& err, bool single)
+{
+    QList<ComplexArray *> l;
+    QString fullname = (QFileInfo(QFile::decodeName(file_name.toUtf8())).absoluteFilePath());
+    err.clear();
+    QStringList files;
+    files << fullname;
+    if (!single) {
+        QFileInfo info(fullname);
+        QString base = info.baseName();
+        QString path = info.path();
+        QString ext = info.completeSuffix();
+        if (ext.length() > 0)
+            ext.insert(0, '.');
+        QRegExp test("(\\d+)$");
+        int idx = test.indexIn(base);
+        if (idx >= 0) {
+            QString const nstr(test.cap(1));
+            int const len = nstr.length();
+            QString const fpattern = path + '/' + base.left(idx) + "%1" + ext;
+            int value = nstr.toInt() - 1;
+            for (; value > 0;) {
+                QString testname(fpattern.arg(value, len, 10, QLatin1Char('0')));
+                QFileInfo ftest(testname);
+                if (!ftest.exists())
+                    break;
+                files.prepend(testname);
+                --value;
+            }
+            value = nstr.toInt() + 1;
+            for (;;) {
+                QString testname(fpattern.arg(value, len, 10, QLatin1Char('0')));
+                QFileInfo ftest(testname);
+               if (!ftest.exists())
+                    break;
+                files.append(testname);
+                ++value;
+            }
+        }
+    }
+    for (QStringList::iterator f = files.begin(); f != files.end(); ++f) {
+        ComplexArray *a = new ComplexArray(*f);
+        if (!a->isValid()) {
+            err += a->errorString() + "\n";
+            delete a;
+        }
+        else
+            l << a;
+    }
+    return l;
+}
+
 ComplexArray::ComplexArray(QString const& file_name):
     mem(0),
     vals(NULL),

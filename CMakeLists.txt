@@ -66,7 +66,7 @@ set(${CppLibName}_Headers
   )
 
 add_library(${CppLibName} SHARED ${${CppLibName}_Sources} ${${CppLibName}_Headers})
-target_link_libraries(${CppLibName} ${QT_LIBRARIES} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
+target_link_libraries(${CppLibName} ${QT_QTCORE_LIBRARY} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
 set_target_properties(${CppLibName}
   PROPERTIES
   OUTPUT_NAME eigenbroetler
@@ -156,7 +156,7 @@ add_executable(${GuiApp}
   ${${GuiApp}_Mocfiles}
   ${${GuiApp}_Uifiles}
   ${${GuiApp}_Resources})
-target_link_libraries(${GuiApp} ${CppLibName})
+target_link_libraries(${GuiApp} ${QT_QTGUI_LIBRARY} ${CppLibName})
 add_dependencies(${GuiApp} ${Language_Resources})
 
 set_target_properties(${GuiApp}

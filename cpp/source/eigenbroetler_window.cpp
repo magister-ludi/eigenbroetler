@@ -409,16 +409,16 @@ void EigenbroetlerWindow::readData()
 
 void EigenbroetlerWindow::loadImage(QString const& filename)
 {
-    ComplexArray *cdata = new ComplexArray(filename);
-    if (!cdata->isValid()) {
-        QMessageBox::warning(this, "File load failed", cdata->errorString());
-        delete cdata;
+    QString err;
+    QList<ComplexArray *> cdata = ComplexArray::readFileData(filename, err);
+    if (!err.isEmpty()) {
+        QMessageBox::warning(this, "File load failed", err);
+        QList<ComplexArray *>::iterator c;
+        for (c = cdata.begin(); c != cdata.end(); ++c)
+            delete *c;
     }
-    else {
-        QList<ComplexArray *> arr;
-        arr << cdata;
-        newWindow(arr, false);
-    }
+    else
+        newWindow(cdata, true);
 }
 
 ArrayWindow *EigenbroetlerWindow::getArrayWindow(QMdiSubWindow *w)

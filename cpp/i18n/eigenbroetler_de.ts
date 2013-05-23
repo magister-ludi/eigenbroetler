@@ -47,37 +47,37 @@
 <context>
     <name>ArrayWindow</name>
     <message>
-        <location filename="../source/array_window.cpp" line="140"/>
+        <location filename="../source/array_window.cpp" line="141"/>
         <source>%1 (%2 of %3)</source>
         <translation>%1 (%2 von %3)</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="198"/>
+        <location filename="../source/array_window.cpp" line="199"/>
         <source>FITS Files (*.fits *.fit);;All files (*.*)</source>
         <translation>FITS Dateien (*.fits *.fit);;Alle Dateien (*.*)</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="201"/>
+        <location filename="../source/array_window.cpp" line="202"/>
         <source>Save file</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="230"/>
+        <location filename="../source/array_window.cpp" line="231"/>
         <source>File save failed: %1</source>
         <translation>Dateispeicherung fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="252"/>
+        <location filename="../source/array_window.cpp" line="253"/>
         <source>Bitmap Files (</source>
         <translation>Bitmapdateien (</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="255"/>
+        <location filename="../source/array_window.cpp" line="256"/>
         <source>;;All files (*.*)</source>
         <translation>;;Alle Dateien (*.*)</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="259"/>
+        <location filename="../source/array_window.cpp" line="260"/>
         <source>Export file</source>
         <translation>Datei exportieren</translation>
     </message>
@@ -603,47 +603,47 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../source/complex_array.cpp" line="87"/>
+        <location filename="../source/complex_array.cpp" line="139"/>
         <source>&quot;%1&quot; doesn&apos;t appear to exist!</source>
         <translation>&quot;%1&quot; existiert anscheinend nicht!</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="93"/>
+        <location filename="../source/complex_array.cpp" line="145"/>
         <source>Couldn&apos;t open &quot;%1&quot; for reading</source>
         <translation>Konnte &quot;%1&quot; nicht lesen</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="97"/>
+        <location filename="../source/complex_array.cpp" line="149"/>
         <source>Unable to determine file type of &quot;%1&quot;</source>
         <translation>Konnte Datei &quot;%1&quot; nicht entziffern</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="143"/>
+        <location filename="../source/complex_array.cpp" line="195"/>
         <source>File &quot;%1&quot; load failed: unsupported format?</source>
         <translation>Lesen von &quot;%1&quot; fehlgeschlagen: Dateiformat nicht unterstützt?</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="184"/>
+        <location filename="../source/complex_array.cpp" line="236"/>
         <source>Can&apos;t open &quot;%1&quot; for reading</source>
         <translation>Kann &quot;%1&quot; nicht lesen</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="189"/>
+        <location filename="../source/complex_array.cpp" line="241"/>
         <source>&quot;%1&quot; has no NAXIS key</source>
         <translation>&quot;%1&quot; hat kein NAXIS Schlüssel</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="194"/>
+        <location filename="../source/complex_array.cpp" line="246"/>
         <source>&quot;%1&quot; has no BITPIX key</source>
         <translation>&quot;%1&quot; hat kein BITPIX Schlüssel</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="202"/>
+        <location filename="../source/complex_array.cpp" line="254"/>
         <source>Axis data missing for axis #%1 of %2</source>
         <translation>Fehlende Daten für Achse #%1 von %2</translation>
     </message>
     <message>
-        <location filename="../source/complex_array.cpp" line="218"/>
+        <location filename="../source/complex_array.cpp" line="270"/>
         <source>The data in &quot;%1&quot; are badly formatted</source>
         <translation>Die Datn in &quot;%1&quot; sind falsch formattiert</translation>
     </message>
