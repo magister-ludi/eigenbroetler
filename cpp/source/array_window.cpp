@@ -114,8 +114,8 @@ ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
     updateTitle();
 
     if (curs == NULL) {
-        curs = new QCursor(QBitmap(":/resources/cross_map.pbm"),
-                           QBitmap(":/resources/cross_mask.pbm"));
+        curs = new QCursor(QBitmap(":/resources/curs_map.pbm"),
+                           QBitmap(":/resources/curs_mask.pbm"));
         atexit(cleanup);
     }
     left_plot->setCursor(*curs);
