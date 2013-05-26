@@ -52,6 +52,10 @@ private slots:
     void windowActivated(QMdiSubWindow *w);
     void updateWindowMenu();
     void setActiveSubwindow(QWidget *w);
+    void dislocation();
+    void addConstPhase();
+    void addLinearPhase();
+    void addQuadPhase();
 private:
     EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
@@ -75,6 +79,11 @@ private:
     QAction *exitAction;
     // Actions for basic operations
     QAction *newAction;
+    // Actions for advanced operations
+    QAction *dislocationAction;
+    QAction *constPhaseAction;
+    QAction *linearPhaseAction;
+    QAction *quadPhaseAction;
     // Actions for Fourier menu
     QAction *fftAction;
     QAction *fftxAction;
@@ -107,6 +116,8 @@ private:
 
     QMenu *fileMenu;
     QMenu *basicOpsMenu;
+    QMenu *advancedOpsMenu;
+    QMenu *phaseOpsMenu;
     QMenu *fourierMenu;
     QMenu *displayMenu;
     QMenu *colourMenu;

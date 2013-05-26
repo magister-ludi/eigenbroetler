@@ -119,6 +119,24 @@
     </message>
 </context>
 <context>
+    <name>DislocationDialog</name>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="14"/>
+        <source>Add spiral dislocation</source>
+        <translation>Schraubenversetzung einfügen</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="15"/>
+        <source>&amp;X location</source>
+        <translation>&amp;X-Koordinate</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="16"/>
+        <source>&amp;Y location</source>
+        <translation>&amp;Y-Koordinate</translation>
+    </message>
+</context>
+<context>
     <name>DisplayInfo</name>
     <message>
         <location filename="../include/display_info.h" line="60"/>
@@ -185,313 +203,363 @@
 <context>
     <name>EigenbroetlerWindow</name>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="56"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="57"/>
         <source>Ready</source>
         <translation>Bereit</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="134"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="135"/>
         <source>&amp;New...</source>
         <translation>&amp;Neu...</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="136"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="137"/>
         <source>Create a new complex array</source>
         <translation>Einen neuen komplexen Datensatz erzeugen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="114"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="115"/>
         <source>&amp;Open...</source>
         <translation>&amp;Offnen...</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="115"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="116"/>
         <source>Open an image file</source>
         <translation>Eine Bilddatei öffnen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="118"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="119"/>
         <source>&amp;Save as...</source>
         <translation>&amp;Speichern unter...</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="119"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="120"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="120"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="121"/>
         <source>Save complex array to disk</source>
         <translation>Datensatz auf die Festplatte speichern</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="124"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="125"/>
         <source>&amp;Export...</source>
         <translation>&amp;Export...</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="125"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="126"/>
         <source>Save display images to disk</source>
         <translation>Anzeigebilder speichern</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="129"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="130"/>
         <source>E&amp;xit</source>
         <translation>Sch&amp;ließen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="131"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="132"/>
         <source>Close %1</source>
         <translation>%1 schließen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="140"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="141"/>
+        <source>&amp;Spiral dislocation...</source>
+        <translation>&amp;Schraubenversetzung</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="142"/>
+        <source>Insert spiral phase dislocation</source>
+        <translation>Eine Schraubenverstezung in die Phase einfügen</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="144"/>
+        <source>Add &amp;constant phase...</source>
+        <translation>&amp;Konstante Phase...</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="145"/>
+        <source>Add a constant phase</source>
+        <translation>Eine konstante Phase hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="147"/>
+        <source>Add &amp;linear phase...</source>
+        <translation>&amp;Lineare Phase...</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="148"/>
+        <source>Add a linear phase</source>
+        <translation>Eine lineare Phase hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="150"/>
+        <source>Add &amp;quadratic phase...</source>
+        <translation>&amp;Quadratische Phase...</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="151"/>
+        <source>Add a quadratic phase</source>
+        <translation>Eine quadratische Phase hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="155"/>
         <source>2D &amp;FFT</source>
         <translation>2D &amp;FFT</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="142"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="157"/>
         <source>2D discrete Fourier transform</source>
         <translation>2D diskrete Fouriertransformierte</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="145"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="160"/>
         <source>1D FFT (&amp;X direction)</source>
         <translation>1D FFT (&amp;X-Richtung)</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="146"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="161"/>
         <source>1D discrete Fourier transform in X direction</source>
         <translation>1D diskrete Fouriertransforme in X-Richtung</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="149"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="164"/>
         <source>1D FFT (&amp;Y direction)</source>
         <translation>1D FFT (&amp;Y-Richtung)</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="150"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="165"/>
         <source>1D discrete Fourier transform in Y direction</source>
         <translation>1D diskrete Fouriertransformierte in Y-Richtung</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="158"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="173"/>
         <source>&amp;Real/imaginary</source>
         <translation>&amp;Reell/imaginär</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="161"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="176"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="162"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="177"/>
         <source>Display real and imaginary components</source>
         <translation>Reelle und imaginäre Komponenten anzeigen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="164"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="179"/>
         <source>&amp;Magnitude/Phase</source>
         <translation>&amp;Absolutwert/Phase</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="167"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="182"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="168"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="183"/>
         <source>Display magnitude and phase</source>
         <translation>Absolutwerte und Phasen anzeigen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="171"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="186"/>
         <source>&amp;Toggle components</source>
         <translation>&amp;Komponenten schalten</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="173"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="188"/>
         <source>Toggle component display</source>
         <translation>Komponentenanzeige schalten</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="178"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="193"/>
         <source>Li&amp;near</source>
         <translation>Li&amp;near</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="181"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="196"/>
         <source>Linear scaling</source>
         <translation>Lineare Skalierung</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="184"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="199"/>
         <source>Lo&amp;garithmic</source>
         <translation>Lo&amp;garithmisch</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="187"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="202"/>
         <source>Logarithmic scaling</source>
         <translation>Logarithmische Skalierung</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="190"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="205"/>
         <source>R&amp;oot</source>
         <translation>&amp;Würzel</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="193"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="208"/>
         <source>Root scaling</source>
         <translation>Würzelskalierung</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="211"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="226"/>
         <source>&amp;Colours</source>
         <translation>&amp;Farben</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="212"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="227"/>
         <source>Choose colour map</source>
         <translation>Farbschema wählen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="141"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="156"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="216"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="232"/>
         <source>&amp;Close window</source>
         <translation>Fenster S&amp;chließen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="217"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="233"/>
         <source>Close active window</source>
         <translation>Aktives Fenster schließen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="220"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="236"/>
         <source>Close all windows</source>
         <translation>Alle Fenster schließen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="223"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="239"/>
         <source>Tile windows</source>
         <translation>Fenster kacheln</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="226"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="242"/>
         <source>Cascade windows</source>
         <translation>Fenster staffeln</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="254"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="270"/>
         <source>&amp;Basic</source>
         <translation>&amp;Einfach</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="263"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="287"/>
         <source>&amp;Settings</source>
         <translation>&amp;Einstellungen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="382"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="406"/>
         <source>Image Files (*.fits *.fit</source>
         <translation>Bilddateien (*.fits *.fit</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="385"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="409"/>
         <source>;;All files (*.*)</source>
         <translation>;;Alle Dateien (*.*)</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="219"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="235"/>
         <source>Close &amp;All windows</source>
         <translation>&amp;Alle Fenster schließen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="222"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="238"/>
         <source>&amp;Tile windows</source>
         <translation>Fenster &amp;kacheln</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="225"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="241"/>
         <source>C&amp;ascade windows</source>
         <translation>Fenster s&amp;taffeln</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="228"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="244"/>
         <source>&amp;Next window</source>
         <translation>&amp;Nächstes Fenster</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="231"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="247"/>
         <source>&amp;Previous window</source>
         <translation>&amp;Voriges Fenster</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="238"/>
-        <location filename="../source/eigenbroetler_window.cpp" line="284"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="254"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="308"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="240"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="256"/>
         <source>A&amp;bout </source>
         <translation>Ü&amp;ber </translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="247"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="263"/>
         <source>&amp;File</source>
         <translation>&amp;Datei</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="266"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="273"/>
+        <source>&amp;Advanced</source>
+        <translation>&amp;Erweitert</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="274"/>
+        <source>&amp;Phase</source>
+        <translation>&amp;Phase</translation>
+    </message>
+    <message>
+        <location filename="../source/eigenbroetler_window.cpp" line="290"/>
         <source>Colour maps</source>
         <translation>Farbschemata</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="270"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="294"/>
         <source>Components</source>
         <translation>Komponenten</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="273"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="297"/>
         <source>Scale</source>
         <translation>Skalierung</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="257"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="281"/>
         <source>&amp;Fourier</source>
         <translation>&amp;Fourier</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="278"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="302"/>
         <source>&amp;Window</source>
         <translation>Fen&amp;ster</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="311"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="335"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="313"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="337"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="389"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="413"/>
         <source>Read file</source>
         <translation>Datei lesen</translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="489"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="513"/>
         <source>Select root to use</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../source/eigenbroetler_window.cpp" line="490"/>
+        <location filename="../source/eigenbroetler_window.cpp" line="514"/>
         <source>Root:</source>
         <translation></translation>
     </message>
@@ -598,6 +666,46 @@
         <location filename="../source/get_images.cpp" line="39"/>
         <source>Wrap &amp;both</source>
         <translation>&amp;Beides wickeln</translation>
+    </message>
+</context>
+<context>
+    <name>PhaseDialog</name>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="35"/>
+        <source>Incorrect value (%1) passed to PhaseDialog constructor
+</source>
+        <translation>Falscher Wert (%1) an den PhaseDialog-Konstructor eingegeben
+</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="36"/>
+        <source>Using Quadratic phase</source>
+        <translation>Quadratische Phase wird verwendet</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="41"/>
+        <source>Phase offset</source>
+        <translation>Phasenzusatz</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="42"/>
+        <source>Phase (fraction of 2%1)</source>
+        <translation>Phase (Bruchteil von 2%1)</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="49"/>
+        <source>Linear phase</source>
+        <translation>Lineare Phase</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="56"/>
+        <source>Quadratic phase</source>
+        <translation>Quadratische Phase</translation>
+    </message>
+    <message>
+        <location filename="../source/phase_ops.cpp" line="34"/>
+        <source>Internal error</source>
+        <translation>Interner Fehler</translation>
     </message>
 </context>
 <context>
@@ -837,6 +945,45 @@
         <location filename="../../build/ui_formula_dialog.h" line="334"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
+    </message>
+</context>
+<context>
+    <name>phaseDialog</name>
+    <message>
+        <location filename="../ui/phase_dialog.ui" line="32"/>
+        <location filename="../../build/ui_phase_dialog.h" line="138"/>
+        <source>Dislocation &amp;order</source>
+        <translation>Versetzungs&amp;grad</translation>
+    </message>
+    <message>
+        <location filename="../ui/phase_dialog.ui" line="42"/>
+        <location filename="../../build/ui_phase_dialog.h" line="139"/>
+        <source>Factor in &amp;X direction</source>
+        <translation>Faktor in &amp;X-Richtung</translation>
+    </message>
+    <message>
+        <location filename="../ui/phase_dialog.ui" line="52"/>
+        <location filename="../../build/ui_phase_dialog.h" line="140"/>
+        <source>Factor in &amp;Y direction</source>
+        <translation>Faktor in &amp;Y-Richtung</translation>
+    </message>
+    <message>
+        <location filename="../ui/phase_dialog.ui" line="62"/>
+        <location filename="../../build/ui_phase_dialog.h" line="141"/>
+        <source>Use &amp;absolute value of phase</source>
+        <translation>Verwende den &amp;Absolutwert der Phase</translation>
+    </message>
+    <message>
+        <location filename="../ui/phase_dialog.ui" line="111"/>
+        <location filename="../../build/ui_phase_dialog.h" line="142"/>
+        <source>&amp;Cancel</source>
+        <translation>A&amp;bbrechen</translation>
+    </message>
+    <message>
+        <location filename="../ui/phase_dialog.ui" line="118"/>
+        <location filename="../../build/ui_phase_dialog.h" line="143"/>
+        <source>OK</source>
+        <translation>OK</translation>
     </message>
 </context>
 </TS>

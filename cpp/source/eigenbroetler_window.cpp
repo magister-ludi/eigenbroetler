@@ -18,6 +18,7 @@
 #include <about_dialog.h>
 #include <array_window_2d.h>
 #include <complex_array.h>
+#include <complex_operations.h>
 #include <formula_dialog.h>
 
 QString const EigenbroetlerWindow::app_owner("magister-ludi");
@@ -136,6 +137,20 @@ void EigenbroetlerWindow::constructActions()
     newAction->setStatusTip(tr("Create a new complex array"));
     connect(newAction, SIGNAL(triggered()), this, SLOT(newWindow()));
 
+    // Advanced actions
+    dislocationAction = new QAction(tr("&Spiral dislocation..."), this);
+    dislocationAction->setStatusTip(tr("Insert spiral phase dislocation"));
+    connect(dislocationAction, SIGNAL(triggered()), this, SLOT(dislocation()));
+    constPhaseAction = new QAction(tr("Add &constant phase..."), this);
+    constPhaseAction->setStatusTip(tr("Add a constant phase"));
+    connect(constPhaseAction, SIGNAL(triggered()), this, SLOT(addConstPhase()));
+    linearPhaseAction = new QAction(tr("Add &linear phase..."), this);
+    linearPhaseAction->setStatusTip(tr("Add a linear phase"));
+    connect(linearPhaseAction, SIGNAL(triggered()), this, SLOT(addLinearPhase()));
+    quadPhaseAction = new QAction(tr("Add &quadratic phase..."), this);
+    quadPhaseAction->setStatusTip(tr("Add a quadratic phase"));
+    connect(quadPhaseAction, SIGNAL(triggered()), this, SLOT(addQuadPhase()));
+
     // Fourier actions
     fftAction = new QAction(QIcon(":/resources/fft.png"), tr("2D &FFT"), this);
     fftAction->setShortcut(tr("Ctrl+F"));
@@ -212,7 +227,8 @@ void EigenbroetlerWindow::constructActions()
     colourmapAction->setStatusTip(tr("Choose colour map"));
     connect(colourmapAction, SIGNAL(triggered()), this, SLOT(setColourMap()));
     disabledActions << colourmapAction;
-    // window actions
+
+    // Window actions
     closeAction = new QAction(tr("&Close window"), this);
     closeAction->setStatusTip(tr("Close active window"));
     connect(closeAction, SIGNAL(triggered()), mdiArea, SLOT(closeActiveSubWindow()));
@@ -253,6 +269,14 @@ void EigenbroetlerWindow::constructMenu()
 
     basicOpsMenu = menuBar()->addMenu(tr("&Basic"));
     basicOpsMenu->addAction(newAction);
+
+    advancedOpsMenu = menuBar()->addMenu(tr("&Advanced"));
+    phaseOpsMenu = advancedOpsMenu->addMenu(tr("&Phase"));
+    phaseOpsMenu->addAction(dislocationAction);
+    phaseOpsMenu->addAction(constPhaseAction);
+    phaseOpsMenu->addAction(linearPhaseAction);
+    phaseOpsMenu->addAction(quadPhaseAction);
+    disabledWidgets << advancedOpsMenu;
 
     fourierMenu = menuBar()->addMenu(tr("&Fourier"));
     fourierMenu->addAction(fftAction);

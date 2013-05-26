@@ -57,11 +57,13 @@ set(${CppLibName}_Sources
   ${flex_output}
   ${TOP}/cpp/source/calculator.cpp
   ${TOP}/cpp/source/complex_array.cpp
+  ${TOP}/cpp/source/complex_operations.cpp
   )
 set(${CppLibName}_Headers
   ${bison_h_output}
   ${TOP}/cpp/include/calculator.h
   ${TOP}/cpp/include/complex_array.h
+  ${TOP}/cpp/include/complex_operations.h
   ${TOP}/cpp/include/display_info.h
   )
 
@@ -88,6 +90,7 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/formula_dialog.cpp
   ${TOP}/cpp/source/get_images.cpp
   ${TOP}/cpp/source/main.cpp
+  ${TOP}/cpp/source/phase_ops.cpp
   ${TOP}/cpp/source/plotter.cpp
   #${TOP}/cpp/source/scaled_plotter.cpp
   )
@@ -102,6 +105,7 @@ set(${GuiApp}_Headers
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/get_images.h
+  ${TOP}/cpp/include/phase_ops.h
   ${TOP}/cpp/include/plotter.h
   ${TOP}/cpp/include/scaled_plotter.h
   ${version_header}
@@ -116,6 +120,7 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/get_images.h
+  ${TOP}/cpp/include/phase_ops.h
   ${TOP}/cpp/include/plotter.h
   #${TOP}/cpp/include/scaled_plotter.h
   )
@@ -124,6 +129,7 @@ qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
   ${TOP}/cpp/ui/export_components_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
+  ${TOP}/cpp/ui/phase_dialog.ui
   )
 
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
