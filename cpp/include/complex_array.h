@@ -35,6 +35,8 @@ class ComplexArray {
     bool save(QString const& filename);
     QImage constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
                           DisplayInfo::ColourMap const& colour_map, int inv_power = -1) const;
+    // Mark min/max calculations as invalid
+    void reset();
     // Operations
     ComplexArray *dft(bool recentre) const;
     ComplexArray *xdft(bool recentre) const;
@@ -107,6 +109,11 @@ inline Complex& ComplexArray::value(int x, int y)
 inline QString const& ComplexArray::source() const
 {
     return file;
+}
+
+inline void ComplexArray::reset()
+{
+    have_min_max = false;
 }
 
 #endif /* COMPLEX_ARRAY_INCLUDE */
