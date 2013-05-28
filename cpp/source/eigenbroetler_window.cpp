@@ -136,6 +136,10 @@ void EigenbroetlerWindow::constructActions()
     newAction->setShortcuts(QKeySequence::New);
     newAction->setStatusTip(tr("Create a new complex array"));
     connect(newAction, SIGNAL(triggered()), this, SLOT(newWindow()));
+    padAction = new QAction(tr("&Pad/Crop..."), this);
+    padAction->setStatusTip(tr("Pad or crop complex array"));
+    connect(padAction, SIGNAL(triggered()), this, SLOT(padData()));
+    disabledActions << padAction;
 
     // Advanced actions
     dislocationAction = new QAction(tr("&Spiral dislocation..."), this);
@@ -269,6 +273,7 @@ void EigenbroetlerWindow::constructMenu()
 
     basicOpsMenu = menuBar()->addMenu(tr("&Basic"));
     basicOpsMenu->addAction(newAction);
+    basicOpsMenu->addAction(padAction);
 
     advancedOpsMenu = menuBar()->addMenu(tr("&Advanced"));
     phaseOpsMenu = advancedOpsMenu->addMenu(tr("&Phase"));

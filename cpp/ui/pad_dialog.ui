@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>padDialog</class>
+ <widget class="QDialog" name="padDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>323</width>
+    <height>738</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pad/Crop</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="Australia"/>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>301</width>
+     <height>721</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="mainLayout">
+    <item>
+     <widget class="QGroupBox" name="valueBox">
+      <property name="title">
+       <string>Value</string>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>241</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="valueGrid">
+        <item row="0" column="0">
+         <widget class="QLabel" name="realLabel">
+          <property name="text">
+           <string>R&amp;eal part</string>
+          </property>
+          <property name="buddy">
+           <cstring>realSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="realSpinBox"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="imagLabel">
+          <property name="text">
+           <string>&amp;Imaginary part</string>
+          </property>
+          <property name="buddy">
+           <cstring>imagSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="imagSpinBox"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="lrBox">
+      <property name="title">
+       <string>Left/Right</string>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>19</x>
+         <y>29</y>
+         <width>241</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="lrGrid">
+        <item row="0" column="0">
+         <widget class="QLabel" name="leftLabel">
+          <property name="text">
+           <string>&amp;Left</string>
+          </property>
+          <property name="buddy">
+           <cstring>leftSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="rightSpinBox"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="rightLabel">
+          <property name="text">
+           <string>&amp;Right</string>
+          </property>
+          <property name="buddy">
+           <cstring>rightSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="leftSpinBox"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="lrCheckBox">
+          <property name="text">
+           <string>&amp;Symmetric</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="tbBox">
+      <property name="title">
+       <string>Top/Bottom</string>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>241</width>
+         <height>75</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="tbGrid">
+        <item row="0" column="0">
+         <widget class="QLabel" name="topLabel">
+          <property name="text">
+           <string>&amp;Top</string>
+          </property>
+          <property name="buddy">
+           <cstring>topSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="bottomSpinBox"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="bottomLabel">
+          <property name="text">
+           <string>&amp;Bottom</string>
+          </property>
+          <property name="buddy">
+           <cstring>bottomSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="topSpinBox"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="tbCheckBox">
+          <property name="text">
+           <string>S&amp;ymmetric</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="infoLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <item>
+       <spacer name="buttonSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancelButton">
+        <property name="text">
+         <string>&amp;Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="okButton">
+        <property name="text">
+         <string>OK</string>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>realSpinBox</tabstop>
+  <tabstop>imagSpinBox</tabstop>
+  <tabstop>leftSpinBox</tabstop>
+  <tabstop>rightSpinBox</tabstop>
+  <tabstop>lrCheckBox</tabstop>
+  <tabstop>topSpinBox</tabstop>
+  <tabstop>bottomSpinBox</tabstop>
+  <tabstop>tbCheckBox</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>okButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>padDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>676</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>217</x>
+     <y>706</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>padDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>676</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>274</x>
+     <y>719</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tbCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>padDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>600</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>38</x>
+     <y>623</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lrCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>padDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>484</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>leftSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>padDialog</receiver>
+   <slot>padChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>430</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>307</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rightSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>padDialog</receiver>
+   <slot>padChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>256</x>
+     <y>456</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>465</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>topSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>padDialog</receiver>
+   <slot>padChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>545</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>307</x>
+     <y>543</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bottomSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>padDialog</receiver>
+   <slot>padChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>307</x>
+     <y>578</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>updateControls()</slot>
+  <slot>padChanged()</slot>
+ </slots>
+</ui>

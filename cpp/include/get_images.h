@@ -34,7 +34,7 @@ private:
 
 class GetImageDialog: public QDialog {
 public:
-    GetImageDialog(EigenbroetlerWindow *w, Calculator& calc);
+    GetImageDialog(QWidget *p, Calculator& calc);
     QString const& errors() const;
 protected slots:
     void comboSelection();

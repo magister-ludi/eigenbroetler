@@ -90,28 +90,18 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/formula_dialog.cpp
   ${TOP}/cpp/source/get_images.cpp
   ${TOP}/cpp/source/main.cpp
+  ${TOP}/cpp/source/pad_data.cpp
   ${TOP}/cpp/source/phase_ops.cpp
   ${TOP}/cpp/source/plotter.cpp
-  #${TOP}/cpp/source/scaled_plotter.cpp
   )
 set(${GuiApp}_Headers
-  ${TOP}/cpp/include/about_dialog.h
-  ${TOP}/cpp/include/array_window.h
-  ${TOP}/cpp/include/array_window_2d.h
-  ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/complex_array.h
   ${TOP}/cpp/include/data_selector.h
-  ${TOP}/cpp/include/display_info.h
-  ${TOP}/cpp/include/eigenbroetler_window.h
-  ${TOP}/cpp/include/formula_dialog.h
-  ${TOP}/cpp/include/get_images.h
-  ${TOP}/cpp/include/phase_ops.h
   ${TOP}/cpp/include/plotter.h
   ${TOP}/cpp/include/scaled_plotter.h
   ${version_header}
   )
-
-qt4_wrap_cpp(${GuiApp}_Mocfiles
+set(${GuiApp}_MocHeaders
   ${TOP}/cpp/include/about_dialog.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
@@ -120,15 +110,18 @@ qt4_wrap_cpp(${GuiApp}_Mocfiles
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/get_images.h
+  ${TOP}/cpp/include/pad_data.h
   ${TOP}/cpp/include/phase_ops.h
   ${TOP}/cpp/include/plotter.h
-  #${TOP}/cpp/include/scaled_plotter.h
   )
+
+qt4_wrap_cpp(${GuiApp}_Mocfiles ${${GuiApp}_MocHeaders})
 qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
   ${TOP}/cpp/ui/export_components_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
+  ${TOP}/cpp/ui/pad_dialog.ui
   ${TOP}/cpp/ui/phase_dialog.ui
   )
 
@@ -159,6 +152,7 @@ endforeach(language ${Languages})
 add_executable(${GuiApp}
   ${${GuiApp}_Sources}
   ${${GuiApp}_Headers}
+  ${${GuiApp}_MocHeaders}
   ${${GuiApp}_Mocfiles}
   ${${GuiApp}_Uifiles}
   ${${GuiApp}_Resources})
