@@ -22,6 +22,9 @@ class ComplexArray {
     ComplexArray& operator=(ComplexArray const& ca);
     static QList<ComplexArray *> readFileData(QString const& source, QString& err, bool single = false);
 
+    Complex *data();
+    Complex const *data() const;
+
     int width() const;
     int height() const;
     bool isValid() const;
@@ -114,6 +117,16 @@ inline QString const& ComplexArray::source() const
 inline void ComplexArray::reset()
 {
     have_min_max = false;
+}
+
+inline Complex *ComplexArray::data()
+{
+    return vals;
+}
+
+inline Complex const *ComplexArray::data() const
+{
+    return vals;
 }
 
 #endif /* COMPLEX_ARRAY_INCLUDE */
