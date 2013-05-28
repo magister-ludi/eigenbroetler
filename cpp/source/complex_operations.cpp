@@ -67,3 +67,34 @@ ComplexArray *Operations::addPhase(ComplexArray const *a, int order, double x, d
     da->reset();
     return da;
 }
+
+ComplexArray *Operations::padCrop(ComplexArray const *a, int left, int top, int right, int bottom, Complex const& val)
+{
+    int const ww = a->width() + left + right;
+    int const hh = a->height() + bottom + top;
+    if (ww <= 0 || hh <= 0)
+        return NULL;
+    ComplexArray *nc = new ComplexArray(ww, hh);
+    Complex *dst_ptr = nc->data();
+    for (int p = 0; p < nc->width(); ++p, ++dst_ptr)
+        memcpy(dst_ptr, &val, sizeof(Complex));
+    for (int p = 1; p < nc->height(); ++p, dst_ptr += nc->width())
+        memcpy(dst_ptr, nc->data(), nc->width() * sizeof(Complex));
+
+    int const src_start_x = (left > 0) ? 0 : -left;
+    int const dst_start_x = left > 0 ? left : 0;
+    size_t const cpy_x_len = (a->width() + (right > 0 ? 0 : right) + (left > 0 ? 0 : left)) * sizeof(Complex);
+    int const src_start_y = bottom > 0 ? 0 : -bottom;
+    int const dst_start_y = bottom > 0 ? bottom : 0;
+    int const cpy_y_len = a->height() + (top > 0 ? 0 : top) + (bottom > 0 ? 0 : bottom);
+
+    dst_ptr = nc->data() + dst_start_x + nc->width() * dst_start_y;
+    Complex const *src_ptr = a->data() + src_start_x + a->width() * src_start_y;
+    for (int y = 0; y < cpy_y_len; ++y) {
+        memcpy(dst_ptr, src_ptr, cpy_x_len);
+        dst_ptr += nc->width();
+        src_ptr += a->width();
+    }
+    nc->reset();
+    return nc;
+}
