@@ -15,6 +15,7 @@
 #include <array_window_2d.h>
 #include <array_window_dialogs.h>
 #include <complex_array.h>
+#include <complex_operations.h>
 #include <eigenbroetler_window.h>
 #include <scaled_plotter.h>
 
@@ -66,21 +67,43 @@ ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
     pholder->addWidget(colour_map_display);
 
     QList<ComplexArray *>::iterator dt;
+    QSize mx(0, 0);
     for (dt = cdata.begin(); dt != cdata.end(); ++dt) {
         DataSet *set = new DataSet;
+        mx.setWidth(std::max(mx.width(), (*dt)->width()));
+        mx.setHeight(std::max(mx.height(), (*dt)->height()));
         set->d = *dt;
-        alist << *dt;
         dlist << set;
     }
     plotLayout = new QWidget;
-    left_plot = new ScaledPlotter(dlist.at(index)->d->width(), dlist.at(index)->d->height(), this);
-    right_plot = new ScaledPlotter(dlist.at(index)->d->width(), dlist.at(index)->d->height(), this);
+    left_plot = new ScaledPlotter(mx.width(), mx.height(), this);
+    right_plot = new ScaledPlotter(mx.width(), mx.height(), this);
     left_plot->setParent(plotLayout);
     left_plot->move(0, 0);
     left_plot->setCursor(Qt::CrossCursor);
     right_plot->setParent(plotLayout);
     right_plot->move(left_plot->width(), index);
     right_plot->setCursor(Qt::CrossCursor);
+    for(QList<DataSet *>::iterator set = dlist.begin(); set != dlist.end(); ++set) {
+        ComplexArray *d0 = (*set)->d;
+        if (mx.width() > d0->width() || mx.height() > d0->height()) {
+            int dw = (mx.width() - d0->width());
+            int l = dw / 2;
+            int r = l;
+            if (r + l != dw)
+                r += 1;
+            int dh = (mx.width() - d0->width());
+            int t = dh / 2;
+            int b = l;
+            if (b + t != dh)
+                b += 1;
+            ComplexArray *pd = Operations::padCrop(d0, l, t, r, b);
+            pd->setName(d0->source());
+            delete d0;
+            (*set)->d = pd;
+        }
+        alist << (*set)->d;
+    }
 
     plotLayout->setFixedSize(left_plot->width() + right_plot->width(),
                              left_plot->height());

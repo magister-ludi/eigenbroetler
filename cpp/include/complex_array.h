@@ -24,6 +24,7 @@ class ComplexArray {
 
     Complex *data();
     Complex const *data() const;
+    QString setName(QString const& name);
 
     int width() const;
     int height() const;
@@ -127,6 +128,13 @@ inline Complex *ComplexArray::data()
 inline Complex const *ComplexArray::data() const
 {
     return vals;
+}
+
+inline QString ComplexArray::setName(QString const& name)
+{
+    QString orig(file);
+    file = name;
+    return orig;
 }
 
 #endif /* COMPLEX_ARRAY_INCLUDE */

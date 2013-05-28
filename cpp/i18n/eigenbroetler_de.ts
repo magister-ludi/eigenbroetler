@@ -47,37 +47,37 @@
 <context>
     <name>ArrayWindow</name>
     <message>
-        <location filename="../source/array_window.cpp" line="141"/>
+        <location filename="../source/array_window.cpp" line="164"/>
         <source>%1 (%2 of %3)</source>
         <translation>%1 (%2 von %3)</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="199"/>
+        <location filename="../source/array_window.cpp" line="222"/>
         <source>FITS Files (*.fits *.fit);;All files (*.*)</source>
         <translation>FITS Dateien (*.fits *.fit);;Alle Dateien (*.*)</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="202"/>
+        <location filename="../source/array_window.cpp" line="225"/>
         <source>Save file</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="231"/>
+        <location filename="../source/array_window.cpp" line="254"/>
         <source>File save failed: %1</source>
         <translation>Dateispeicherung fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="253"/>
+        <location filename="../source/array_window.cpp" line="276"/>
         <source>Bitmap Files (</source>
         <translation>Bitmapdateien (</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="256"/>
+        <location filename="../source/array_window.cpp" line="279"/>
         <source>;;All files (*.*)</source>
         <translation>;;Alle Dateien (*.*)</translation>
     </message>
     <message>
-        <location filename="../source/array_window.cpp" line="260"/>
+        <location filename="../source/array_window.cpp" line="283"/>
         <source>Export file</source>
         <translation>Datei exportieren</translation>
     </message>
