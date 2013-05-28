@@ -49,8 +49,8 @@ ImageLayout::ImageLayout(QWidget *p, int id):
     hbox->addLayout(grid);
 }
 
-GetImageDialog::GetImageDialog(EigenbroetlerWindow *w, Calculator& calc):
-    QDialog(w),
+GetImageDialog::GetImageDialog(QWidget *p, Calculator& calc):
+    QDialog(p),
     c(calc),
     currentCombo(NULL)
 {
@@ -77,7 +77,6 @@ GetImageDialog::GetImageDialog(EigenbroetlerWindow *w, Calculator& calc):
 
     QList<int>keys = image_list.keys();
     QList<int>::const_iterator lnum;
-    DataSelector list(w);
     for (lnum = keys.begin(); lnum != keys.end(); ++lnum) {
         ImageLayout *box = new ImageLayout(mainLayoutWidget, *lnum);
         imageGroups[*lnum] = box;

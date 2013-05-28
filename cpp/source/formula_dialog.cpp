@@ -42,7 +42,7 @@ FormulaDialog::FormulaDialog(QWidget *p):
     ui.finalNSpinBox->setMaximum(std::numeric_limits<int>::max());
     ui.incrNSpinBox->setMaximum(std::numeric_limits<int>::max());
 
-    EigenbroetlerWindow *eb = (EigenbroetlerWindow *) p;
+    EigenbroetlerWindow *eb = EigenbroetlerWindow::instance();
     QSettings settings(eb->app_owner, eb->app_name);
     ui.squareCheckBox->setCheckState(settings.value(sq_name, false).toBool() ? Qt::Checked : Qt::Unchecked);
     ui.twoDRadioButton->setChecked(settings.value(dim_name, true).toBool());
@@ -128,7 +128,7 @@ void FormulaDialog::accept()
     QString formula = ui.formulaComboBox->currentText();
     if (calculator.setFormula(formula)) {
         QDialog::accept();
-        EigenbroetlerWindow *eb = (EigenbroetlerWindow *) parent();
+        EigenbroetlerWindow *eb = EigenbroetlerWindow::instance();
         QSettings settings(eb->app_owner, eb->app_name);
         settings.setValue(sq_name, ui.squareCheckBox->checkState() ? true : false);
         settings.setValue(dim_name, ui.twoDRadioButton->isChecked());
@@ -174,8 +174,7 @@ QList<ComplexArray *> FormulaDialog::construct()
                 nStep = abs(nStep);
         }
         if (calculator.getImageData().size() > 0) {
-            GetImageDialog dlg(dynamic_cast<EigenbroetlerWindow *>(parent()),
-                               calculator);
+            GetImageDialog dlg(EigenbroetlerWindow::instance(), calculator);
             if (dlg.exec() == QDialog::Rejected)
                 return d;
             if (!dlg.errors().isEmpty()) {
