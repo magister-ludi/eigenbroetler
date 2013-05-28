@@ -4,6 +4,7 @@
 
 #include <global_defs.h>
 #include <QWidget>
+#include <QPainter>
 
 QT_BEGIN_NAMESPACE
 class QImage;
@@ -13,52 +14,27 @@ QT_END_NAMESPACE
 class ArrayWindow;
 
 class Plotter: public QWidget {
- public:
+public:
     Plotter(int w, int h, ArrayWindow *listener = NULL);
     ~Plotter();
-    void setForeground(int r, int g, int b);
-    void setForeground(QColor const& c);
-    void setBackground(int r, int g, int b);
-    void setBackground(QColor const& c);
-    QColor getForeground() const;
-    QColor getBackground() const;
-    void clear();
-    void drawRectangle(int xx, int yy, int w, int h);
-    void fillRectangle(int xx, int yy, int w, int h);
-
-    void drawLine(int x1, int y1, int x2, int y2);
-    void drawImage(int x, int y, QImage const& img, bool centred = false);
-    QImage const& getImage() const;
- protected:
+protected:
     void paintEvent(QPaintEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
     void leaveEvent(QEvent *event);
     QImage pixmap;
-    QPainter *painter;
- private:
+public:
+    QPainter painter;
+private:
     Plotter(); // not implemented
     Plotter(Plotter const&); // not implemented
     Plotter& operator=(Plotter const&); // not implemented
-
-    QColor bg;
     ArrayWindow *owner;
 
     Q_OBJECT
 };
 
-inline void Plotter::setForeground(int r, int g, int b)
+inline Plotter::~Plotter()
 {
-    setForeground(QColor(r, g, b));
-}
-
-inline void Plotter::setBackground(int r, int g, int b)
-{
-    setBackground(QColor(r, g, b));
-}
-
-inline QImage const& Plotter::getImage() const
-{
-    return pixmap;
 }
 
 #endif /* PLOTTER_INCLUDE */

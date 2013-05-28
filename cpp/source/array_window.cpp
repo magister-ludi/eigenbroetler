@@ -180,14 +180,14 @@ void ArrayWindow::setColourMap(DisplayInfo::ColourMap const& p)
 {
     if (pal != p) {
         pal = p;
-        colour_map_display->setBackground(192, 192, 192);
-        colour_map_display->clear();
-        colour_map_display->setForeground(0, 0, 0);
+        colour_map_display->painter.setBrush(QColor(192, 192, 192));
+        colour_map_display->painter.drawRect(0, 0, colour_map_display->width(), colour_map_display->height());
+        colour_map_display->painter.setPen(QPen(Qt::black));
         for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; i += 64)
-            colour_map_display->drawLine(0, i, colour_map_display->width(), i);
+            colour_map_display->painter.drawLine(0, i, colour_map_display->width(), i);
         for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; ++i) {
-            colour_map_display->setForeground(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]);
-            colour_map_display->drawLine(10, i, colour_map_display->width() - 10, i);
+            colour_map_display->painter.setPen(QPen(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]));
+            colour_map_display->painter.drawLine(10, i, colour_map_display->width() - 10, i);
         }
         colour_map_display->repaint();
         redraw();
@@ -312,8 +312,8 @@ void ArrayWindow::setViewIndex(int idx, bool force)
 {
     if ((force || idx != index) && idx >= 0 && idx < dlist.length()) {
         index = idx;
-        left_plot->drawImage(0, 0, dlist.at(index)->left);
-        right_plot->drawImage(0, 0, dlist.at(index)->right);
+        left_plot->painter.drawImage(0, 0, dlist.at(index)->left);
+        right_plot->painter.drawImage(0, 0, dlist.at(index)->right);
         left_plot->repaint();
         right_plot->repaint();
         updateTitle();
