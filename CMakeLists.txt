@@ -81,6 +81,7 @@ configure_file(${version_file} ${version_header} @ONLY)
 set(GuiApp ${CMAKE_PROJECT_NAME}_App)
 set(${GuiApp}_Sources
   ${TOP}/cpp/source/about_dialog.cpp
+  ${TOP}/cpp/source/arithmetic.cpp
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/array_window_dialogs.cpp
@@ -103,6 +104,7 @@ set(${GuiApp}_Headers
   )
 set(${GuiApp}_MocHeaders
   ${TOP}/cpp/include/about_dialog.h
+  ${TOP}/cpp/include/arithmetic.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/array_window_dialogs.h
@@ -123,6 +125,7 @@ qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/formula_dialog.ui
   ${TOP}/cpp/ui/pad_dialog.ui
   ${TOP}/cpp/ui/phase_dialog.ui
+  ${TOP}/cpp/ui/arithmetic_dialog.ui
   )
 
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)

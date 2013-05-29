@@ -57,6 +57,7 @@ private slots:
     void addLinearPhase();
     void addQuadPhase();
     void padData();
+    void arithmetic();
 private:
     EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
@@ -81,6 +82,7 @@ private:
     // Actions for basic operations
     QAction *newAction;
     QAction *padAction;
+    QAction *arithAction;
     // Actions for advanced operations
     QAction *dislocationAction;
     QAction *constPhaseAction;

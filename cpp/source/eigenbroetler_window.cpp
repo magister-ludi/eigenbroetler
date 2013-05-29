@@ -140,6 +140,9 @@ void EigenbroetlerWindow::constructActions()
     padAction->setStatusTip(tr("Pad or crop complex array"));
     connect(padAction, SIGNAL(triggered()), this, SLOT(padData()));
     disabledActions << padAction;
+    arithAction = new QAction(QIcon(":/resources/arith.png"), tr("&Arithmetic..."), this);
+    arithAction->setStatusTip(tr("Arithmetic operations on complex arrays"));
+    connect(arithAction, SIGNAL(triggered()), this, SLOT(arithmetic()));
 
     // Advanced actions
     dislocationAction = new QAction(tr("&Spiral dislocation..."), this);
@@ -274,6 +277,7 @@ void EigenbroetlerWindow::constructMenu()
     basicOpsMenu = menuBar()->addMenu(tr("&Basic"));
     basicOpsMenu->addAction(newAction);
     basicOpsMenu->addAction(padAction);
+    basicOpsMenu->addAction(arithAction);
 
     advancedOpsMenu = menuBar()->addMenu(tr("&Advanced"));
     phaseOpsMenu = advancedOpsMenu->addMenu(tr("&Phase"));
@@ -358,6 +362,7 @@ void EigenbroetlerWindow::constructToolbars()
     opsToolbar = addToolBar("Operations");
     opsToolbar->addAction(newAction);
     opsToolbar->addAction(fftAction);
+    opsToolbar->addAction(arithAction);
 
     displayToolbar = addToolBar("Display");
     displayToolbar->addAction(linAction);

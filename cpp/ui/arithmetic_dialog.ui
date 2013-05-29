@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>arithmeticDialog</class>
+ <widget class="QDialog" name="arithmeticDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>597</width>
+    <height>322</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dataset Arithmetic</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="Australia"/>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>571</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QGridLayout" name="mainGridLayout">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="leftLayout">
+        <item>
+         <widget class="DataSelector" name="leftComboBox"/>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="2">
+       <layout class="QVBoxLayout" name="rightLayout">
+        <item>
+         <widget class="DataSelector" name="rightComboBox"/>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QGridLayout" name="leftAdjust">
+        <item row="0" column="0">
+         <widget class="QLabel" name="leftNumLabel">
+          <property name="text">
+           <string>Numerator</string>
+          </property>
+          <property name="buddy">
+           <cstring>leftNum</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="leftNum"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="leftDenLabel">
+          <property name="text">
+           <string>Denominator</string>
+          </property>
+          <property name="buddy">
+           <cstring>leftDen</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="leftDen"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="leftOffsLabel">
+          <property name="text">
+           <string>Offset by</string>
+          </property>
+          <property name="buddy">
+           <cstring>leftOffs</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="leftOffs"/>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="2">
+       <layout class="QGridLayout" name="rightAdjust">
+        <item row="0" column="0">
+         <widget class="QLabel" name="rightNumLabel">
+          <property name="text">
+           <string>Numerator</string>
+          </property>
+          <property name="buddy">
+           <cstring>rightNum</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="rightNum"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="rightDenLabel">
+          <property name="text">
+           <string>Denominator</string>
+          </property>
+          <property name="buddy">
+           <cstring>rightDen</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="rightDen"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="rightOffsLabel">
+          <property name="text">
+           <string>Offset by</string>
+          </property>
+          <property name="buddy">
+           <cstring>rightOffs</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="rightOffs"/>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="opsLayout">
+        <item>
+         <widget class="QRadioButton" name="plusRadioButton">
+          <property name="text">
+           <string>&amp;Plus</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="minusRadioButton">
+          <property name="text">
+           <string>&amp;Minus</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="timesRadioButton">
+          <property name="text">
+           <string>&amp;Times</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="divideRadioButton">
+          <property name="text">
+           <string>&amp;Divided by</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="opsSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancelButton">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="okButton">
+        <property name="text">
+         <string>OK</string>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DataSelector</class>
+   <extends>QComboBox</extends>
+   <header location="global">data_selector.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>leftComboBox</tabstop>
+  <tabstop>rightComboBox</tabstop>
+  <tabstop>plusRadioButton</tabstop>
+  <tabstop>minusRadioButton</tabstop>
+  <tabstop>timesRadioButton</tabstop>
+  <tabstop>divideRadioButton</tabstop>
+  <tabstop>leftNum</tabstop>
+  <tabstop>leftDen</tabstop>
+  <tabstop>leftOffs</tabstop>
+  <tabstop>rightNum</tabstop>
+  <tabstop>rightDen</tabstop>
+  <tabstop>rightOffs</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>okButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>arithmeticDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>486</x>
+     <y>291</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>arithmeticDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>561</x>
+     <y>302</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>leftComboBox</sender>
+   <signal>activated(QString)</signal>
+   <receiver>arithmeticDialog</receiver>
+   <slot>comboSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>133</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>59</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rightComboBox</sender>
+   <signal>activated(QString)</signal>
+   <receiver>arithmeticDialog</receiver>
+   <slot>comboSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>55</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>comboSelection()</slot>
+ </slots>
+</ui>

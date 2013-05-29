@@ -87,17 +87,7 @@ ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
     for(QList<DataSet *>::iterator set = dlist.begin(); set != dlist.end(); ++set) {
         ComplexArray *d0 = (*set)->d;
         if (mx.width() > d0->width() || mx.height() > d0->height()) {
-            int dw = (mx.width() - d0->width());
-            int l = dw / 2;
-            int r = l;
-            if (r + l != dw)
-                r += 1;
-            int dh = (mx.width() - d0->width());
-            int t = dh / 2;
-            int b = l;
-            if (b + t != dh)
-                b += 1;
-            ComplexArray *pd = Operations::padCrop(d0, l, t, r, b);
+            ComplexArray *pd = Operations::resize(d0, mx.width(), mx.height());
             pd->setName(d0->source());
             delete d0;
             (*set)->d = pd;

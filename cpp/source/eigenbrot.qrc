@@ -18,5 +18,6 @@
     <file>resources/um2.png</file>
     <file>resources/curs_map.pbm</file>
     <file>resources/curs_mask.pbm</file>
+    <file>resources/arith.png</file>
 </qresource>
 </RCC>
