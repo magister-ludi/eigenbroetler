@@ -98,3 +98,80 @@ ComplexArray *Operations::padCrop(ComplexArray const *a, int left, int top, int 
     nc->reset();
     return nc;
 }
+
+ComplexArray *Operations::resize(ComplexArray const *a, int ww, int hh)
+{
+    if (ww > a->width() || hh > a->height()) {
+        int dw = (ww - a->width());
+        int l = dw / 2;
+        int r = l;
+        if (r + l != dw)
+            r += 1;
+        int dh = (hh - a->height());
+        int t = dh / 2;
+        int b = l;
+        if (b + t != dh)
+            b += 1;
+        return Operations::padCrop(a, l, t, r, b);
+    }
+    else
+        return new ComplexArray(*a);
+}
+
+ComplexArray *Operations::arithmetic(ComplexArray const *a,
+                                     int a_num, int a_den, int a_offs,
+                                     int op,
+                                     ComplexArray const *b,
+                                     int b_num, int b_den, int b_offs)
+{
+    ComplexArray const *a_op;
+    ComplexArray const *b_op;
+    if (a->width() != b->width() || a->height() != b->height()) {
+        a_op = resize(a, std::max(a->width(), b->width()), std::max(a->height(), b->height()));
+        b_op = resize(b, std::max(a->width(), b->width()), std::max(a->height(), b->height()));
+    }
+    else {
+        a_op = a;
+        b_op = b;
+    }
+    ComplexArray *nc = new ComplexArray(a_op->width(), a_op->height());
+    Complex *ptr = nc->data();
+    Complex const *a_ptr = a_op->data();
+    Complex const *b_ptr = b_op->data();
+    int const count = a_op->width() * a_op->height();
+    Complex const a_factor = Complex(double(a_num) / double(a_den));
+    Complex const b_factor = Complex(double(b_num) / double(b_den));
+    Complex const a_add = Complex(a_offs);
+    Complex const b_add = Complex(b_offs);
+
+    switch (op) {
+    default:
+    case 0:
+        for (int i = 0; i < count; ++i, ++ptr, ++a_ptr, ++b_ptr)
+            *ptr = ((*a_ptr) * a_factor + a_add) + ((*b_ptr) * b_factor + b_add);
+        break;
+    case 1:
+        for (int i = 0; i < count; ++i, ++ptr, ++a_ptr, ++b_ptr)
+            *ptr = ((*a_ptr) * a_factor + a_add) - ((*b_ptr) * b_factor + b_add);
+        break;
+    case 2:
+        for (int i = 0; i < count; ++i, ++ptr, ++a_ptr, ++b_ptr)
+            *ptr = ((*a_ptr) * a_factor + a_add) * ((*b_ptr) * b_factor + b_add);
+        break;
+    case 3:
+        for (int i = 0; i < count; ++i, ++ptr, ++a_ptr, ++b_ptr) {
+             Complex const div = (*b_ptr * b_factor + b_add);
+             if (std::abs(div) < 1e-6)
+                 *ptr = 0;
+             else
+                 *ptr = (*a_ptr * a_factor + a_add) / div;
+        }
+        break;
+    }
+    if (a->width() != b->width() || a->height() != b->height()) {
+        delete a_op;
+        delete b_op;
+    }
+    nc->reset();
+    return nc;
+}
