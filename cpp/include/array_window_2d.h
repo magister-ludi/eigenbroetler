@@ -10,7 +10,7 @@ QT_END_NAMESPACE
 
 class ArrayWindow2D: public ArrayWindow {
  public:
-    ArrayWindow2D(QList<ComplexArray *>& cdata, DisplayInfo::ComplexComponent c,
+    ArrayWindow2D(QList<ComplexArray *>& cdata, ComplexArray::Component c,
                   DisplayInfo::Scale s,
                   DisplayInfo::ColourMap const& p);
     ~ArrayWindow2D();

@@ -162,11 +162,26 @@ QList<ComplexArray *> ArithmeticDialog::doArithmetic() const
         }
         l_owned = r_owned = true;
     }
+    Operations::ArithOp arith_op;
+    switch (op) {
+    case 0:
+        arith_op = Operations::ADD;
+        break;
+    case 1:
+        arith_op = Operations::SUBTRACT;
+        break;
+    case 2:
+        arith_op = Operations::MULTIPLY;
+        break;
+    case 3:
+        arith_op = Operations::DIVIDE;
+        break;
+    };
     if (left_operand.length() == right_operand.length()) {
         for (int i = 0; i < left_operand.length(); ++i)
             arith_result << Operations::arithmetic(left_operand[i],
                                                    ui.leftNum->value(), ui.leftDen->value(), ui.leftOffs->value(),
-                                                   op,
+                                                   arith_op,
                                                    right_operand[i],
                                                    ui.rightNum->value(), ui.rightDen->value(), ui.rightOffs->value());
 
@@ -175,7 +190,7 @@ QList<ComplexArray *> ArithmeticDialog::doArithmetic() const
         for (int i = 0; i < right_operand.length(); ++i)
             arith_result << Operations::arithmetic(left_operand[0],
                                                    ui.leftNum->value(), ui.leftDen->value(), ui.leftOffs->value(),
-                                                   op,
+                                                   arith_op,
                                                    right_operand[i],
                                                    ui.rightNum->value(), ui.rightDen->value(), ui.rightOffs->value());
 
@@ -184,7 +199,7 @@ QList<ComplexArray *> ArithmeticDialog::doArithmetic() const
         for (int i = 0; i < left_operand.length(); ++i)
             arith_result << Operations::arithmetic(left_operand[i],
                                                    ui.leftNum->value(), ui.leftDen->value(), ui.leftOffs->value(),
-                                                   op,
+                                                   arith_op,
                                                    right_operand[0],
                                                    ui.rightNum->value(), ui.rightDen->value(), ui.rightOffs->value());
 
@@ -194,7 +209,7 @@ QList<ComplexArray *> ArithmeticDialog::doArithmetic() const
         for (int i = 0; i < n; ++i)
             arith_result << Operations::arithmetic(left_operand[i],
                                                    ui.leftNum->value(), ui.leftDen->value(), ui.leftOffs->value(),
-                                                   op,
+                                                   arith_op,
                                                    right_operand[i],
                                                    ui.rightNum->value(), ui.rightDen->value(), ui.rightOffs->value());
 

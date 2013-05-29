@@ -58,6 +58,11 @@ private slots:
     void addQuadPhase();
     void padData();
     void arithmetic();
+    void hilbert_x();
+    void hilbert_y();
+    void demod_add();
+    void demod_sel();
+    void demod_hilbert();
 private:
     EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
@@ -88,6 +93,11 @@ private:
     QAction *constPhaseAction;
     QAction *linearPhaseAction;
     QAction *quadPhaseAction;
+    QAction *demodAddAction;
+    QAction *demodHilbertAction;
+    QAction *demodSelAction;
+    QAction *xHilbertAction;
+    QAction *yHilbertAction;
     // Actions for Fourier menu
     QAction *fftAction;
     QAction *fftxAction;
@@ -121,6 +131,8 @@ private:
     QMenu *fileMenu;
     QMenu *basicOpsMenu;
     QMenu *advancedOpsMenu;
+    QMenu *demodOpsMenu;
+    QMenu *directionOpsMenu;
     QMenu *phaseOpsMenu;
     QMenu *fourierMenu;
     QMenu *displayMenu;

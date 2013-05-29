@@ -9,16 +9,10 @@
 
 class DisplayInfo: public QObject {
  public:
-    enum ComplexComponent {
-        REAL,
-        IMAG,
-        MAGN,
-        PHSE,
-    };
     enum Scale {
-        LIN,
-        LOG,
-        POW
+        LINEAR,
+        LOGARITHMIC,
+        POWER_LAW
     };
     static int const COLOURMAP_SIZE = 256;
 

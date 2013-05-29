@@ -5,7 +5,7 @@
 #include <complex_array.h>
 #include <scaled_plotter.h>
 
-ArrayWindow2D::ArrayWindow2D(QList<ComplexArray *>& cdata, DisplayInfo::ComplexComponent c,
+ArrayWindow2D::ArrayWindow2D(QList<ComplexArray *>& cdata, ComplexArray::Component c,
                              DisplayInfo::Scale s,
                              DisplayInfo::ColourMap const& p):
     ArrayWindow(cdata, c, s)
@@ -35,30 +35,30 @@ void ArrayWindow2D::redraw()
     QList<DataSet *>::iterator it;
     for (it = dlist.begin(); it != dlist.end(); ++it) {
         ComplexArray *d = (*it)->d;
-        (*it)->left = d->constructImage(cmp == DisplayInfo::REAL
-                                       ? DisplayInfo::REAL
-                                       : DisplayInfo::MAGN,
+        (*it)->left = d->constructImage(cmp == ComplexArray::REAL
+                                       ? ComplexArray::REAL
+                                       : ComplexArray::MAGNITUDE,
                                        scl, pal, power);
-        (*it)->right = d->constructImage(cmp == DisplayInfo::REAL
-                                ? DisplayInfo::IMAG
-                                : DisplayInfo::PHSE,
-                                DisplayInfo::LIN, pal, power);
+        (*it)->right = d->constructImage(cmp == ComplexArray::REAL
+                                ? ComplexArray::IMAGINARY
+                                : ComplexArray::PHASE,
+                                DisplayInfo::LINEAR, pal, power);
     }
     setViewIndex(index, true);
     QString componentStr;
-    if (cmp == DisplayInfo::REAL)
+    if (cmp == ComplexArray::REAL)
         componentStr = tr("real/imaginary");
     else
         componentStr = tr("magnitude/phase");
     QString scaleStr;
     switch(scl) {
-    case DisplayInfo::LIN:
+    case DisplayInfo::LINEAR:
         scaleStr = tr("linear");
         break;
-    case DisplayInfo::LOG:
+    case DisplayInfo::LOGARITHMIC:
         scaleStr = tr("logarithmic");
         break;
-    case DisplayInfo::POW:
+    case DisplayInfo::POWER_LAW:
         scaleStr = QString(tr("root (1/%1)").arg(power));
         break;
     }

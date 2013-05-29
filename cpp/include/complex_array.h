@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef COMPLEX_ARRAY_INCLUDE
 #define COMPLEX_ARRAY_INCLUDE
 
@@ -15,6 +16,12 @@ class Calculator;
 
 class ComplexArray {
  public:
+    enum Component {
+        REAL,
+        IMAGINARY,
+        MAGNITUDE,
+        PHASE,
+    };
     ComplexArray(int w, int h = 0);
     ComplexArray(Calculator& calc, int ww, int hh, int n);
     ComplexArray(ComplexArray const& ca);
@@ -30,6 +37,7 @@ class ComplexArray {
     int height() const;
     bool isValid() const;
     bool isFFT() const;
+    void setFFT(bool set_fft);
     QString const& source() const;
     QString const& errorString() const;
     Complex const& value(int x, int y) const;
@@ -37,7 +45,7 @@ class ComplexArray {
     // TODO: Rewrite this method that can save
     // 2- or 3-dimensional FITS data
     bool save(QString const& filename);
-    QImage constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
+    QImage constructImage(Component cmp, DisplayInfo::Scale scl,
                           DisplayInfo::ColourMap const& colour_map, int inv_power = -1) const;
     // Mark min/max calculations as invalid
     void reset();
@@ -93,6 +101,11 @@ inline bool ComplexArray::isValid() const
 inline bool ComplexArray::isFFT() const
 {
     return fft;
+}
+
+inline void ComplexArray::setFFT(bool set_fft)
+{
+    fft = set_fft;
 }
 
 inline QString const& ComplexArray::errorString() const

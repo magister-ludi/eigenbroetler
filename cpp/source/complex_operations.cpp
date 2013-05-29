@@ -7,14 +7,14 @@ ComplexArray *Operations::addDislocation(ComplexArray const *a, int order,
 {
     int const ww = a->width();
     int const hh = a->height();
-    int const centreCol = (ww & 1) ? (ww - 1) / 2 : ww / 2;
-    int const centreRow = (hh & 1) ? (hh - 1) / 2 : hh / 2;
+    int const centreX = (ww & 1) ? (ww - 1) / 2 : ww / 2;
+    int const centreY = (hh & 1) ? (hh - 1) / 2 : hh / 2;
 
     ComplexArray *da = new ComplexArray(*a);
-    for (int x = 0; x < ww; x++) {
-        double const xx = x - centreCol - xOffset;
-        for (int y = 0; y < hh; y++) {
-            double const yy = y - centreRow - yOffset;
+    for (int x = 0; x < ww; ++x) {
+        double const xx = x - centreX - xOffset;
+        for (int y = 0; y < hh; ++y) {
+            double const yy = y - centreY - yOffset;
             double phase = order * atan2(yy, xx);
             if (use_abs)
                 phase = fabs(phase);
@@ -37,20 +37,20 @@ ComplexArray *Operations::addPhase(ComplexArray const *a, int order, double x, d
         {
             double const dphase = 2.0 * M_PI * x;
             Complex const factor = Complex(cos(dphase), sin(dphase));
-            for (int xx = 0; xx < ww; xx++)
-                for (int yy = 0; yy < hh; yy++)
+            for (int xx = 0; xx < ww; ++xx)
+                for (int yy = 0; yy < hh; ++yy)
                     da->value(xx, yy) *= factor;
         }
         break;
     case 1:
     case 2:
         {
-            int const centreCol = (ww & 1) ? (ww - 1) / 2 : ww / 2;
-            int const centreRow = (hh & 1) ? (hh - 1) / 2 : hh / 2;
-            for (int xx = 0; xx < ww; xx++) {
-                double const c = (double) (xx - centreCol) / ww;
-                for (int yy = 0; yy < hh; yy++) {
-                    double const s = (double) (yy - centreRow) / hh;
+            int const centreX = (ww & 1) ? (ww - 1) / 2 : ww / 2;
+            int const centreY = (hh & 1) ? (hh - 1) / 2 : hh / 2;
+            for (int xx = 0; xx < ww; ++xx) {
+                double const c = (double) (xx - centreX) / ww;
+                for (int yy = 0; yy < hh; ++yy) {
+                    double const s = (double) (yy - centreY) / hh;
                     double phase;
                     if (order == 2) {
                         double const r2 = x * c * c + y * s * s;
@@ -120,7 +120,7 @@ ComplexArray *Operations::resize(ComplexArray const *a, int ww, int hh)
 
 ComplexArray *Operations::arithmetic(ComplexArray const *a,
                                      int a_num, int a_den, int a_offs,
-                                     int op,
+                                     ArithOp op,
                                      ComplexArray const *b,
                                      int b_num, int b_den, int b_offs)
 {
@@ -160,11 +160,11 @@ ComplexArray *Operations::arithmetic(ComplexArray const *a,
         break;
     case 3:
         for (int i = 0; i < count; ++i, ++ptr, ++a_ptr, ++b_ptr) {
-             Complex const div = (*b_ptr * b_factor + b_add);
-             if (std::abs(div) < 1e-6)
-                 *ptr = 0;
-             else
-                 *ptr = (*a_ptr * a_factor + a_add) / div;
+            Complex const div = (*b_ptr * b_factor + b_add);
+            if (std::abs(div) < 1e-6)
+                *ptr = 0;
+            else
+                *ptr = (*a_ptr * a_factor + a_add) / div;
         }
         break;
     }
@@ -174,4 +174,210 @@ ComplexArray *Operations::arithmetic(ComplexArray const *a,
     }
     nc->reset();
     return nc;
+}
+
+ComplexArray *Operations::hilbert(ComplexArray const *d, bool x)
+{
+    ComplexArray *nd = new ComplexArray(*d);
+
+    int const ww = nd->width();
+    int const hh = nd->height();
+    int const centre_x = (ww & 1) ? (ww - 1) / 2 : ww / 2;
+    int const centre_y = (hh & 1) ? (hh - 1) / 2 : hh / 2;
+    int sign;
+    for (int yy = 0; yy < hh; ++yy) {
+        for (int xx = 0; xx < ww; ++xx) {
+            if (xx == centre_x)
+                sign = (yy > centre_y) ? 1 : -1;
+            else if (yy == centre_y)
+                sign = (xx > centre_x) ? 1 : -1;
+            else if (x)
+                sign = (xx > centre_x) ? 1 : -1;
+            else
+                sign = (yy > centre_y) ? 1 : -1;
+            nd->value(xx, yy) *= Complex(0, sign);
+        }
+    }
+    nd->reset();
+    return nd;
+}
+
+ComplexArray *Operations::extract_component(ComplexArray const *a, ComplexArray::Component component)
+{
+    int ww = a->width();
+    int hh = a->height();
+    ComplexArray *nd = new ComplexArray(ww, hh);
+
+    for (int x = 0; x < ww; ++x) {
+        for (int y = 0; y < hh; ++y) {
+            switch (component) {
+            case ComplexArray::REAL:
+                nd->value(x, y) = Complex(a->value(x, y).real(), 0.0);
+                break;
+            case ComplexArray::IMAGINARY:
+                nd->value(x, y) = Complex(a->value(x, y).imag(), 0.0);
+                break;
+            case ComplexArray::MAGNITUDE:
+                nd->value(x, y) = Complex(std::abs(a->value(x, y)), 0.0);
+                break;
+            case ComplexArray::PHASE:
+                nd->value(x, y) = Complex(arg(a->value(x, y)), 0.0);
+                break;
+            }
+        }
+    }
+    nd->reset();
+    return nd;
+}
+
+ComplexArray *Operations::calculateEnergy(ComplexArray const *a, bool modified)
+{
+    int const ww = a->width();
+    int const hh = a->height();
+    bool const ft = a->isFFT();
+    int centreX = ww / 2;
+    int centreY = hh / 2;
+    ComplexArray *result[2];
+    for (int cmp = 0; cmp < 2; ++cmp) {
+        ComplexArray *component = (cmp == 0) ?
+            extract_component(a, ComplexArray::REAL) :
+            extract_component(a, ComplexArray::IMAGINARY);
+
+        ComplexArray *noDC = removeDC(component);
+        delete component;
+
+        ComplexArray *h = new ComplexArray(ww, hh);
+        for (int x = 0; x < ww; ++x) {
+            double const iFactor = x - centreX;
+            for (int y = 0; y < hh; ++y) {
+                double const rFactor = y - centreY;
+                double const pha = atan2(iFactor, rFactor);
+                double const c = cos(pha);
+                double const s = sin(pha);
+                h->value(x, y) = (modified ? 1.0 : sqrt(iFactor * iFactor + rFactor * rFactor)) * Complex(c, s);
+            }
+        }
+
+        ComplexArray *fs = noDC->dft(true);
+        delete noDC;
+        ComplexArray *hfs = arithmetic(h, 1, 1, 0, MULTIPLY, fs, 1, 1, 0);
+        hfs->setFFT(!ft);
+        ComplexArray *fhfs = hfs->dft(true);
+        ComplexArray *hhfs = arithmetic(h, 1, 1, 0, MULTIPLY, hfs, 1, 1, 0);
+        hhfs->setFFT(!ft);
+
+        delete h;        // don't need this again
+        delete hfs;      // don't need this again
+        ComplexArray *fhhfs = hhfs->dft(true);
+        delete hhfs;
+
+        // junk DC component
+        fs->value(centreX, centreY) = 0;
+        ComplexArray *ss = fs->dft(true);
+        delete fs;       // don't need this again
+
+        hfs = arithmetic(fhfs, 1, 1, 0, MULTIPLY, fhfs, 1, 1, 0); // (Ds)^2
+        delete fhfs;
+        hfs->setFFT(ft);
+        fs = arithmetic(ss, 1, 1, 0, MULTIPLY, fhhfs, 1, 1, 0); // s(D^2)s
+        delete ss;
+        delete fhhfs;
+        fs->setFFT(ft);
+        // (Ds)^2 - s(D^2)s
+        result[cmp] = arithmetic(hfs, 1, 1, 0, SUBTRACT, fs, 1, 1, 0);
+
+        delete fs;
+        delete hfs;
+    }
+
+    ComplexArray *nd = arithmetic(result[0], 1, 1, 0, ADD, result[1], 1, 1, 0);
+    delete result[0];
+    delete result[1];
+    nd->reset();
+    return nd;
+}
+
+ComplexArray *Operations::demod(ComplexArray const *a, bool use_sel)
+{
+    int const ww = a->width();
+    int const hh = a->height();
+    ComplexArray *noDC = removeDC(a);
+    ComplexArray *energy = calculateEnergy(a, true);
+
+    ComplexArray *nd = new ComplexArray(ww, hh);
+
+    for (int x = 0; x < ww; ++x) {
+        for (int y = 0; y < hh; ++y) {
+            double phase = 0.5 * arg(energy->value(x, y));
+            nd->value(x, y) = Complex(cos(phase), sin(phase));
+        }
+    }
+    delete energy;
+
+    ComplexArray *ff = noDC->dft(true);
+    ComplexArray *h2 = addDislocation(ff, 1, 0, 0, false);
+
+    delete ff;
+    ff = h2->dft(true);
+
+    delete h2;
+    h2 = arithmetic(ff, 1, 1, 0, MULTIPLY, nd, 1, 1, 0);
+
+    delete ff;
+
+    if (use_sel) {
+        for (int x = 0; x < ww; ++x)
+            for (int y = 0; y < hh; ++y)
+                nd->value(x, y) = Complex(noDC->value(x, y).real(), h2->value(x, y).imag());
+    }
+    else {
+        delete nd;
+        nd = arithmetic(noDC, 1, 1, 0, ADD, h2, 1, 1, 0);
+    }
+    delete noDC;
+    delete h2;
+
+    nd->reset();
+    return nd;
+}
+
+ComplexArray *Operations::demod_hilbert(ComplexArray const *a)
+{
+    int const ww = a->width();
+    int const hh = a->height();
+    int const centreX = ww / 2;
+    int const centreY = hh / 2;
+    ComplexArray *ft = a->dft(true);
+
+    for (int y = 0; y < hh; ++y) {
+        for (int x = 0; x < ww; ++x) {
+            int mul;
+            if (x == centreX)
+                mul = (y > centreY) ? 1 : 0;
+            else if (y == centreY)
+                mul = (x > centreX) ? 1 : 0;
+            else
+                mul = (x > centreX) ? 1 : 0;
+            ft->value(x, y) = Complex(-mul * ft->value(x, y).imag(), mul * ft->value(x, y).real());
+        }
+    }
+    ComplexArray *nd = ft->dft(true);
+    delete ft;
+    nd->reset();
+    return nd;
+}
+
+ComplexArray *Operations::removeDC(ComplexArray const *a)
+{
+    int const ww = a->width();
+    int const hh = a->height();
+    int const centreX = ww / 2;
+    int const centreY = hh / 2;
+
+    ComplexArray *ft = a->dft(true);
+    ft->value(centreX, centreY) = 0;
+    ComplexArray *nd = ft->dft(true);
+    delete ft;
+    nd->reset();
+    return nd;
 }

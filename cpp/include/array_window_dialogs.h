@@ -6,6 +6,7 @@
 #include <display_info.h>
 #include <ui_close_subwindow_dialog.h>
 #include <ui_export_components_dialog.h>
+#include <complex_array.h>
 
 class CloseSubwindowDialog: public QDialog {
 public:
@@ -26,7 +27,7 @@ private:
 
 class ExportDialog: public QDialog {
 public:
-    ExportDialog(QWidget *p, DisplayInfo::ComplexComponent cmp);
+    ExportDialog(QWidget *p, ComplexArray::Component cmp);
     int result() const;
 protected slots:
     void accept();

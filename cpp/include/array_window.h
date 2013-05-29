@@ -5,8 +5,7 @@
 #include <global_defs.h>
 #include <QWidget>
 #include <display_info.h>
-
-class ComplexArray;
+#include <complex_array.h>
 
 QT_BEGIN_NAMESPACE
 class QKeyEvent;
@@ -19,13 +18,13 @@ class ScaledPlotter;
 class ArrayWindow: public QWidget {
 public:
     static ArrayWindow *createWindow(QList<ComplexArray *>& data,
-                                     DisplayInfo::ComplexComponent c,
+                                     ComplexArray::Component c,
                                      DisplayInfo::Scale s,
                                      DisplayInfo::ColourMap const& p);
     virtual ~ArrayWindow();
-    void setComponent(DisplayInfo::ComplexComponent c);
+    void setComponent(ComplexArray::Component c);
     void setScale(DisplayInfo::Scale s, int pow = -1);
-    DisplayInfo::ComplexComponent getComponent() const;
+    ComplexArray::Component getComponent() const;
     DisplayInfo::Scale getScale(int& pow) const;
     void setColourMap(DisplayInfo::ColourMap const& p);
     QList<ComplexArray const *> getData() const;
@@ -47,14 +46,14 @@ protected:
         DataSet(DataSet const&); // not implemented
         DataSet& operator=(DataSet const&); // not implemented
     };
-    ArrayWindow(QList<ComplexArray *>& data, DisplayInfo::ComplexComponent c,
+    ArrayWindow(QList<ComplexArray *>& data, ComplexArray::Component c,
                 DisplayInfo::Scale s);
     virtual void redraw() = 0;
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *e);
     void setViewIndex(int idx, bool force = false);
 
-    DisplayInfo::ComplexComponent cmp;
+    ComplexArray::Component cmp;
     DisplayInfo::Scale scl;
     int index;
     int power;
@@ -75,7 +74,7 @@ private:
     Q_OBJECT
 };
 
-inline void ArrayWindow::setComponent(DisplayInfo::ComplexComponent c)
+inline void ArrayWindow::setComponent(ComplexArray::Component c)
 {
     if (cmp != c) {
         cmp = c;
@@ -85,7 +84,7 @@ inline void ArrayWindow::setComponent(DisplayInfo::ComplexComponent c)
 
 inline void ArrayWindow::setScale(DisplayInfo::Scale s, int pow)
 {
-    if (scl != s || (scl == DisplayInfo::POW && pow != power)) {
+    if (scl != s || (scl == DisplayInfo::POWER_LAW && pow != power)) {
         scl = s;
         power = pow > 0 ? pow : power;
         redraw();
@@ -98,7 +97,7 @@ inline DisplayInfo::Scale ArrayWindow::getScale(int& pow) const
     return scl;
 }
 
-inline DisplayInfo::ComplexComponent ArrayWindow::getComponent() const
+inline ComplexArray::Component ArrayWindow::getComponent() const
 {
     return cmp;
 }

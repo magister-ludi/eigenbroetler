@@ -432,7 +432,7 @@ inline bool testEqual(double a, double b)
             (fabs(a - b) / std::max(fabs(a), fabs(b)) < VERYSMALL));
 }
 
-QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
+QImage ComplexArray::constructImage(ComplexArray::Component cmp, DisplayInfo::Scale scl,
                                     DisplayInfo::ColourMap const& colour_map, int inv_power) const
 {
     QImage img(w, h, QImage::Format_Indexed8);
@@ -446,15 +446,15 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
     if (inv_power == 0)
         inv_power = 1;
     double power = 1.0 / fabs(inv_power);
-    if (cmp == DisplayInfo::MAGN)
+    if (cmp == MAGNITUDE)
         switch (scl) {
-        case DisplayInfo::LIN:
+        case DisplayInfo::LINEAR:
             scaler = scaleLinear;
             break;
-        case DisplayInfo::LOG:
+        case DisplayInfo::LOGARITHMIC:
             scaler = scaleLogarithmic;
             break;
-        case DisplayInfo::POW:
+        case DisplayInfo::POWER_LAW:
             scaler = scaleRoot;
             break;
         }
@@ -464,7 +464,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
     double scaleFactor;
     double offset;
     switch(cmp) {
-    case DisplayInfo::REAL:
+    case REAL:
         {
             minValue = minCmp;
             maxValue = maxCmp;
@@ -490,7 +490,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
         }
         break;
-    case DisplayInfo::IMAG:
+    case IMAGINARY:
         {
             minValue = minCmp;
             maxValue = maxCmp;
@@ -516,7 +516,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
         }
         break;
-    case DisplayInfo::PHSE:
+    case PHASE:
         {
             scaler = scaleLinear;
             minValue = -M_PI;
@@ -536,11 +536,11 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
         }
         break;
-    case DisplayInfo::MAGN:
+    case MAGNITUDE:
         {
             minValue = minMag;
             maxValue = maxMag;
-            offset = scl == DisplayInfo::LOG ? 1 : 0;
+            offset = scl == DisplayInfo::LOGARITHMIC ? 1 : 0;
             if (testEqual(maxValue, minValue)) {
                 scaleFactor = (DisplayInfo::COLOURMAP_SIZE >> 1) - 1;
                 offset = 0;
@@ -608,7 +608,6 @@ ComplexArray *ComplexArray::xdft(bool recentre) const
     if (recentre) {
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                //std::cout << "(" << x << ", " << y << "): " << (
                 if (x & 1)
                     *ptr *= -1;
                 ++ptr;

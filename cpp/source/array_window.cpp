@@ -14,7 +14,6 @@
 
 #include <array_window_2d.h>
 #include <array_window_dialogs.h>
-#include <complex_array.h>
 #include <complex_operations.h>
 #include <eigenbroetler_window.h>
 #include <scaled_plotter.h>
@@ -28,7 +27,7 @@ static void cleanup()
 }
 
 ArrayWindow *ArrayWindow::createWindow(QList<ComplexArray *>& data,
-                                       DisplayInfo::ComplexComponent c,
+                                       ComplexArray::Component c,
                                        DisplayInfo::Scale s,
                                        DisplayInfo::ColourMap const& p)
 {
@@ -43,7 +42,7 @@ ArrayWindow *ArrayWindow::createWindow(QList<ComplexArray *>& data,
 }
 
 ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
-                         DisplayInfo::ComplexComponent c,
+                         ComplexArray::Component c,
                          DisplayInfo::Scale s):
     QWidget(),
     cmp(c),
@@ -257,8 +256,8 @@ void ArrayWindow::exportComponents()
 {
     ExportDialog expt(this, cmp);
     if (expt.exec() == QDialog::Accepted && expt.result()) {
-        QString lext = cmp == DisplayInfo::REAL ? "real" : "magn";
-        QString rext = cmp == DisplayInfo::REAL ? "imag" : "phas";
+        QString lext = cmp == ComplexArray::REAL ? "real" : "magn";
+        QString rext = cmp == ComplexArray::REAL ? "imag" : "phas";
         int cmp_result = expt.result();
         QList<QByteArray> formats = QImageWriter::supportedImageFormats();
         QList<QByteArray>::iterator fmt;
