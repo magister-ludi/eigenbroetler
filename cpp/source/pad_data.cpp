@@ -7,14 +7,14 @@
 #include <complex_array.h>
 #include <complex_operations.h>
 
-QString const real_name("PadDialog/real");
-QString const imag_name("PadDialog/imag");
-QString const left_name("PadDialog/left");
-QString const top_name("PadDialog/top");
-QString const right_name("PadDialog/right");
-QString const bottom_name("PadDialog/bottom");
-QString const lr_name("PadDialog/lr_symmetric");
-QString const tb_name("PadDialog/tb_symmetric");
+static QString const real_name("PadDialog/real");
+static QString const imag_name("PadDialog/imag");
+static QString const left_name("PadDialog/left");
+static QString const top_name("PadDialog/top");
+static QString const right_name("PadDialog/right");
+static QString const bottom_name("PadDialog/bottom");
+static QString const lr_name("PadDialog/lr_symmetric");
+static QString const tb_name("PadDialog/tb_symmetric");
 
 PadDialog::PadDialog(QWidget *p, ComplexArray const *a):
     QDialog(p),
