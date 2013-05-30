@@ -63,6 +63,8 @@ private slots:
     void demod_add();
     void demod_sel();
     void demod_hilbert();
+    void standard_energy();
+    void modified_energy();
 private:
     EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
@@ -98,6 +100,8 @@ private:
     QAction *demodSelAction;
     QAction *xHilbertAction;
     QAction *yHilbertAction;
+    QAction *stdEnergyAction;
+    QAction *modEnergyAction;
     // Actions for Fourier menu
     QAction *fftAction;
     QAction *fftxAction;
@@ -132,6 +136,7 @@ private:
     QMenu *basicOpsMenu;
     QMenu *advancedOpsMenu;
     QMenu *demodOpsMenu;
+    QMenu *energyOpsMenu;
     QMenu *directionOpsMenu;
     QMenu *phaseOpsMenu;
     QMenu *fourierMenu;

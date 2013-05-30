@@ -177,6 +177,13 @@ void EigenbroetlerWindow::constructActions()
     quadPhaseAction->setStatusTip(tr("Add a quadratic phase"));
     connect(quadPhaseAction, SIGNAL(triggered()), this, SLOT(addQuadPhase()));
 
+    stdEnergyAction = new QAction(tr("Energy operator (&standard)"), this);
+    stdEnergyAction->setStatusTip(tr("Calculate energy values using the standard method"));
+    connect(stdEnergyAction, SIGNAL(triggered()), this, SLOT(standard_energy()));
+    modEnergyAction = new QAction(tr("Energy operator (&modified)"), this);
+    modEnergyAction->setStatusTip(tr("Calculate energy values using Larkin's method"));
+    connect(modEnergyAction, SIGNAL(triggered()), this, SLOT(modified_energy()));
+
     // Fourier actions
     fftAction = new QAction(QIcon(":/resources/fft.png"), tr("2D &DFT"), this);
     fftAction->setShortcut(tr("Ctrl+F"));
@@ -299,13 +306,16 @@ void EigenbroetlerWindow::constructMenu()
     basicOpsMenu->addAction(arithAction);
 
     advancedOpsMenu = menuBar()->addMenu(tr("&Advanced"));
+    directionOpsMenu = advancedOpsMenu->addMenu(tr("&Directional operations"));
+    directionOpsMenu->addAction(xHilbertAction);
+    directionOpsMenu->addAction(yHilbertAction);
     demodOpsMenu = advancedOpsMenu->addMenu(tr("De&modulation"));
     demodOpsMenu->addAction(demodAddAction);
     demodOpsMenu->addAction(demodSelAction);
     demodOpsMenu->addAction(demodHilbertAction);
-    directionOpsMenu = advancedOpsMenu->addMenu(tr("&Directional operations"));
-    directionOpsMenu->addAction(xHilbertAction);
-    directionOpsMenu->addAction(yHilbertAction);
+    energyOpsMenu = advancedOpsMenu->addMenu(tr("&Energy"));
+    energyOpsMenu->addAction(stdEnergyAction);
+    energyOpsMenu->addAction(modEnergyAction);
     phaseOpsMenu = advancedOpsMenu->addMenu(tr("&Phase"));
     phaseOpsMenu->addAction(dislocationAction);
     phaseOpsMenu->addAction(constPhaseAction);
@@ -678,6 +688,30 @@ void EigenbroetlerWindow::demod_hilbert()
         QList<ComplexArray const *> const& aa = a->getData();
         for (int i = 0; i < a->numDataSets(); ++i)
             da << Operations::demod_hilbert(aa[i]);
+        newWindow(da, true);
+    }
+}
+
+void EigenbroetlerWindow::standard_energy()
+{
+    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
+    if (a) {
+        QList<ComplexArray *> da;
+        QList<ComplexArray const *> const& aa = a->getData();
+        for (int i = 0; i < a->numDataSets(); ++i)
+            da << Operations::calculateEnergy(aa[i], false);
+        newWindow(da, true);
+    }
+}
+
+void EigenbroetlerWindow::modified_energy()
+{
+    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
+    if (a) {
+        QList<ComplexArray *> da;
+        QList<ComplexArray const *> const& aa = a->getData();
+        for (int i = 0; i < a->numDataSets(); ++i)
+            da << Operations::calculateEnergy(aa[i], true);
         newWindow(da, true);
     }
 }
