@@ -57,6 +57,7 @@ set(${CppLibName}_Sources
   ${flex_output}
   ${TOP}/cpp/source/calculator.cpp
   ${TOP}/cpp/source/complex_array.cpp
+  ${TOP}/cpp/source/complex_filters.cpp
   ${TOP}/cpp/source/complex_operations.cpp
   )
 set(${CppLibName}_Headers
@@ -87,7 +88,9 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/array_window_dialogs.cpp
   ${TOP}/cpp/source/data_selector.cpp
   ${TOP}/cpp/source/display_info.cpp
+  ${TOP}/cpp/source/eigenbroetler_slots.cpp
   ${TOP}/cpp/source/eigenbroetler_window.cpp
+  ${TOP}/cpp/source/filter_dialog.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
   ${TOP}/cpp/source/get_images.cpp
   ${TOP}/cpp/source/main.cpp
@@ -110,6 +113,7 @@ set(${GuiApp}_MocHeaders
   ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
+  ${TOP}/cpp/include/filter_dialog.h
   ${TOP}/cpp/include/formula_dialog.h
   ${TOP}/cpp/include/get_images.h
   ${TOP}/cpp/include/pad_data.h
@@ -122,6 +126,7 @@ qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
   ${TOP}/cpp/ui/export_components_dialog.ui
+  ${TOP}/cpp/ui/filter_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
   ${TOP}/cpp/ui/pad_dialog.ui
   ${TOP}/cpp/ui/phase_dialog.ui

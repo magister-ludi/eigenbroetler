@@ -1,25 +1,19 @@
+
 #include <eigenbroetler_window.h>
 #include <QAction>
-#include <QActionGroup>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QImageReader>
-#include <QInputDialog>
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QPixmap>
 #include <QSettings>
 #include <QSignalMapper>
 #include <QStatusBar>
 #include <QToolBar>
-#include <about_dialog.h>
 #include <array_window_2d.h>
-#include <complex_array.h>
-#include <complex_operations.h>
-#include <formula_dialog.h>
 
 QString const EigenbroetlerWindow::app_owner("magister-ludi");
 QString const EigenbroetlerWindow::app_name(QString::fromUtf8("eigenbroetler"));
@@ -143,6 +137,10 @@ void EigenbroetlerWindow::constructActions()
     arithAction = new QAction(QIcon(":/resources/arith.png"), tr("&Arithmetic..."), this);
     arithAction->setStatusTip(tr("Arithmetic operations on complex arrays"));
     connect(arithAction, SIGNAL(triggered()), this, SLOT(arithmetic()));
+    filterAction = new QAction(tr("F&ilter..."), this);
+    filterAction->setStatusTip(tr("Use windowing filters on data set"));
+    connect(filterAction, SIGNAL(triggered()), this, SLOT(filter()));
+    disabledActions << filterAction;
 
     // Advanced actions
     xHilbertAction = new QAction(QIcon(":/resources/Hx.png"), tr("&Hilbert transform (X direction)"), this);
@@ -193,11 +191,9 @@ void EigenbroetlerWindow::constructActions()
     fftxAction = new QAction(tr("1D DFT (&X direction)"), this);
     fftxAction->setStatusTip(tr("1D discrete Fourier transform in X direction"));
     connect(fftxAction, SIGNAL(triggered()), this, SLOT(fftx()));
-    disabledActions << fftxAction;
     fftyAction = new QAction(tr("1D DFT (&Y direction)"), this);
     fftyAction->setStatusTip(tr("1D discrete Fourier transform in Y direction"));
     connect(fftyAction, SIGNAL(triggered()), this, SLOT(ffty()));
-    disabledActions << fftyAction;
 
     // Settings actions
     // 1. components
@@ -304,6 +300,7 @@ void EigenbroetlerWindow::constructMenu()
     basicOpsMenu->addAction(newAction);
     basicOpsMenu->addAction(padAction);
     basicOpsMenu->addAction(arithAction);
+    basicOpsMenu->addAction(filterAction);
 
     advancedOpsMenu = menuBar()->addMenu(tr("&Advanced"));
     directionOpsMenu = advancedOpsMenu->addMenu(tr("&Directional operations"));
@@ -410,13 +407,6 @@ void EigenbroetlerWindow::constructToolbars()
     displayToolbar->addAction(colourmapAction);
 }
 
-void EigenbroetlerWindow::newWindow()
-{
-    bool stack;
-    QList<ComplexArray *> a = FormulaDialog::create_image(this, stack);
-    newWindow(a, stack);
-}
-
 void EigenbroetlerWindow::newWindow(QList<ComplexArray *>& a, bool stack)
 {
     if (!a.isEmpty()) {
@@ -472,13 +462,6 @@ QString EigenbroetlerWindow::getFileName(QWidget *p)
     return fileName;
 }
 
-void EigenbroetlerWindow::readData()
-{
-    QString fileName = getFileName(this);
-    if (!fileName.isEmpty())
-        loadImage(fileName);
-}
-
 void EigenbroetlerWindow::loadImage(QString const& filename)
 {
     QString err;
@@ -509,72 +492,6 @@ ArrayWindow const *EigenbroetlerWindow::getArrayWindow(QMdiSubWindow const *w) c
     return a;
 }
 
-void EigenbroetlerWindow::exportImages()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a)
-        a->exportComponents();
-}
-
-void EigenbroetlerWindow::saveData()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        a->saveData();
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::setComponent()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (componentGroup->checkedAction() == riAction)
-            a->setComponent(ComplexArray::REAL);
-        else
-            a->setComponent(ComplexArray::MAGNITUDE);
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::toggleComponents()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (a->getComponent() == ComplexArray::REAL)
-            a->setComponent(ComplexArray::MAGNITUDE);
-        else
-            a->setComponent(ComplexArray::REAL);
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::setScale()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (scaleGroup->checkedAction() == linAction)
-            a->setScale(DisplayInfo::LINEAR);
-        else if (scaleGroup->checkedAction() == logAction)
-            a->setScale(DisplayInfo::LOGARITHMIC);
-        else if (scaleGroup->checkedAction() == powAction) {
-            int	root = QInputDialog::getInt(this, tr("Select root to use"),
-                                            tr("Root:"), 2, 2);
-            a->setScale(DisplayInfo::POWER_LAW, root);
-        }
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::setColourMap()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (colourMenu->exec(QCursor::pos()))
-            a->setColourMap(DisplayInfo::instance().getColourMap(colourGroup->checkedAction()->text()));
-    }
-}
-
 void EigenbroetlerWindow::resizeEvent(QResizeEvent *evt)
 {
     QSettings settings(app_owner, app_name);
@@ -591,127 +508,4 @@ void EigenbroetlerWindow::setActiveSubwindow(QWidget *w)
 {
     if (w)
         mdiArea->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w));
-}
-
-void EigenbroetlerWindow::fft()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData()[i]->dft(true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::fftx()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData()[i]->xdft(true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::ffty()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData()[i]->ydft(true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::about()
-{
-    AboutDialog dlg(this);
-    dlg.exec();
-}
-
-void EigenbroetlerWindow::hilbert_x()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::hilbert(aa[i], true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::hilbert_y()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::hilbert(aa[i], false);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::demod_add()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::demod(aa[i], false);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::demod_sel()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::demod(aa[i], true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::demod_hilbert()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::demod_hilbert(aa[i]);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::standard_energy()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::calculateEnergy(aa[i], false);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::modified_energy()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        QList<ComplexArray const *> const& aa = a->getData();
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << Operations::calculateEnergy(aa[i], true);
-        newWindow(da, true);
-    }
 }

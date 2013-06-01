@@ -27,5 +27,19 @@ ComplexArray *demod_hilbert(ComplexArray const *a);
 ComplexArray *removeDC(ComplexArray const *a);
 ComplexArray *calculateEnergy(ComplexArray const *a, bool modified);
 ComplexArray *extract_component(ComplexArray const *a, ComplexArray::Component component);
+
+ComplexArray *low_pass_rectangular(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *high_pass_rectangular(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *low_pass_butterworth(ComplexArray const *a, int xc, int yc, int r, int order);
+ComplexArray *high_pass_butterworth(ComplexArray const *a, int xc, int yc, int r, int order);
+ComplexArray *low_pass_parzen(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *high_pass_parzen(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *low_pass_hanning(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *high_pass_hanning(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *low_pass_hamming(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *high_pass_hamming(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *low_pass_welch(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *high_pass_welch(ComplexArray const *a, int xc, int yc, int r);
+ComplexArray *gaussian_filter(ComplexArray const *a, int xc, int yc, int r);
 }
 #endif /* COMPLEX_OPERATIONS_INCLUDE */

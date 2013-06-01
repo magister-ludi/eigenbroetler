@@ -28,13 +28,17 @@ public:
     DisplayInfo::Scale getScale(int& pow) const;
     void setColourMap(DisplayInfo::ColourMap const& p);
     QList<ComplexArray const *> getData() const;
-    virtual void mouseData(QWidget const *w, QMouseEvent *evt) = 0;
     void updateTitle();
     bool saveData();
     void exportComponents();
     int numDataSets() const;
     QString const& baseTitle() const;
     int currentIndex() const;
+    virtual void mouseData(QWidget const *w, QMouseEvent *evt) = 0;
+    // radius > 0 flags masking low pass
+    // radius == 0 flags masking removal
+    // radius < 0 flags masking high pass
+    virtual void markFilter(int xc, int yc, int radius = 0) = 0;
 protected:
     class DataSet {
     public:

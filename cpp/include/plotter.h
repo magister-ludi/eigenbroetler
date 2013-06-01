@@ -9,6 +9,7 @@
 QT_BEGIN_NAMESPACE
 class QImage;
 class QPainter;
+class QRegion;
 QT_END_NAMESPACE
 
 class ArrayWindow;
@@ -17,6 +18,9 @@ class Plotter: public QWidget {
 public:
     Plotter(int w, int h, ArrayWindow *listener = NULL);
     ~Plotter();
+    void setHiddenRegion(QRegion const& m);
+    void setVisibleRegion(QRegion const& m);
+    void setVisibleRegion();
 protected:
     void paintEvent(QPaintEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
@@ -29,6 +33,7 @@ private:
     Plotter(Plotter const&); // not implemented
     Plotter& operator=(Plotter const&); // not implemented
     ArrayWindow *owner;
+    QRegion mask;
 
     Q_OBJECT
 };

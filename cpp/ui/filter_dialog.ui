@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>filterDialog</class>
+ <widget class="QDialog" name="filterDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>273</width>
+    <height>504</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Filter data set</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="Australia"/>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>251</width>
+     <height>481</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QVBoxLayout" name="quantititiesLayout">
+      <item>
+       <layout class="QGridLayout" name="quantitiesGrid1">
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="xSpinBox"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="highpassButton">
+          <property name="text">
+           <string>&amp;High pass</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="orderLabel">
+          <property name="text">
+           <string>&amp;Order</string>
+          </property>
+          <property name="buddy">
+           <cstring>orderSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="orderSpinBox"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="radiusLabel">
+          <property name="text">
+           <string>&amp;Radius</string>
+          </property>
+          <property name="buddy">
+           <cstring>radiusSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="radiusSpinBox"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="lowpassButton">
+          <property name="text">
+           <string>&amp;Low pass</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="xLabel">
+          <property name="text">
+           <string>Centre &amp;X</string>
+          </property>
+          <property name="buddy">
+           <cstring>xSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="yLabel">
+          <property name="text">
+           <string>Centre &amp;Y</string>
+          </property>
+          <property name="buddy">
+           <cstring>ySpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="ySpinBox"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QSlider" name="radiusSlider">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="invertedControls">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="windowGroup">
+      <property name="title">
+       <string>Window type</string>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>211</width>
+         <height>100</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="windowLayout">
+        <item>
+         <layout class="QGridLayout" name="windowGrid">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="rectangularButton">
+            <property name="text">
+             <string>Re&amp;ctangular</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="hanningButton">
+            <property name="text">
+             <string>Ha&amp;nning</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="butterworthButton">
+            <property name="text">
+             <string>&amp;Butterworth</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QRadioButton" name="hammingButton">
+            <property name="text">
+             <string>Ha&amp;mming</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="parzenButton">
+            <property name="text">
+             <string>&amp;Parzen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QRadioButton" name="welchButton">
+            <property name="text">
+             <string>&amp;Welch</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QRadioButton" name="gaussianButton">
+            <property name="text">
+             <string>&amp;Gaussian</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancelButton">
+        <property name="text">
+         <string>&amp;Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="okButton">
+        <property name="text">
+         <string>OK</string>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>orderSpinBox</tabstop>
+  <tabstop>radiusSpinBox</tabstop>
+  <tabstop>radiusSlider</tabstop>
+  <tabstop>rectangularButton</tabstop>
+  <tabstop>butterworthButton</tabstop>
+  <tabstop>parzenButton</tabstop>
+  <tabstop>hanningButton</tabstop>
+  <tabstop>hammingButton</tabstop>
+  <tabstop>welchButton</tabstop>
+  <tabstop>gaussianButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>okButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>209</x>
+     <y>422</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>386</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>258</x>
+     <y>422</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>386</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lowpassButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>filter_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>highpassButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>filter_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rectangularButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>26</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>480</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butterworthButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>26</x>
+     <y>249</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>parzenButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>26</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>8</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hanningButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hammingButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>249</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>welchButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gaussianButton</sender>
+   <signal>clicked()</signal>
+   <receiver>filterDialog</receiver>
+   <slot>window_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiusSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>filterDialog</receiver>
+   <slot>radius_slider_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>269</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiusSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>filterDialog</receiver>
+   <slot>radius_slider_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiusSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>filterDialog</receiver>
+   <slot>radius_spin_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>91</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>filterDialog</receiver>
+   <slot>updateArrayWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>65</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>orderSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>filterDialog</receiver>
+   <slot>updateArrayWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>218</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>262</x>
+     <y>45</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ySpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>filterDialog</receiver>
+   <slot>updateArrayWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>228</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>110</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>radius_spin_changed()</slot>
+  <slot>radius_slider_changed()</slot>
+  <slot>filter_changed()</slot>
+  <slot>window_changed()</slot>
+  <slot>updateArrayWindow()</slot>
+ </slots>
+</ui>

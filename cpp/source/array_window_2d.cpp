@@ -68,3 +68,30 @@ void ArrayWindow2D::redraw()
                        arg(componentStr).
                        arg(scaleStr));
 }
+
+void ArrayWindow2D::markFilter(int xc, int yc, int radius)
+{
+    if (radius == 0) {
+        // radius == 0 flags masking removal
+        left_plot->setVisibleRegion();
+        right_plot->setVisibleRegion();
+    }
+    else {
+        int const aradius = abs(radius);
+        QRegion m(QRect(left_plot->width() / 2 - aradius + xc,
+                        left_plot->height() / 2 - aradius - yc,
+                        2 * aradius, 2 * aradius), QRegion::Ellipse);
+        if (radius > 0) {
+            // radius > 0 flags masking low pass
+            left_plot->setVisibleRegion(m);
+            right_plot->setVisibleRegion(m);
+        }
+        else {
+            // radius < 0 flags masking high pass
+            left_plot->setHiddenRegion(m);
+            right_plot->setHiddenRegion(m);
+        }
+    }
+    left_plot->update();
+    right_plot->update();
+}

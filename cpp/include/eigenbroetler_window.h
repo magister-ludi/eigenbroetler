@@ -65,6 +65,7 @@ private slots:
     void demod_hilbert();
     void standard_energy();
     void modified_energy();
+    void filter();
 private:
     EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
@@ -106,6 +107,7 @@ private:
     QAction *fftAction;
     QAction *fftxAction;
     QAction *fftyAction;
+    QAction *filterAction;
     // Actions for display menu
     QActionGroup *componentGroup;
     QAction *riAction;
