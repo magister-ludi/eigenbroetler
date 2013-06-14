@@ -1,5 +1,5 @@
 #include <calculator.h>
-#include <cstdlib>
+#include <complex_array.h>
 
 Complex const Constants::E = exp(1);
 Complex const Constants::I(0, 1);
@@ -911,7 +911,7 @@ Calculator::Calculator():
 
 Calculator::~Calculator()
 {
-    delete expr;
+    setExpression(NULL);
 }
 
 Expression Calculator::cmp(Expression tst, Expression iftrue, Expression iffalse) const
@@ -1017,6 +1017,90 @@ Expression Calculator::var_pi() const
     return new reference_class(Constants::PI);
 }
 
+Calculator::ImageData::ImageData():
+    owned(false)
+{
+}
+
+Calculator::ImageData::~ImageData()
+{
+    for (QList<ComplexArray const *>::iterator i = c.begin(); owned && i != c.end(); ++i)
+        delete *i;
+}
+
+class pixel_class: public Expression_class<3> {
+public:
+    pixel_class(Calculator::ImageData *data, Expression layer, Expression a1, Expression a2);
+    Complex eval() const;
+private:
+    pixel_class();
+    pixel_class(pixel_class const &);
+    pixel_class & operator=(pixel_class const &);
+    Calculator::ImageData *d;
+};
+
+pixel_class::pixel_class(Calculator::ImageData *data, Expression layer, Expression a1, Expression a2):
+d(data)
+{
+    expr[0] = layer;
+    expr[1] = a1;
+    expr[2] = a2;
+}
+
+Complex pixel_class::eval() const
+{
+    ComplexArray const *a = d->c[d->curr];
+    if (expr[0]) {
+        int layer = int(expr[0]->eval().real()) - 1;
+        int nlayers = d->c.length();
+        if (layer < 0)
+            layer += nlayers * (layer / nlayers + 1);
+        layer %= nlayers;
+        a = d->c[layer];
+    }
+    int xx = int(expr[1]->eval().real()) + a->width() / 2;
+    int yy = int(expr[2]->eval().real()) + a->height() / 2;
+    if (xx < 0 || xx >= a->width()) {
+        if (d->ax == Calculator::ImageData::TRUNCATE)
+            return 0;
+        else {
+            if (xx < 0)
+                xx += a->width() * (xx / a->width() + 1);
+            xx %= a->width();
+        }
+    }
+    if (yy < 0 || yy >= a->height()) {
+        if (d->ay == Calculator::ImageData::TRUNCATE)
+            return 0;
+        else {
+            if (yy < 0)
+                yy += a->height() * (yy / a->height() + 1);
+            yy %= a->height();
+        }
+    }
+    return a->value(xx, yy);
+}
+
+Expression Calculator::pixel(int img, Expression xpos, Expression ypos) const
+{
+    // Is this good? I don't know.
+    Calculator *non_const = const_cast<Calculator *>(this);
+    ImageMap::iterator key = non_const->image_data.find(img);
+    if (key == non_const->image_data.end())
+        non_const->image_data[img] = new ImageData;
+    return new pixel_class(non_const->image_data[img], NULL, xpos, ypos);
+}
+
+Expression Calculator::pixel(int img, Expression layer, Expression xpos, Expression ypos) const
+{
+    // Is this good? I don't know.
+    Calculator *non_const = const_cast<Calculator *>(this);
+    ImageMap::iterator key = non_const->image_data.find(img);
+    if (key == non_const->image_data.end())
+        non_const->image_data[img] = new ImageData;
+    return new pixel_class(non_const->image_data[img], layer, xpos, ypos);
+}
+
 struct yy_buffer_state;
 typedef yy_buffer_state *YY_BUFFER_STATE;
 void yy_switch_to_buffer (YY_BUFFER_STATE new_buffer);
@@ -1047,8 +1131,13 @@ bool Calculator::setFormula(QString const& formula)
 
 void Calculator::setExpression(Expression formula)
 {
-    if (expr)
+    if (expr) {
         delete expr;
+        ImageMap::iterator id;
+        for (id = image_data.begin(); id != image_data.end(); ++id)
+            delete id.value();
+        image_data.clear();
+    }
     expr = formula;
 }
 

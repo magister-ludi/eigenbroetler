@@ -1,24 +1,19 @@
+
 #include <eigenbroetler_window.h>
 #include <QAction>
-#include <QActionGroup>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QImageReader>
-#include <QInputDialog>
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QPixmap>
 #include <QSettings>
 #include <QSignalMapper>
 #include <QStatusBar>
 #include <QToolBar>
-#include <about_dialog.h>
 #include <array_window_2d.h>
-#include <complex_array.h>
-#include <formula_dialog.h>
 
 QString const EigenbroetlerWindow::app_owner("magister-ludi");
 QString const EigenbroetlerWindow::app_name(QString::fromUtf8("eigenbroetler"));
@@ -27,6 +22,8 @@ QString const EigenbroetlerWindow::win_name(QString::fromUtf8("eigenbrötler"));
 QString const EigenbroetlerWindow::window_size("size");
 QString const EigenbroetlerWindow::last_save("LastSave");
 QString const EigenbroetlerWindow::last_read("LastRead");
+
+EigenbroetlerWindow *EigenbroetlerWindow::eb = NULL;
 
 EigenbroetlerWindow::EigenbroetlerWindow()
 {
@@ -67,7 +64,7 @@ void EigenbroetlerWindow::resetGUI()
         (*menu)->setEnabled(enable);
 
     if (a) {
-        bool disable = a->getComponent() == DisplayInfo::REAL;
+        bool disable = a->getComponent() == ComplexArray::REAL;
         if (disable)
             riAction->setChecked(true);
         else
@@ -79,13 +76,13 @@ void EigenbroetlerWindow::resetGUI()
         powAction->setEnabled(!disable);
         int dummy;
         switch(a->getScale(dummy)) {
-        case DisplayInfo::LIN:
+        case DisplayInfo::LINEAR:
             linAction->setChecked(true);
             break;
-        case DisplayInfo::LOG:
+        case DisplayInfo::LOGARITHMIC:
             logAction->setChecked(true);
             break;
-        case DisplayInfo::POW:
+        case DisplayInfo::POWER_LAW:
             powAction->setChecked(true);
             break;
         }
@@ -133,21 +130,70 @@ void EigenbroetlerWindow::constructActions()
     newAction->setShortcuts(QKeySequence::New);
     newAction->setStatusTip(tr("Create a new complex array"));
     connect(newAction, SIGNAL(triggered()), this, SLOT(newWindow()));
+    padAction = new QAction(tr("&Pad/Crop..."), this);
+    padAction->setStatusTip(tr("Pad or crop complex array"));
+    connect(padAction, SIGNAL(triggered()), this, SLOT(padData()));
+    disabledActions << padAction;
+    arithAction = new QAction(QIcon(":/resources/arith.png"), tr("&Arithmetic..."), this);
+    arithAction->setStatusTip(tr("Arithmetic operations on complex arrays"));
+    connect(arithAction, SIGNAL(triggered()), this, SLOT(arithmetic()));
+    filterAction = new QAction(tr("F&ilter..."), this);
+    filterAction->setStatusTip(tr("Use windowing filters on data set"));
+    connect(filterAction, SIGNAL(triggered()), this, SLOT(filter()));
+    disabledActions << filterAction;
+
+    // Advanced actions
+    xHilbertAction = new QAction(QIcon(":/resources/Hx.png"), tr("&Hilbert transform (X direction)"), this);
+    xHilbertAction->setStatusTip(tr("Apply a Hilbert transform in the x-direction"));
+    connect(xHilbertAction, SIGNAL(triggered()), this, SLOT(hilbert_x()));
+    yHilbertAction = new QAction(QIcon(":/resources/Hy.png"), tr("Hil&bert transform (Y direction)"), this);
+    yHilbertAction->setStatusTip(tr("Apply a Hilbert transform in the y-direction"));
+    connect(yHilbertAction, SIGNAL(triggered()), this, SLOT(hilbert_y()));
+    disabledActions << xHilbertAction;
+    disabledActions << yHilbertAction;
+
+    demodAddAction = new QAction(tr("&Addition method"), this);
+    demodAddAction->setStatusTip(tr("Demodulate using the addition method"));
+    connect(demodAddAction, SIGNAL(triggered()), this, SLOT(demod_add()));
+    demodHilbertAction = new QAction(tr("&Hilbert method"), this);
+    demodHilbertAction->setStatusTip(tr("Demodulate using the Hilbert method"));
+    connect(demodHilbertAction, SIGNAL(triggered()), this, SLOT(demod_hilbert()));
+    demodSelAction = new QAction(tr("&Selection method"), this);
+    demodSelAction->setStatusTip(tr("Demodulate using the selection method"));
+    connect(demodSelAction, SIGNAL(triggered()), this, SLOT(demod_sel()));
+
+    dislocationAction = new QAction(tr("&Spiral dislocation..."), this);
+    dislocationAction->setStatusTip(tr("Insert spiral phase dislocation"));
+    connect(dislocationAction, SIGNAL(triggered()), this, SLOT(dislocation()));
+    constPhaseAction = new QAction(tr("Add &constant phase..."), this);
+    constPhaseAction->setStatusTip(tr("Add a constant phase"));
+    connect(constPhaseAction, SIGNAL(triggered()), this, SLOT(addConstPhase()));
+    linearPhaseAction = new QAction(tr("Add &linear phase..."), this);
+    linearPhaseAction->setStatusTip(tr("Add a linear phase"));
+    connect(linearPhaseAction, SIGNAL(triggered()), this, SLOT(addLinearPhase()));
+    quadPhaseAction = new QAction(tr("Add &quadratic phase..."), this);
+    quadPhaseAction->setStatusTip(tr("Add a quadratic phase"));
+    connect(quadPhaseAction, SIGNAL(triggered()), this, SLOT(addQuadPhase()));
+
+    stdEnergyAction = new QAction(tr("Energy operator (&standard)"), this);
+    stdEnergyAction->setStatusTip(tr("Calculate energy values using the standard method"));
+    connect(stdEnergyAction, SIGNAL(triggered()), this, SLOT(standard_energy()));
+    modEnergyAction = new QAction(tr("Energy operator (&modified)"), this);
+    modEnergyAction->setStatusTip(tr("Calculate energy values using Larkin's method"));
+    connect(modEnergyAction, SIGNAL(triggered()), this, SLOT(modified_energy()));
 
     // Fourier actions
-    fftAction = new QAction(QIcon(":/resources/fft.png"), tr("2D &FFT"), this);
+    fftAction = new QAction(QIcon(":/resources/fft.png"), tr("2D &DFT"), this);
     fftAction->setShortcut(tr("Ctrl+F"));
     fftAction->setStatusTip(tr("2D discrete Fourier transform"));
     connect(fftAction, SIGNAL(triggered()), this, SLOT(fft()));
     disabledActions << fftAction;
-    fftxAction = new QAction(tr("1D FFT (&X direction)"), this);
+    fftxAction = new QAction(tr("1D DFT (&X direction)"), this);
     fftxAction->setStatusTip(tr("1D discrete Fourier transform in X direction"));
     connect(fftxAction, SIGNAL(triggered()), this, SLOT(fftx()));
-    disabledActions << fftxAction;
-    fftyAction = new QAction(tr("1D FFT (&Y direction)"), this);
+    fftyAction = new QAction(tr("1D DFT (&Y direction)"), this);
     fftyAction->setStatusTip(tr("1D discrete Fourier transform in Y direction"));
     connect(fftyAction, SIGNAL(triggered()), this, SLOT(ffty()));
-    disabledActions << fftyAction;
 
     // Settings actions
     // 1. components
@@ -210,7 +256,8 @@ void EigenbroetlerWindow::constructActions()
     colourmapAction->setStatusTip(tr("Choose colour map"));
     connect(colourmapAction, SIGNAL(triggered()), this, SLOT(setColourMap()));
     disabledActions << colourmapAction;
-    // window actions
+
+    // Window actions
     closeAction = new QAction(tr("&Close window"), this);
     closeAction->setStatusTip(tr("Close active window"));
     connect(closeAction, SIGNAL(triggered()), mdiArea, SLOT(closeActiveSubWindow()));
@@ -251,6 +298,27 @@ void EigenbroetlerWindow::constructMenu()
 
     basicOpsMenu = menuBar()->addMenu(tr("&Basic"));
     basicOpsMenu->addAction(newAction);
+    basicOpsMenu->addAction(padAction);
+    basicOpsMenu->addAction(arithAction);
+    basicOpsMenu->addAction(filterAction);
+
+    advancedOpsMenu = menuBar()->addMenu(tr("&Advanced"));
+    directionOpsMenu = advancedOpsMenu->addMenu(tr("&Directional operations"));
+    directionOpsMenu->addAction(xHilbertAction);
+    directionOpsMenu->addAction(yHilbertAction);
+    demodOpsMenu = advancedOpsMenu->addMenu(tr("De&modulation"));
+    demodOpsMenu->addAction(demodAddAction);
+    demodOpsMenu->addAction(demodSelAction);
+    demodOpsMenu->addAction(demodHilbertAction);
+    energyOpsMenu = advancedOpsMenu->addMenu(tr("&Energy"));
+    energyOpsMenu->addAction(stdEnergyAction);
+    energyOpsMenu->addAction(modEnergyAction);
+    phaseOpsMenu = advancedOpsMenu->addMenu(tr("&Phase"));
+    phaseOpsMenu->addAction(dislocationAction);
+    phaseOpsMenu->addAction(constPhaseAction);
+    phaseOpsMenu->addAction(linearPhaseAction);
+    phaseOpsMenu->addAction(quadPhaseAction);
+    disabledWidgets << advancedOpsMenu;
 
     fourierMenu = menuBar()->addMenu(tr("&Fourier"));
     fourierMenu->addAction(fftAction);
@@ -327,6 +395,9 @@ void EigenbroetlerWindow::constructToolbars()
     opsToolbar = addToolBar("Operations");
     opsToolbar->addAction(newAction);
     opsToolbar->addAction(fftAction);
+    opsToolbar->addAction(xHilbertAction);
+    opsToolbar->addAction(yHilbertAction);
+    opsToolbar->addAction(arithAction);
 
     displayToolbar = addToolBar("Display");
     displayToolbar->addAction(linAction);
@@ -336,18 +407,11 @@ void EigenbroetlerWindow::constructToolbars()
     displayToolbar->addAction(colourmapAction);
 }
 
-void EigenbroetlerWindow::newWindow()
-{
-    bool stack;
-    QList<ComplexArray *> a = FormulaDialog::create_image(this, stack);
-    newWindow(a, stack);
-}
-
 void EigenbroetlerWindow::newWindow(QList<ComplexArray *>& a, bool stack)
 {
     if (!a.isEmpty()) {
-        DisplayInfo::ComplexComponent cmp = a.at(0)->isFFT() ? DisplayInfo::MAGN : DisplayInfo::REAL;
-        DisplayInfo::Scale scl = a.at(0)->isFFT() ? DisplayInfo::LOG : DisplayInfo::LIN;
+        ComplexArray::Component cmp = a.at(0)->isFFT() ? ComplexArray::MAGNITUDE : ComplexArray::REAL;
+        DisplayInfo::Scale scl = a.at(0)->isFFT() ? DisplayInfo::LOGARITHMIC : DisplayInfo::LINEAR;
         QString p = colourGroup->checkedAction()->text();
         if (stack && a.size() > 1) {
             ArrayWindow *w = ArrayWindow::createWindow(a, cmp, scl,
@@ -373,7 +437,7 @@ void EigenbroetlerWindow::newWindow(QList<ComplexArray *>& a, bool stack)
     }
 }
 
-void EigenbroetlerWindow::readData()
+QString EigenbroetlerWindow::getFileName(QWidget *p)
 {
     QList<QByteArray> formats = QImageReader::supportedImageFormats();
     QList<QByteArray>::iterator fmt;
@@ -384,23 +448,32 @@ void EigenbroetlerWindow::readData()
 
     QSettings settings(app_owner, app_name);
     QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toAscii());
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Read file"),
+    QString fileName = QFileDialog::getOpenFileName(p, tr("Read file"),
                                                     dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
     if (!fileName.isEmpty()) {
+#if defined(Q_OS_WIN)
+        fileName = fileName.toUtf8().toLower();
+#else
         fileName = fileName.toUtf8();
+#endif
         int slash = fileName.lastIndexOf('/');
         settings.setValue(last_read, fileName.left(slash + 1));
-        ComplexArray *cdata = new ComplexArray(fileName);
-        if (!cdata->isValid()) {
-            QMessageBox::warning(this, "File load failed", cdata->errorString());
-            delete cdata;
-        }
-        else {
-            QList<ComplexArray *> arr;
-            arr << cdata;
-            newWindow(arr, false);
-        }
     }
+    return fileName;
+}
+
+void EigenbroetlerWindow::loadImage(QString const& filename)
+{
+    QString err;
+    QList<ComplexArray *> cdata = ComplexArray::readFileData(filename, err);
+    if (!err.isEmpty()) {
+        QMessageBox::warning(this, "File load failed", err);
+        QList<ComplexArray *>::iterator c;
+        for (c = cdata.begin(); c != cdata.end(); ++c)
+            delete *c;
+    }
+    else
+        newWindow(cdata, true);
 }
 
 ArrayWindow *EigenbroetlerWindow::getArrayWindow(QMdiSubWindow *w)
@@ -419,72 +492,6 @@ ArrayWindow const *EigenbroetlerWindow::getArrayWindow(QMdiSubWindow const *w) c
     return a;
 }
 
-void EigenbroetlerWindow::exportImages()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a)
-        a->exportComponents();
-}
-
-void EigenbroetlerWindow::saveData()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        a->saveData();
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::setComponent()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (componentGroup->checkedAction() == riAction)
-            a->setComponent(DisplayInfo::REAL);
-        else
-            a->setComponent(DisplayInfo::MAGN);
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::toggleComponents()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (a->getComponent() == DisplayInfo::REAL)
-            a->setComponent(DisplayInfo::MAGN);
-        else
-            a->setComponent(DisplayInfo::REAL);
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::setScale()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (scaleGroup->checkedAction() == linAction)
-            a->setScale(DisplayInfo::LIN);
-        else if (scaleGroup->checkedAction() == logAction)
-            a->setScale(DisplayInfo::LOG);
-        else if (scaleGroup->checkedAction() == powAction) {
-            int	root = QInputDialog::getInt(this, tr("Select root to use"),
-                                            tr("Root:"), 2, 2);
-            a->setScale(DisplayInfo::POW, root);
-        }
-        resetGUI();
-    }
-}
-
-void EigenbroetlerWindow::setColourMap()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        if (colourMenu->exec(QCursor::pos()))
-            a->setColourMap(DisplayInfo::instance().getColourMap(colourGroup->checkedAction()->text()));
-    }
-}
-
 void EigenbroetlerWindow::resizeEvent(QResizeEvent *evt)
 {
     QSettings settings(app_owner, app_name);
@@ -501,43 +508,4 @@ void EigenbroetlerWindow::setActiveSubwindow(QWidget *w)
 {
     if (w)
         mdiArea->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w));
-}
-
-void EigenbroetlerWindow::fft()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData(i)->dft(true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::fftx()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData(i)->xdft(true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::ffty()
-{
-    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
-    if (a) {
-        QList<ComplexArray *> da;
-        for (int i = 0; i < a->numDataSets(); ++i)
-            da << a->getData(i)->ydft(true);
-        newWindow(da, true);
-    }
-}
-
-void EigenbroetlerWindow::about()
-{
-    AboutDialog dlg(this);
-    dlg.exec();
 }

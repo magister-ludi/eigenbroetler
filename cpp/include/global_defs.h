@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef GLOBAL_DEFS_INCLUDE
 #define GLOBAL_DEFS_INCLUDE
 

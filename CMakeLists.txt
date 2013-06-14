@@ -57,16 +57,19 @@ set(${CppLibName}_Sources
   ${flex_output}
   ${TOP}/cpp/source/calculator.cpp
   ${TOP}/cpp/source/complex_array.cpp
+  ${TOP}/cpp/source/complex_filters.cpp
+  ${TOP}/cpp/source/complex_operations.cpp
   )
 set(${CppLibName}_Headers
   ${bison_h_output}
   ${TOP}/cpp/include/calculator.h
   ${TOP}/cpp/include/complex_array.h
+  ${TOP}/cpp/include/complex_operations.h
   ${TOP}/cpp/include/display_info.h
   )
 
 add_library(${CppLibName} SHARED ${${CppLibName}_Sources} ${${CppLibName}_Headers})
-target_link_libraries(${CppLibName} ${QT_LIBRARIES} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
+target_link_libraries(${CppLibName} ${QT_QTCORE_LIBRARY} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
 set_target_properties(${CppLibName}
   PROPERTIES
   OUTPUT_NAME eigenbroetler
@@ -79,46 +82,55 @@ configure_file(${version_file} ${version_header} @ONLY)
 set(GuiApp ${CMAKE_PROJECT_NAME}_App)
 set(${GuiApp}_Sources
   ${TOP}/cpp/source/about_dialog.cpp
+  ${TOP}/cpp/source/arithmetic.cpp
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/array_window_dialogs.cpp
+  ${TOP}/cpp/source/data_selector.cpp
   ${TOP}/cpp/source/display_info.cpp
+  ${TOP}/cpp/source/eigenbroetler_slots.cpp
   ${TOP}/cpp/source/eigenbroetler_window.cpp
+  ${TOP}/cpp/source/filter_dialog.cpp
   ${TOP}/cpp/source/formula_dialog.cpp
+  ${TOP}/cpp/source/get_images.cpp
   ${TOP}/cpp/source/main.cpp
+  ${TOP}/cpp/source/pad_data.cpp
+  ${TOP}/cpp/source/phase_ops.cpp
   ${TOP}/cpp/source/plotter.cpp
-  #${TOP}/cpp/source/scaled_plotter.cpp
   )
 set(${GuiApp}_Headers
-  ${TOP}/cpp/include/about_dialog.h
-  ${TOP}/cpp/include/array_window.h
-  ${TOP}/cpp/include/array_window_2d.h
-  ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/complex_array.h
-  ${TOP}/cpp/include/display_info.h
-  ${TOP}/cpp/include/eigenbroetler_window.h
-  ${TOP}/cpp/include/formula_dialog.h
+  ${TOP}/cpp/include/data_selector.h
   ${TOP}/cpp/include/plotter.h
   ${TOP}/cpp/include/scaled_plotter.h
   ${version_header}
   )
-
-qt4_wrap_cpp(${GuiApp}_Mocfiles
+set(${GuiApp}_MocHeaders
   ${TOP}/cpp/include/about_dialog.h
+  ${TOP}/cpp/include/arithmetic.h
   ${TOP}/cpp/include/array_window.h
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/display_info.h
   ${TOP}/cpp/include/eigenbroetler_window.h
+  ${TOP}/cpp/include/filter_dialog.h
   ${TOP}/cpp/include/formula_dialog.h
+  ${TOP}/cpp/include/get_images.h
+  ${TOP}/cpp/include/pad_data.h
+  ${TOP}/cpp/include/phase_ops.h
   ${TOP}/cpp/include/plotter.h
-  #${TOP}/cpp/include/scaled_plotter.h
   )
+
+qt4_wrap_cpp(${GuiApp}_Mocfiles ${${GuiApp}_MocHeaders})
 qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
   ${TOP}/cpp/ui/export_components_dialog.ui
+  ${TOP}/cpp/ui/filter_dialog.ui
   ${TOP}/cpp/ui/formula_dialog.ui
+  ${TOP}/cpp/ui/pad_dialog.ui
+  ${TOP}/cpp/ui/phase_dialog.ui
+  ${TOP}/cpp/ui/arithmetic_dialog.ui
   )
 
 qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
@@ -148,10 +160,11 @@ endforeach(language ${Languages})
 add_executable(${GuiApp}
   ${${GuiApp}_Sources}
   ${${GuiApp}_Headers}
+  ${${GuiApp}_MocHeaders}
   ${${GuiApp}_Mocfiles}
   ${${GuiApp}_Uifiles}
   ${${GuiApp}_Resources})
-target_link_libraries(${GuiApp} ${CppLibName})
+target_link_libraries(${GuiApp} ${QT_QTGUI_LIBRARY} ${CppLibName})
 add_dependencies(${GuiApp} ${Language_Resources})
 
 set_target_properties(${GuiApp}

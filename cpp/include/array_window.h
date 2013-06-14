@@ -1,11 +1,11 @@
+// -*- c++ -*-
 #ifndef ARRAY_WINDOW_INCLUDE
 #define ARRAY_WINDOW_INCLUDE
 
 #include <global_defs.h>
 #include <QWidget>
 #include <display_info.h>
-
-class ComplexArray;
+#include <complex_array.h>
 
 QT_BEGIN_NAMESPACE
 class QKeyEvent;
@@ -16,25 +16,30 @@ class Plotter;
 class ScaledPlotter;
 
 class ArrayWindow: public QWidget {
- public:
+public:
     static ArrayWindow *createWindow(QList<ComplexArray *>& data,
-                                     DisplayInfo::ComplexComponent c,
+                                     ComplexArray::Component c,
                                      DisplayInfo::Scale s,
                                      DisplayInfo::ColourMap const& p);
     virtual ~ArrayWindow();
-    void setComponent(DisplayInfo::ComplexComponent c);
+    void setComponent(ComplexArray::Component c);
     void setScale(DisplayInfo::Scale s, int pow = -1);
-    DisplayInfo::ComplexComponent getComponent() const;
+    ComplexArray::Component getComponent() const;
     DisplayInfo::Scale getScale(int& pow) const;
     void setColourMap(DisplayInfo::ColourMap const& p);
-    ComplexArray *getData(int i);
-    ComplexArray const *getData(int i) const;
-    virtual void mouseData(QWidget const *w, QMouseEvent *evt) = 0;
+    QList<ComplexArray const *> getData() const;
     void updateTitle();
     bool saveData();
     void exportComponents();
     int numDataSets() const;
- protected:
+    QString const& baseTitle() const;
+    int currentIndex() const;
+    virtual void mouseData(QWidget const *w, QMouseEvent *evt) = 0;
+    // radius > 0 flags masking low pass
+    // radius == 0 flags masking removal
+    // radius < 0 flags masking high pass
+    virtual void markFilter(int xc, int yc, int radius = 0) = 0;
+protected:
     class DataSet {
     public:
         DataSet();
@@ -45,14 +50,14 @@ class ArrayWindow: public QWidget {
         DataSet(DataSet const&); // not implemented
         DataSet& operator=(DataSet const&); // not implemented
     };
-    ArrayWindow(QList<ComplexArray *>& data, DisplayInfo::ComplexComponent c,
+    ArrayWindow(QList<ComplexArray *>& data, ComplexArray::Component c,
                 DisplayInfo::Scale s);
     virtual void redraw() = 0;
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *e);
     void setViewIndex(int idx, bool force = false);
 
-    DisplayInfo::ComplexComponent cmp;
+    ComplexArray::Component cmp;
     DisplayInfo::Scale scl;
     int index;
     int power;
@@ -64,7 +69,8 @@ class ArrayWindow: public QWidget {
     ScaledPlotter *right_plot;
     QLineEdit *status[2];
     QList<DataSet *> dlist;
- private:
+    QList<ComplexArray const *> alist;
+private:
     ArrayWindow(); // not imlemented
     ArrayWindow(ArrayWindow const&); // not imlemented
     ArrayWindow& operator=(ArrayWindow const&); // not imlemented
@@ -72,7 +78,7 @@ class ArrayWindow: public QWidget {
     Q_OBJECT
 };
 
-inline void ArrayWindow::setComponent(DisplayInfo::ComplexComponent c)
+inline void ArrayWindow::setComponent(ComplexArray::Component c)
 {
     if (cmp != c) {
         cmp = c;
@@ -82,7 +88,7 @@ inline void ArrayWindow::setComponent(DisplayInfo::ComplexComponent c)
 
 inline void ArrayWindow::setScale(DisplayInfo::Scale s, int pow)
 {
-    if (scl != s || (scl == DisplayInfo::POW && pow != power)) {
+    if (scl != s || (scl == DisplayInfo::POWER_LAW && pow != power)) {
         scl = s;
         power = pow > 0 ? pow : power;
         redraw();
@@ -95,19 +101,14 @@ inline DisplayInfo::Scale ArrayWindow::getScale(int& pow) const
     return scl;
 }
 
-inline DisplayInfo::ComplexComponent ArrayWindow::getComponent() const
+inline ComplexArray::Component ArrayWindow::getComponent() const
 {
     return cmp;
 }
 
-inline ComplexArray *ArrayWindow::getData(int i)
+inline QList<ComplexArray const *> ArrayWindow::getData() const
 {
-    return dlist.at(i)->d;
-}
-
-inline ComplexArray const *ArrayWindow::getData(int i) const
-{
-    return dlist.at(i)->d;
+    return alist;
 }
 
 inline int ArrayWindow::numDataSets() const
@@ -116,8 +117,18 @@ inline int ArrayWindow::numDataSets() const
 }
 
 inline ArrayWindow::DataSet::DataSet():
-                   d(NULL)
+    d(NULL)
 {
+}
+
+inline QString const& ArrayWindow::baseTitle() const
+{
+    return title_base;
+}
+
+inline int ArrayWindow::currentIndex() const
+{
+    return index;
 }
 
 #endif /* ARRAY_WINDOW_INCLUDE */

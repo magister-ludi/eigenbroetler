@@ -1,11 +1,14 @@
 
 #include <formula_dialog.h>
+#include <limits>
+#include <QMessageBox>
 #include <QRegExp>
 #include <QSettings>
 #include <QVector>
 #include <calculator.h>
 #include <complex_array.h>
 #include <eigenbroetler_window.h>
+#include <get_images.h>
 
 QString const FormulaDialog::sq_name("FormulaDialog/square_image");
 QString const FormulaDialog::dim_name("FormulaDialog/image_dimension");
@@ -23,17 +26,33 @@ FormulaDialog::FormulaDialog(QWidget *p):
     QDialog(p)
 {
     ui.setupUi(this);
-    EigenbroetlerWindow *eb = (EigenbroetlerWindow *) p;
+
+    // image size must be greater than 1. Maximum is
+    // ultimately dependent on available memory...
+    ui.widthSpinBox->setMinimum(1);
+    ui.widthSpinBox->setMaximum(std::numeric_limits<int>::max());
+    ui.heightSpinBox->setMinimum(1);
+    ui.heightSpinBox->setMaximum(std::numeric_limits<int>::max());
+    // start/stop/step values can be any values. It is
+    // the responsibility of the caller to make sure they are consistent.
+    ui.firstNSpinBox->setMinimum(-std::numeric_limits<int>::max());
+    ui.finalNSpinBox->setMinimum(-std::numeric_limits<int>::max());
+    ui.incrNSpinBox->setMinimum(-std::numeric_limits<int>::max());
+    ui.firstNSpinBox->setMaximum(std::numeric_limits<int>::max());
+    ui.finalNSpinBox->setMaximum(std::numeric_limits<int>::max());
+    ui.incrNSpinBox->setMaximum(std::numeric_limits<int>::max());
+
+    EigenbroetlerWindow *eb = EigenbroetlerWindow::instance();
     QSettings settings(eb->app_owner, eb->app_name);
     ui.squareCheckBox->setCheckState(settings.value(sq_name, false).toBool() ? Qt::Checked : Qt::Unchecked);
     ui.twoDRadioButton->setChecked(settings.value(dim_name, true).toBool());
-    ui.widthLineEdit->setText(settings.value(width_name, QString().setNum(256)).toString());
-    ui.heightLineEdit->setText(settings.value(height_name, QString().setNum(256)).toString());
+    ui.widthSpinBox->setValue(settings.value(width_name, 256).toInt());
+    ui.heightSpinBox->setValue(settings.value(height_name, 256).toInt());
     ui.formulaComboBox->setMaxVisibleItems(num_formulae);
 
-    ui.firstNLineEdit->setText(settings.value(start_name, QString().setNum(1)).toString());
-    ui.finalNLineEdit->setText(settings.value(stop_name, QString().setNum(5)).toString());
-    ui.incrNLineEdit->setText(settings.value(incr_name, QString().setNum(1)).toString());
+    ui.firstNSpinBox->setValue(settings.value(start_name, 1).toInt());
+    ui.finalNSpinBox->setValue(settings.value(stop_name, 5).toInt());
+    ui.incrNSpinBox->setValue(settings.value(incr_name, 1).toInt());
     ui.multiviewCheckBox->setCheckState(settings.value(multi_name, false).toBool() ? Qt::Checked : Qt::Unchecked);
     // TODO: fix 1D arrays, and remove next lines
     ui.oneDRadioButton->setEnabled(false);
@@ -55,19 +74,19 @@ void FormulaDialog::updateControls()
 {
     if (ui.twoDRadioButton->isChecked()) {
         ui.heightLabel->show();
-        ui.heightLineEdit->show();
+        ui.heightSpinBox->show();
         ui.squareCheckBox->show();
         if (ui.squareCheckBox->checkState() == Qt::Checked) {
-            ui.heightLineEdit->setEnabled(false);
-            ui.heightLineEdit->setText(ui.widthLineEdit->text());
+            ui.heightSpinBox->setEnabled(false);
+            ui.heightSpinBox->setValue(ui.widthSpinBox->value());
         }
         else {
-            ui.heightLineEdit->setEnabled(true);
+            ui.heightSpinBox->setEnabled(true);
         }
     }
     else {
         ui.heightLabel->hide();
-        ui.heightLineEdit->hide();
+        ui.heightSpinBox->hide();
         ui.squareCheckBox->hide();
     }
 }
@@ -109,16 +128,16 @@ void FormulaDialog::accept()
     QString formula = ui.formulaComboBox->currentText();
     if (calculator.setFormula(formula)) {
         QDialog::accept();
-        EigenbroetlerWindow *eb = (EigenbroetlerWindow *) parent();
+        EigenbroetlerWindow *eb = EigenbroetlerWindow::instance();
         QSettings settings(eb->app_owner, eb->app_name);
         settings.setValue(sq_name, ui.squareCheckBox->checkState() ? true : false);
         settings.setValue(dim_name, ui.twoDRadioButton->isChecked());
-        settings.setValue(width_name, ui.widthLineEdit->text());
-        settings.setValue(height_name, ui.heightLineEdit->text());
+        settings.setValue(width_name, ui.widthSpinBox->value());
+        settings.setValue(height_name, ui.heightSpinBox->value());
 
-        settings.setValue(start_name, ui.firstNLineEdit->text());
-        settings.setValue(stop_name, ui.finalNLineEdit->text());
-        settings.setValue(incr_name, ui.incrNLineEdit->text());
+        settings.setValue(start_name, ui.firstNSpinBox->value());
+        settings.setValue(stop_name, ui.finalNSpinBox->value());
+        settings.setValue(incr_name, ui.incrNSpinBox->value());
         settings.setValue(multi_name, ui.multiviewCheckBox->checkState() ? true : false);
 
         std::map<QString, QString> frms;
@@ -144,14 +163,31 @@ QList<ComplexArray *> FormulaDialog::construct()
         int nStop = 0;
         int nStep = 1;
         if (calculator.counterUsed()) {
-            nStart = ui.firstNLineEdit->text().toInt();
-            nStop = ui.finalNLineEdit->text().toInt();
-            nStep = ui.incrNLineEdit->text().toInt();
+            nStart = ui.firstNSpinBox->value();
+            nStop = ui.finalNSpinBox->value();
+            nStep = ui.incrNSpinBox->value();
+            if (nStep == 0)
+                nStep = 1;
+            if (nStart >= nStop)
+                nStep = -abs(nStep);
+            else
+                nStep = abs(nStep);
         }
+        if (calculator.getImageData().size() > 0) {
+            GetImageDialog dlg(EigenbroetlerWindow::instance(), calculator);
+            if (dlg.exec() == QDialog::Rejected)
+                return d;
+            if (!dlg.errors().isEmpty()) {
+                QMessageBox::critical(dynamic_cast<EigenbroetlerWindow *>(parent()),
+                                      tr("Error in processing image data"), dlg.errors());
+                return d;
+            }
+        }
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         for (int n = nStart; n <= nStop; n += nStep) {
             ComplexArray *nd = new ComplexArray(calculator,
-                                                ui.widthLineEdit->text().toInt(),
-                                                ui.heightLineEdit->text().toInt(),
+                                                ui.widthSpinBox->value(),
+                                                ui.heightSpinBox->value(),
                                                 n);
             if (nd) {
                 if (nd->isValid())
@@ -160,6 +196,7 @@ QList<ComplexArray *> FormulaDialog::construct()
                     delete nd;
             }
         }
+        QApplication::restoreOverrideCursor();
     }
     return d;
 }
@@ -169,9 +206,7 @@ QList<ComplexArray *> FormulaDialog::create_image(QWidget *p, bool& stack)
     FormulaDialog dlg(p);
     if (dlg.exec() == QDialog::Accepted) {
         stack = dlg.ui.multiviewCheckBox->checkState();
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         QList<ComplexArray *> arr = dlg.construct();
-        QApplication::restoreOverrideCursor();
         return arr;
     }
     else

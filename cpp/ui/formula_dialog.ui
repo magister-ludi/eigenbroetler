@@ -93,7 +93,7 @@
                <string>&amp;Width</string>
               </property>
               <property name="buddy">
-               <cstring>widthLineEdit</cstring>
+               <cstring>widthSpinBox</cstring>
               </property>
              </widget>
             </item>
@@ -105,9 +105,15 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="widthLineEdit">
+             <widget class="QSpinBox" name="widthSpinBox">
               <property name="inputMethodHints">
                <set>Qt::ImhDigitsOnly</set>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>99999</number>
               </property>
              </widget>
             </item>
@@ -117,14 +123,20 @@
                <string>&amp;Height</string>
               </property>
               <property name="buddy">
-               <cstring>heightLineEdit</cstring>
+               <cstring>heightSpinBox</cstring>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="heightLineEdit">
+             <widget class="QSpinBox" name="heightSpinBox">
               <property name="inputMethodHints">
                <set>Qt::ImhDigitsOnly</set>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>99999</number>
               </property>
              </widget>
             </item>
@@ -216,19 +228,19 @@
                <string>&amp;First value:</string>
               </property>
               <property name="buddy">
-               <cstring>firstNLineEdit</cstring>
+               <cstring>firstNSpinBox</cstring>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="finalNLineEdit">
+             <widget class="QSpinBox" name="finalNSpinBox">
               <property name="inputMethodHints">
                <set>Qt::ImhDigitsOnly</set>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QLineEdit" name="incrNLineEdit">
+             <widget class="QSpinBox" name="incrNSpinBox">
               <property name="inputMethodHints">
                <set>Qt::ImhDigitsOnly</set>
               </property>
@@ -240,7 +252,7 @@
                <string>Fi&amp;nal value:</string>
               </property>
               <property name="buddy">
-               <cstring>finalNLineEdit</cstring>
+               <cstring>finalNSpinBox</cstring>
               </property>
              </widget>
             </item>
@@ -250,12 +262,12 @@
                <string>In&amp;crement:</string>
               </property>
               <property name="buddy">
-               <cstring>incrNLineEdit</cstring>
+               <cstring>incrNSpinBox</cstring>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="firstNLineEdit">
+             <widget class="QSpinBox" name="firstNSpinBox">
               <property name="inputMethodHints">
                <set>Qt::ImhDigitsOnly</set>
               </property>
@@ -334,14 +346,14 @@
  </widget>
  <tabstops>
   <tabstop>formulaComboBox</tabstop>
-  <tabstop>widthLineEdit</tabstop>
+  <tabstop>widthSpinBox</tabstop>
   <tabstop>squareCheckBox</tabstop>
-  <tabstop>heightLineEdit</tabstop>
+  <tabstop>heightSpinBox</tabstop>
   <tabstop>oneDRadioButton</tabstop>
   <tabstop>twoDRadioButton</tabstop>
-  <tabstop>firstNLineEdit</tabstop>
-  <tabstop>finalNLineEdit</tabstop>
-  <tabstop>incrNLineEdit</tabstop>
+  <tabstop>firstNSpinBox</tabstop>
+  <tabstop>finalNSpinBox</tabstop>
+  <tabstop>incrNSpinBox</tabstop>
   <tabstop>multiviewCheckBox</tabstop>
  </tabstops>
  <resources/>
@@ -353,8 +365,8 @@
    <slot>updateControls()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>383</x>
-     <y>97</y>
+     <x>592</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>698</x>
@@ -369,8 +381,8 @@
    <slot>updateControls()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>389</x>
-     <y>122</y>
+     <x>592</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
      <x>697</x>
@@ -385,28 +397,12 @@
    <slot>updateControls()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>239</x>
-     <y>97</y>
+     <x>297</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel">
      <x>696</x>
      <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>widthLineEdit</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>formulaDialog</receiver>
-   <slot>updateControls()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>150</x>
-     <y>99</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>696</x>
-     <y>215</y>
     </hint>
    </hints>
   </connection>
@@ -433,8 +429,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>517</x>
-     <y>269</y>
+     <x>511</x>
+     <y>337</y>
     </hint>
     <hint type="destinationlabel">
      <x>698</x>
@@ -449,12 +445,28 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>418</x>
-     <y>270</y>
+     <x>430</x>
+     <y>337</y>
     </hint>
     <hint type="destinationlabel">
      <x>696</x>
      <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widthSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>formulaDialog</receiver>
+   <slot>updateControls()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>214</y>
     </hint>
    </hints>
   </connection>

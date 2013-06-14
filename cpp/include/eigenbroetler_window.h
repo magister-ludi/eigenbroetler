@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #ifndef EIGENBROT_WINDOW_INCLUDE
 #define EIGENBROT_WINDOW_INCLUDE
 
@@ -28,8 +29,10 @@ public:
     static QString const last_save;
     static QString const last_read;
 
-    EigenbroetlerWindow();
+    static EigenbroetlerWindow *instance();
     ~EigenbroetlerWindow();
+    static QString getFileName(QWidget *p);
+    void loadImage(QString const& filename);
 protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
@@ -49,20 +52,35 @@ private slots:
     void windowActivated(QMdiSubWindow *w);
     void updateWindowMenu();
     void setActiveSubwindow(QWidget *w);
+    void dislocation();
+    void addConstPhase();
+    void addLinearPhase();
+    void addQuadPhase();
+    void padData();
+    void arithmetic();
+    void hilbert_x();
+    void hilbert_y();
+    void demod_add();
+    void demod_sel();
+    void demod_hilbert();
+    void standard_energy();
+    void modified_energy();
+    void filter();
 private:
+    EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
     EigenbroetlerWindow& operator=(EigenbroetlerWindow const&); // not implemented
-    friend class WindowList;
+    friend class DataSelector;
     void newWindow(QList<ComplexArray *>& a, bool stack);
     void loadSettings();
     void constructActions();
     void constructMenu();
     void constructToolbars();
     void resetGUI();
-    //void toggleComponentActions();
     ArrayWindow *getArrayWindow(QMdiSubWindow *w);
     ArrayWindow const *getArrayWindow(QMdiSubWindow const *w) const;
 
+    static EigenbroetlerWindow *eb;
     QMdiArea *mdiArea;
     // Actions for file menu
     QAction *openAction;
@@ -71,10 +89,25 @@ private:
     QAction *exitAction;
     // Actions for basic operations
     QAction *newAction;
+    QAction *padAction;
+    QAction *arithAction;
+    // Actions for advanced operations
+    QAction *dislocationAction;
+    QAction *constPhaseAction;
+    QAction *linearPhaseAction;
+    QAction *quadPhaseAction;
+    QAction *demodAddAction;
+    QAction *demodHilbertAction;
+    QAction *demodSelAction;
+    QAction *xHilbertAction;
+    QAction *yHilbertAction;
+    QAction *stdEnergyAction;
+    QAction *modEnergyAction;
     // Actions for Fourier menu
     QAction *fftAction;
     QAction *fftxAction;
     QAction *fftyAction;
+    QAction *filterAction;
     // Actions for display menu
     QActionGroup *componentGroup;
     QAction *riAction;
@@ -103,6 +136,11 @@ private:
 
     QMenu *fileMenu;
     QMenu *basicOpsMenu;
+    QMenu *advancedOpsMenu;
+    QMenu *demodOpsMenu;
+    QMenu *energyOpsMenu;
+    QMenu *directionOpsMenu;
+    QMenu *phaseOpsMenu;
     QMenu *fourierMenu;
     QMenu *displayMenu;
     QMenu *colourMenu;
@@ -117,8 +155,16 @@ private:
     Q_OBJECT
 };
 
+inline EigenbroetlerWindow *EigenbroetlerWindow::instance()
+{
+    if (eb == NULL)
+        eb = new EigenbroetlerWindow;
+    return eb;
+}
+
 inline EigenbroetlerWindow::~EigenbroetlerWindow()
 {
+    std::cout << "Bye bye, I'm off" << std::endl;
 }
 
 #endif /* EIGENBROT_WINDOW_INCLUDE */

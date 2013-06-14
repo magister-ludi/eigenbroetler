@@ -14,7 +14,7 @@
 
 #include <array_window_2d.h>
 #include <array_window_dialogs.h>
-#include <complex_array.h>
+#include <complex_operations.h>
 #include <eigenbroetler_window.h>
 #include <scaled_plotter.h>
 
@@ -27,7 +27,7 @@ static void cleanup()
 }
 
 ArrayWindow *ArrayWindow::createWindow(QList<ComplexArray *>& data,
-                                       DisplayInfo::ComplexComponent c,
+                                       ComplexArray::Component c,
                                        DisplayInfo::Scale s,
                                        DisplayInfo::ColourMap const& p)
 {
@@ -42,7 +42,7 @@ ArrayWindow *ArrayWindow::createWindow(QList<ComplexArray *>& data,
 }
 
 ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
-                         DisplayInfo::ComplexComponent c,
+                         ComplexArray::Component c,
                          DisplayInfo::Scale s):
     QWidget(),
     cmp(c),
@@ -66,20 +66,33 @@ ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
     pholder->addWidget(colour_map_display);
 
     QList<ComplexArray *>::iterator dt;
+    QSize mx(0, 0);
     for (dt = cdata.begin(); dt != cdata.end(); ++dt) {
         DataSet *set = new DataSet;
+        mx.setWidth(std::max(mx.width(), (*dt)->width()));
+        mx.setHeight(std::max(mx.height(), (*dt)->height()));
         set->d = *dt;
         dlist << set;
     }
     plotLayout = new QWidget;
-    left_plot = new ScaledPlotter(dlist.at(index)->d->width(), dlist.at(index)->d->height(), this);
-    right_plot = new ScaledPlotter(dlist.at(index)->d->width(), dlist.at(index)->d->height(), this);
+    left_plot = new ScaledPlotter(mx.width(), mx.height(), this);
+    right_plot = new ScaledPlotter(mx.width(), mx.height(), this);
     left_plot->setParent(plotLayout);
     left_plot->move(0, 0);
     left_plot->setCursor(Qt::CrossCursor);
     right_plot->setParent(plotLayout);
     right_plot->move(left_plot->width(), index);
     right_plot->setCursor(Qt::CrossCursor);
+    for(QList<DataSet *>::iterator set = dlist.begin(); set != dlist.end(); ++set) {
+        ComplexArray *d0 = (*set)->d;
+        if (mx.width() > d0->width() || mx.height() > d0->height()) {
+            ComplexArray *pd = Operations::resize(d0, mx.width(), mx.height());
+            pd->setName(d0->source());
+            delete d0;
+            (*set)->d = pd;
+        }
+        alist << (*set)->d;
+    }
 
     plotLayout->setFixedSize(left_plot->width() + right_plot->width(),
                              left_plot->height());
@@ -113,8 +126,8 @@ ArrayWindow::ArrayWindow(QList<ComplexArray *>& cdata,
     updateTitle();
 
     if (curs == NULL) {
-        curs = new QCursor(QBitmap(":/resources/cross_map.pbm"),
-                           QBitmap(":/resources/cross_mask.pbm"));
+        curs = new QCursor(QBitmap(":/resources/curs_map.pbm"),
+                           QBitmap(":/resources/curs_mask.pbm"));
         atexit(cleanup);
     }
     left_plot->setCursor(*curs);
@@ -128,8 +141,9 @@ void ArrayWindow::updateTitle()
     if (!title.isEmpty()) {
         int slash = title.lastIndexOf('/');
         if (slash >= 0)
-            if (title_base.isEmpty())
-                title_base = title.mid(slash + 1);
+            title_base = title.mid(slash + 1);
+        else
+            title_base = title;
     }
     else {
         if (title_base.isEmpty())
@@ -178,14 +192,14 @@ void ArrayWindow::setColourMap(DisplayInfo::ColourMap const& p)
 {
     if (pal != p) {
         pal = p;
-        colour_map_display->setBackground(192, 192, 192);
-        colour_map_display->clear();
-        colour_map_display->setForeground(0, 0, 0);
+        colour_map_display->painter.setBrush(QColor(192, 192, 192));
+        colour_map_display->painter.drawRect(0, 0, colour_map_display->width(), colour_map_display->height());
+        colour_map_display->painter.setPen(QPen(Qt::black));
         for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; i += 64)
-            colour_map_display->drawLine(0, i, colour_map_display->width(), i);
+            colour_map_display->painter.drawLine(0, i, colour_map_display->width(), i);
         for (int i = 0; i < DisplayInfo::COLOURMAP_SIZE; ++i) {
-            colour_map_display->setForeground(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]);
-            colour_map_display->drawLine(10, i, colour_map_display->width() - 10, i);
+            colour_map_display->painter.setPen(QPen(pal[DisplayInfo::COLOURMAP_SIZE - i - 1]));
+            colour_map_display->painter.drawLine(10, i, colour_map_display->width() - 10, i);
         }
         colour_map_display->repaint();
         redraw();
@@ -231,6 +245,7 @@ bool ArrayWindow::saveData()
                 return false;
             }
         }
+        title_base.clear(); // force recalculation of title
         updateTitle();
         return true;
     }
@@ -241,8 +256,8 @@ void ArrayWindow::exportComponents()
 {
     ExportDialog expt(this, cmp);
     if (expt.exec() == QDialog::Accepted && expt.result()) {
-        QString lext = cmp == DisplayInfo::REAL ? "real" : "magn";
-        QString rext = cmp == DisplayInfo::REAL ? "imag" : "phas";
+        QString lext = cmp == ComplexArray::REAL ? "real" : "magn";
+        QString rext = cmp == ComplexArray::REAL ? "imag" : "phas";
         int cmp_result = expt.result();
         QList<QByteArray> formats = QImageWriter::supportedImageFormats();
         QList<QByteArray>::iterator fmt;
@@ -309,8 +324,8 @@ void ArrayWindow::setViewIndex(int idx, bool force)
 {
     if ((force || idx != index) && idx >= 0 && idx < dlist.length()) {
         index = idx;
-        left_plot->drawImage(0, 0, dlist.at(index)->left);
-        right_plot->drawImage(0, 0, dlist.at(index)->right);
+        left_plot->painter.drawImage(0, 0, dlist.at(index)->left);
+        right_plot->painter.drawImage(0, 0, dlist.at(index)->right);
         left_plot->repaint();
         right_plot->repaint();
         updateTitle();

@@ -14,11 +14,13 @@ int main(int argc, char *argv[])
     translator.load(QFile::decodeName(QString("eigenbroetler_de").toAscii()));
     app.installTranslator(&translator);
 
-    EigenbroetlerWindow mainWin;
+    EigenbroetlerWindow *mainWin = EigenbroetlerWindow::instance();
 #if defined(Q_OS_SYMBIAN)
-    mainWin.showMaximized();
+    mainWin->showMaximized();
 #else
-    mainWin.show();
+    mainWin->show();
 #endif
+    for (char **ch = argv + 1; *ch; ++ch)
+        mainWin->loadImage(*ch);
     return app.exec();
 }

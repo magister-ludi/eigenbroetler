@@ -2,6 +2,7 @@
 #include <complex_array.h>
 #include <limits>
 #include <QFile>
+#include <QFileInfo>
 #include <QImage>
 #include <calculator.h>
 
@@ -72,12 +73,64 @@ inline bool testFilestring(char const *data, char const *test)
     return memcmp(data, test, strlen(test)) == 0;
 }
 
+QList<ComplexArray *> ComplexArray::readFileData(QString const& file_name, QString& err, bool single)
+{
+    QList<ComplexArray *> l;
+    QString fullname = (QFileInfo(QFile::decodeName(file_name.toUtf8())).absoluteFilePath());
+    err.clear();
+    QStringList files;
+    files << fullname;
+    if (!single) {
+        QFileInfo info(fullname);
+        QString base = info.baseName();
+        QString path = info.path();
+        QString ext = info.completeSuffix();
+        if (ext.length() > 0)
+            ext.insert(0, '.');
+        QRegExp test("(\\d+)$");
+        int idx = test.indexIn(base);
+        if (idx >= 0) {
+            QString const nstr(test.cap(1));
+            int const len = nstr.length();
+            QString const fpattern = path + '/' + base.left(idx) + "%1" + ext;
+            int value = nstr.toInt() - 1;
+            for (; value > 0;) {
+                QString testname(fpattern.arg(value, len, 10, QLatin1Char('0')));
+                QFileInfo ftest(testname);
+                if (!ftest.exists())
+                    break;
+                files.prepend(testname);
+                --value;
+            }
+            value = nstr.toInt() + 1;
+            for (;;) {
+                QString testname(fpattern.arg(value, len, 10, QLatin1Char('0')));
+                QFileInfo ftest(testname);
+               if (!ftest.exists())
+                    break;
+                files.append(testname);
+                ++value;
+            }
+        }
+    }
+    for (QStringList::iterator f = files.begin(); f != files.end(); ++f) {
+        ComplexArray *a = new ComplexArray(*f);
+        if (!a->isValid()) {
+            err += a->errorString() + "\n";
+            delete a;
+        }
+        else
+            l << a;
+    }
+    return l;
+}
+
 ComplexArray::ComplexArray(QString const& file_name):
     mem(0),
     vals(NULL),
     //TODO: check which of these is correct.
     //file(QFile::decodeName(file_name.toAscii())),
-    file(QFile::decodeName(file_name.toUtf8())),
+    file(QFileInfo(QFile::decodeName(file_name.toUtf8())).absoluteFilePath()),
     fft(false),
     have_min_max(true)
 {
@@ -379,7 +432,7 @@ inline bool testEqual(double a, double b)
             (fabs(a - b) / std::max(fabs(a), fabs(b)) < VERYSMALL));
 }
 
-QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayInfo::Scale scl,
+QImage ComplexArray::constructImage(ComplexArray::Component cmp, DisplayInfo::Scale scl,
                                     DisplayInfo::ColourMap const& colour_map, int inv_power) const
 {
     QImage img(w, h, QImage::Format_Indexed8);
@@ -393,15 +446,15 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
     if (inv_power == 0)
         inv_power = 1;
     double power = 1.0 / fabs(inv_power);
-    if (cmp == DisplayInfo::MAGN)
+    if (cmp == MAGNITUDE)
         switch (scl) {
-        case DisplayInfo::LIN:
+        case DisplayInfo::LINEAR:
             scaler = scaleLinear;
             break;
-        case DisplayInfo::LOG:
+        case DisplayInfo::LOGARITHMIC:
             scaler = scaleLogarithmic;
             break;
-        case DisplayInfo::POW:
+        case DisplayInfo::POWER_LAW:
             scaler = scaleRoot;
             break;
         }
@@ -411,7 +464,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
     double scaleFactor;
     double offset;
     switch(cmp) {
-    case DisplayInfo::REAL:
+    case REAL:
         {
             minValue = minCmp;
             maxValue = maxCmp;
@@ -437,7 +490,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
         }
         break;
-    case DisplayInfo::IMAG:
+    case IMAGINARY:
         {
             minValue = minCmp;
             maxValue = maxCmp;
@@ -463,7 +516,7 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
         }
         break;
-    case DisplayInfo::PHSE:
+    case PHASE:
         {
             scaler = scaleLinear;
             minValue = -M_PI;
@@ -483,11 +536,11 @@ QImage ComplexArray::constructImage(DisplayInfo::ComplexComponent cmp, DisplayIn
             }
         }
         break;
-    case DisplayInfo::MAGN:
+    case MAGNITUDE:
         {
             minValue = minMag;
             maxValue = maxMag;
-            offset = scl == DisplayInfo::LOG ? 1 : 0;
+            offset = scl == DisplayInfo::LOGARITHMIC ? 1 : 0;
             if (testEqual(maxValue, minValue)) {
                 scaleFactor = (DisplayInfo::COLOURMAP_SIZE >> 1) - 1;
                 offset = 0;
@@ -555,7 +608,6 @@ ComplexArray *ComplexArray::xdft(bool recentre) const
     if (recentre) {
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                //std::cout << "(" << x << ", " << y << "): " << (
                 if (x & 1)
                     *ptr *= -1;
                 ++ptr;
