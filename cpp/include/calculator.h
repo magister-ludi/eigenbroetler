@@ -79,6 +79,7 @@ class Calculator {
     Expression pow_func(Expression a1, Expression a2) const;
     Expression rand_func() const;
     Expression exp_func(Expression a) const;
+    Expression abs_func(Expression a) const;
     Expression arg_func(Expression a) const;
     Expression real_func(Expression a) const;
     Expression imag_func(Expression a) const;

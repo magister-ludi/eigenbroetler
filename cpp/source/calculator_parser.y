@@ -61,6 +61,7 @@ expr:
    | TOK_POW '(' expr ',' expr ')'         { $$ = calculator.pow_func($3, $5); }
    | TOK_RANDOM                            { $$ = calculator.rand_func(); }
    | TOK_EXP          '(' expr ')'         { $$ = calculator.exp_func($3); }
+   | TOK_ABS          '(' expr ')'         { $$ = calculator.abs_func($3); }
    | TOK_ARG          '(' expr ')'         { $$ = calculator.arg_func($3); }
    | TOK_REAL         '(' expr ')'         { $$ = calculator.real_func($3); }
    | TOK_IMAG         '(' expr ')'         { $$ = calculator.imag_func($3); }
