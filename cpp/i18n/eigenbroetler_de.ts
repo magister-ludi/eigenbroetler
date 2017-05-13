@@ -898,19 +898,16 @@
     <name>aboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.ui" line="36"/>
-        <location filename="../../build/ui_about_dialog.h" line="171"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="106"/>
-        <location filename="../../build/ui_about_dialog.h" line="175"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="194"/>
-        <location filename="../../build/ui_about_dialog.h" line="176"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -919,67 +916,54 @@
     <name>arithmeticDialog</name>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="14"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="267"/>
         <source>Dataset Arithmetic</source>
         <translation>Arithmetische Operationen</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="76"/>
         <location filename="../ui/arithmetic_dialog.ui" line="119"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="268"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="271"/>
         <source>Numerator</source>
         <translation>Numerator</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="89"/>
         <location filename="../ui/arithmetic_dialog.ui" line="132"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="269"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="272"/>
         <source>Denominator</source>
         <translation>Denominator</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="102"/>
         <location filename="../ui/arithmetic_dialog.ui" line="145"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="270"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="273"/>
         <source>Offset by</source>
         <translation>Versetzung</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="162"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="274"/>
         <source>&amp;Plus</source>
         <translation>&amp;Plus</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="169"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="275"/>
         <source>&amp;Minus</source>
         <translation>&amp;Minus</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="176"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="276"/>
         <source>&amp;Times</source>
         <translation>M&amp;al</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="183"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="277"/>
         <source>&amp;Divided by</source>
         <translation>&amp;Durch</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="222"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="278"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../ui/arithmetic_dialog.ui" line="229"/>
-        <location filename="../../build/ui_arithmetic_dialog.h" line="279"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -988,31 +972,26 @@
     <name>closeSubwindowDialog</name>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="14"/>
-        <location filename="../../build/ui_close_subwindow_dialog.h" line="114"/>
         <source>Close window</source>
         <translation>Fenster schließen</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="45"/>
-        <location filename="../../build/ui_close_subwindow_dialog.h" line="116"/>
         <source>Don&apos;t ask a&amp;gain</source>
         <translation>Nicht wieder anfragen</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="80"/>
-        <location filename="../../build/ui_close_subwindow_dialog.h" line="117"/>
         <source>C&amp;ancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="87"/>
-        <location filename="../../build/ui_close_subwindow_dialog.h" line="118"/>
         <source>&amp;Don&apos;t save</source>
         <translation>&amp;Nicht speichern</translation>
     </message>
     <message>
         <location filename="../ui/close_subwindow_dialog.ui" line="94"/>
-        <location filename="../../build/ui_close_subwindow_dialog.h" line="119"/>
         <source>&amp;Save</source>
         <translation>&amp;Speichern</translation>
     </message>
@@ -1021,25 +1000,21 @@
     <name>exportDialog</name>
     <message>
         <location filename="../ui/export_components_dialog.ui" line="20"/>
-        <location filename="../../build/ui_export_components_dialog.h" line="117"/>
         <source>Export image components</source>
         <translation>Bildkomponenten exportieren</translation>
     </message>
     <message>
         <location filename="../ui/export_components_dialog.ui" line="35"/>
-        <location filename="../../build/ui_export_components_dialog.h" line="118"/>
         <source>Components to export</source>
         <translation>Komponente für Export</translation>
     </message>
     <message>
         <location filename="../ui/export_components_dialog.ui" line="90"/>
-        <location filename="../../build/ui_export_components_dialog.h" line="122"/>
         <source>&amp;Cancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/export_components_dialog.ui" line="97"/>
-        <location filename="../../build/ui_export_components_dialog.h" line="123"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1048,103 +1023,86 @@
     <name>filterDialog</name>
     <message>
         <location filename="../ui/filter_dialog.ui" line="46"/>
-        <location filename="../../build/ui_filter_dialog.h" line="263"/>
         <source>&amp;Order</source>
         <translation>&amp;Ordnung</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="14"/>
-        <location filename="../../build/ui_filter_dialog.h" line="261"/>
         <source>Filter data set</source>
         <translation>Datensatz filtern</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="72"/>
-        <location filename="../../build/ui_filter_dialog.h" line="265"/>
         <source>&amp;Low pass</source>
         <translation>&amp;Tiefpass</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="39"/>
-        <location filename="../../build/ui_filter_dialog.h" line="262"/>
         <source>&amp;High pass</source>
         <translation>&amp;Hochpass</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="59"/>
-        <location filename="../../build/ui_filter_dialog.h" line="264"/>
         <source>&amp;Radius</source>
         <translation>&amp;Radius</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="79"/>
-        <location filename="../../build/ui_filter_dialog.h" line="266"/>
         <source>Centre &amp;X</source>
         <translation>Mittelpunkt &amp;X</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="89"/>
-        <location filename="../../build/ui_filter_dialog.h" line="267"/>
         <source>Centre &amp;Y</source>
         <translation>Mittelpunkt &amp;Y</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="119"/>
-        <location filename="../../build/ui_filter_dialog.h" line="268"/>
         <source>Window type</source>
         <translation>Fensterung</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="136"/>
-        <location filename="../../build/ui_filter_dialog.h" line="269"/>
         <source>Re&amp;ctangular</source>
         <translation>Re&amp;chteckig</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="143"/>
-        <location filename="../../build/ui_filter_dialog.h" line="270"/>
         <source>Ha&amp;nning</source>
         <translation>Ha&amp;nning</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="150"/>
-        <location filename="../../build/ui_filter_dialog.h" line="271"/>
         <source>&amp;Butterworth</source>
         <translation>&amp;Butterworth</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="157"/>
-        <location filename="../../build/ui_filter_dialog.h" line="272"/>
         <source>Ha&amp;mming</source>
         <translation>Ha&amp;mming</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="164"/>
-        <location filename="../../build/ui_filter_dialog.h" line="273"/>
         <source>&amp;Parzen</source>
         <translation>&amp;Parzen</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="171"/>
-        <location filename="../../build/ui_filter_dialog.h" line="274"/>
         <source>&amp;Welch</source>
         <translation>&amp;Welch</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="178"/>
-        <location filename="../../build/ui_filter_dialog.h" line="275"/>
         <source>&amp;Gaussian</source>
         <translation>&amp;Gauß</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="206"/>
-        <location filename="../../build/ui_filter_dialog.h" line="276"/>
         <source>&amp;Cancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/filter_dialog.ui" line="213"/>
-        <location filename="../../build/ui_filter_dialog.h" line="277"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1153,103 +1111,86 @@
     <name>formulaDialog</name>
     <message>
         <location filename="../ui/formula_dialog.ui" line="14"/>
-        <location filename="../../build/ui_formula_dialog.h" line="315"/>
         <source>Create image</source>
         <translation>Datensatz erzeugen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="41"/>
-        <location filename="../../build/ui_formula_dialog.h" line="316"/>
         <source>For&amp;mula:</source>
         <translation>For&amp;mel:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="76"/>
-        <location filename="../../build/ui_formula_dialog.h" line="318"/>
         <source>Size</source>
         <translation>Bildgröße</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="93"/>
-        <location filename="../../build/ui_formula_dialog.h" line="319"/>
         <source>&amp;Width</source>
         <translation>&amp;Breite</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="103"/>
-        <location filename="../../build/ui_formula_dialog.h" line="320"/>
         <source>S&amp;quare</source>
         <translation>&amp;Quadradisch</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="123"/>
-        <location filename="../../build/ui_formula_dialog.h" line="321"/>
         <source>&amp;Height</source>
         <translation>&amp;Höhe</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="165"/>
-        <location filename="../../build/ui_formula_dialog.h" line="322"/>
         <source>Dimension</source>
         <translation>Dimensionen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="180"/>
-        <location filename="../../build/ui_formula_dialog.h" line="323"/>
         <source>&amp;1 dimension</source>
         <translation>&amp;1 Dimension</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="187"/>
-        <location filename="../../build/ui_formula_dialog.h" line="324"/>
         <source>&amp;2 dimensions</source>
         <translation>&amp;2 Dimensionen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="211"/>
-        <location filename="../../build/ui_formula_dialog.h" line="325"/>
         <source>Multiple images</source>
         <translation>Mehrfachmodus</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="228"/>
-        <location filename="../../build/ui_formula_dialog.h" line="326"/>
         <source>&amp;First value:</source>
         <translation>&amp;Anfangswert:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="252"/>
-        <location filename="../../build/ui_formula_dialog.h" line="327"/>
         <source>Fi&amp;nal value:</source>
         <translation>E&amp;ndwert:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="262"/>
-        <location filename="../../build/ui_formula_dialog.h" line="328"/>
         <source>In&amp;crement:</source>
         <translation>&amp;Zuwachs:</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="279"/>
-        <location filename="../../build/ui_formula_dialog.h" line="329"/>
         <source>Mu&amp;ltiview window</source>
         <translation>Ge&amp;stapelte Bilder</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="310"/>
-        <location filename="../../build/ui_formula_dialog.h" line="331"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="324"/>
-        <location filename="../../build/ui_formula_dialog.h" line="333"/>
         <source>C&amp;ancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/formula_dialog.ui" line="331"/>
-        <location filename="../../build/ui_formula_dialog.h" line="334"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
@@ -1258,85 +1199,71 @@
     <name>padDialog</name>
     <message>
         <location filename="../ui/pad_dialog.ui" line="14"/>
-        <location filename="../../build/ui_pad_dialog.h" line="251"/>
         <source>Pad/Crop</source>
         <translation>Ausdehnen/abschneiden</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="32"/>
-        <location filename="../../build/ui_pad_dialog.h" line="252"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="47"/>
-        <location filename="../../build/ui_pad_dialog.h" line="253"/>
         <source>R&amp;eal part</source>
         <translation>&amp;Reeller Teil</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="60"/>
-        <location filename="../../build/ui_pad_dialog.h" line="254"/>
         <source>&amp;Imaginary part</source>
         <translation>&amp;Imaginärer Teil</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="77"/>
-        <location filename="../../build/ui_pad_dialog.h" line="255"/>
         <source>Left/Right</source>
         <translation>Links/Rechts</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="92"/>
-        <location filename="../../build/ui_pad_dialog.h" line="256"/>
         <source>&amp;Left</source>
         <translation>&amp;Links</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="105"/>
-        <location filename="../../build/ui_pad_dialog.h" line="257"/>
         <source>&amp;Right</source>
         <translation>&amp;Rechts</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="118"/>
-        <location filename="../../build/ui_pad_dialog.h" line="258"/>
         <source>&amp;Symmetric</source>
         <translation>&amp;Symmetrisch</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="129"/>
-        <location filename="../../build/ui_pad_dialog.h" line="259"/>
         <source>Top/Bottom</source>
         <translation>Oben/Unten</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="144"/>
-        <location filename="../../build/ui_pad_dialog.h" line="260"/>
         <source>&amp;Top</source>
         <translation>&amp;Oben</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="157"/>
-        <location filename="../../build/ui_pad_dialog.h" line="261"/>
         <source>&amp;Bottom</source>
         <translation>&amp;Unten</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="170"/>
-        <location filename="../../build/ui_pad_dialog.h" line="262"/>
         <source>S&amp;ymmetric</source>
         <translation>S&amp;ymmetrisch</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="227"/>
-        <location filename="../../build/ui_pad_dialog.h" line="264"/>
         <source>&amp;Cancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/pad_dialog.ui" line="234"/>
-        <location filename="../../build/ui_pad_dialog.h" line="265"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1345,37 +1272,31 @@
     <name>phaseDialog</name>
     <message>
         <location filename="../ui/phase_dialog.ui" line="32"/>
-        <location filename="../../build/ui_phase_dialog.h" line="138"/>
         <source>Dislocation &amp;order</source>
         <translation>Versetzungs&amp;grad</translation>
     </message>
     <message>
         <location filename="../ui/phase_dialog.ui" line="42"/>
-        <location filename="../../build/ui_phase_dialog.h" line="139"/>
         <source>Factor in &amp;X direction</source>
         <translation>Faktor in &amp;X-Richtung</translation>
     </message>
     <message>
         <location filename="../ui/phase_dialog.ui" line="52"/>
-        <location filename="../../build/ui_phase_dialog.h" line="140"/>
         <source>Factor in &amp;Y direction</source>
         <translation>Faktor in &amp;Y-Richtung</translation>
     </message>
     <message>
         <location filename="../ui/phase_dialog.ui" line="62"/>
-        <location filename="../../build/ui_phase_dialog.h" line="141"/>
         <source>Use &amp;absolute value of phase</source>
         <translation>Verwende den &amp;Absolutwert der Phase</translation>
     </message>
     <message>
         <location filename="../ui/phase_dialog.ui" line="111"/>
-        <location filename="../../build/ui_phase_dialog.h" line="142"/>
         <source>&amp;Cancel</source>
         <translation>A&amp;bbrechen</translation>
     </message>
     <message>
         <location filename="../ui/phase_dialog.ui" line="118"/>
-        <location filename="../../build/ui_phase_dialog.h" line="143"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
