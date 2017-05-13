@@ -148,6 +148,29 @@ Expression Calculator::exp_func(Expression a) const
     return new exp_class(a);
 };
 
+class abs_class: public Expression_class<1> {
+public: abs_class(Expression a);
+    Complex eval() const;
+private: abs_class();
+    abs_class(abs_class const &);
+    abs_class & operator=(abs_class const &);
+};
+
+abs_class::abs_class(Expression a)
+{
+    expr[0] = a;
+}
+
+Complex abs_class::eval() const
+{
+    return abs(expr[0]->eval());
+}
+
+Expression Calculator::abs_func(Expression a) const
+{
+    return new abs_class(a);
+};
+
 class arg_class: public Expression_class<1> {
 public: arg_class(Expression a);
     Complex eval() const;
