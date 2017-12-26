@@ -24,10 +24,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(settings)
 
 find_library(CFITSIO_LIBRARY cfitsio)
+find_path (CFITSIO_INCLUDE fitsio.h
+           PATH_SUFFIXES cfitsio)
 find_library(FFTW3_LIBRARY fftw3)
 
 set(CPP_INCLUDE_PATH ${TOP}/cpp/include)
-include_directories(${CPP_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CPP_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR} ${CFITSIO_INCLUDE})
 ###########################################################################
 set(flex_input ${TOP}/cpp/source/calculator_lexer.l)
 set(flex_output ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
