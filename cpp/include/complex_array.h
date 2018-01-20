@@ -53,6 +53,7 @@ class ComplexArray {
     ComplexArray *dft(bool recentre) const;
     ComplexArray *xdft(bool recentre) const;
     ComplexArray *ydft(bool recentre) const;
+    void setAll(Complex const& val);
  private:
     ComplexArray();
     // TODO: Rewrite this constructor as a method that can read

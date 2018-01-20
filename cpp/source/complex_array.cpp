@@ -676,3 +676,13 @@ ComplexArray *ComplexArray::ydft(bool recentre) const
     }
     return trf;
 }
+
+void ComplexArray::setAll(Complex const& val)
+{
+    minCmp = std::min(std::min(minCmp, val.real()), val.imag());
+    maxCmp = std::max(std::max(maxCmp, val.real()), val.imag());
+    maxMag = minMag = std::abs(val);
+    have_min_max = true;
+    for (int i = 0; i < mem; ++i)
+        vals[i] = val;
+}
