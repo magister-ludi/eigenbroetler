@@ -8,6 +8,7 @@
 #include <about_dialog.h>
 #include <array_window_2d.h>
 #include <complex_operations.h>
+#include <chirp_dialog.h>
 #include <filter_dialog.h>
 #include <formula_dialog.h>
 
@@ -219,6 +220,18 @@ void EigenbroetlerWindow::filter()
     ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
     if (a) {
         FilterDialog dlg(this, a);
+        if (dlg.exec() == QDialog::Accepted) {
+            QList<ComplexArray *> da = dlg.apply();
+            newWindow(da, true);
+        }
+    }
+}
+
+void EigenbroetlerWindow::chirp_scale()
+{
+    ArrayWindow *a = getArrayWindow(mdiArea->activeSubWindow());
+    if (a) {
+        ChirpDialog dlg(this, a);
         if (dlg.exec() == QDialog::Accepted) {
             QList<ComplexArray *> da = dlg.apply();
             newWindow(da, true);

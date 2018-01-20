@@ -66,6 +66,7 @@ private slots:
     void standard_energy();
     void modified_energy();
     void filter();
+    void chirp_scale();
 private:
     EigenbroetlerWindow();
     EigenbroetlerWindow(EigenbroetlerWindow const&); // not implemented
@@ -103,6 +104,7 @@ private:
     QAction *yHilbertAction;
     QAction *stdEnergyAction;
     QAction *modEnergyAction;
+    QAction *chirpScaleAction;
     // Actions for Fourier menu
     QAction *fftAction;
     QAction *fftxAction;

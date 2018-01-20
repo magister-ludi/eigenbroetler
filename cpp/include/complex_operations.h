@@ -41,5 +41,7 @@ ComplexArray *high_pass_hamming(ComplexArray const *a, int xc, int yc, int r);
 ComplexArray *low_pass_welch(ComplexArray const *a, int xc, int yc, int r);
 ComplexArray *high_pass_welch(ComplexArray const *a, int xc, int yc, int r);
 ComplexArray *gaussian_filter(ComplexArray const *a, int xc, int yc, int r);
+
+ComplexArray *chirpz_scale(ComplexArray const *a, int xnum, int xden, int ynum, int yden);
 }
 #endif /* COMPLEX_OPERATIONS_INCLUDE */

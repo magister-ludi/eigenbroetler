@@ -58,6 +58,7 @@ set(${CppLibName}_Sources
   ${bison_cpp_output}
   ${flex_output}
   ${TOP}/cpp/source/calculator.cpp
+  ${TOP}/cpp/source/chirpz.cpp
   ${TOP}/cpp/source/complex_array.cpp
   ${TOP}/cpp/source/complex_filters.cpp
   ${TOP}/cpp/source/complex_operations.cpp
@@ -88,6 +89,7 @@ set(${GuiApp}_Sources
   ${TOP}/cpp/source/array_window.cpp
   ${TOP}/cpp/source/array_window_2d.cpp
   ${TOP}/cpp/source/array_window_dialogs.cpp
+  ${TOP}/cpp/source/chirp_dialog.cpp
   ${TOP}/cpp/source/data_selector.cpp
   ${TOP}/cpp/source/display_info.cpp
   ${TOP}/cpp/source/eigenbroetler_slots.cpp
@@ -114,6 +116,7 @@ set(${GuiApp}_MocHeaders
   ${TOP}/cpp/include/array_window_2d.h
   ${TOP}/cpp/include/array_window_dialogs.h
   ${TOP}/cpp/include/display_info.h
+  ${TOP}/cpp/include/chirp_dialog.h
   ${TOP}/cpp/include/eigenbroetler_window.h
   ${TOP}/cpp/include/filter_dialog.h
   ${TOP}/cpp/include/formula_dialog.h
@@ -126,6 +129,7 @@ set(${GuiApp}_MocHeaders
 qt4_wrap_cpp(${GuiApp}_Mocfiles ${${GuiApp}_MocHeaders})
 qt4_wrap_ui(${GuiApp}_Uifiles
   ${TOP}/cpp/ui/about_dialog.ui
+  ${TOP}/cpp/ui/chirp_dialog.ui
   ${TOP}/cpp/ui/close_subwindow_dialog.ui
   ${TOP}/cpp/ui/export_components_dialog.ui
   ${TOP}/cpp/ui/filter_dialog.ui

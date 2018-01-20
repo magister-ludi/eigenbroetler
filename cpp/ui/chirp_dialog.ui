@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChirpDialog</class>
+ <widget class="QDialog" name="ChirpDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>485</width>
+    <height>268</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Chirp-Z Scaling</string>
+  </property>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>461</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="mainLayout">
+    <item>
+     <layout class="QVBoxLayout" name="xLayout">
+      <item>
+       <widget class="QLabel" name="xDescription">
+        <property name="text">
+         <string>Scale in x-direction by</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="xGridLayout">
+        <item row="1" column="0">
+         <widget class="QLabel" name="xNumeratorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Numerator</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="xDenominatorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Denominator</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="xNumSpinBox">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="xDenomSpinBox">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="yLayout">
+      <item>
+       <widget class="QLabel" name="yDescription">
+        <property name="text">
+         <string>Scale in y-direction by</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="yGridLayout">
+        <item row="1" column="0">
+         <widget class="QLabel" name="yNumeratorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Numerator</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="yDenominatorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Denominator</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="yNumSpinBox">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="yDenomSpinBox">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QCheckBox" name="xy_sameCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>461</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Same scale factor in x- and y-directions</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="okButton">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>210</y>
+     <width>88</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>210</y>
+     <width>88</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>xy_sameCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>check_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>61</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xNumSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>spin_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>186</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>26</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xDenomSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>spin_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yNumSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>spin_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>388</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yDenomSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>spin_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>427</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ChirpDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>check_changed()</slot>
+  <slot>spin_changed()</slot>
+ </slots>
+</ui>

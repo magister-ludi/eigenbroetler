@@ -194,6 +194,9 @@ void EigenbroetlerWindow::constructActions()
     fftyAction = new QAction(tr("1D DFT (&Y direction)"), this);
     fftyAction->setStatusTip(tr("1D discrete Fourier transform in Y direction"));
     connect(fftyAction, SIGNAL(triggered()), this, SLOT(ffty()));
+    chirpScaleAction = new QAction(tr("Chirp-Z scale..."), this);
+    chirpScaleAction->setStatusTip(tr("Scale using the chirp transform"));
+    connect(chirpScaleAction, SIGNAL(triggered()), this, SLOT(chirp_scale()));
 
     // Settings actions
     // 1. components
@@ -324,6 +327,7 @@ void EigenbroetlerWindow::constructMenu()
     fourierMenu->addAction(fftAction);
     fourierMenu->addAction(fftxAction);
     fourierMenu->addAction(fftyAction);
+    fourierMenu->addAction(chirpScaleAction);
     disabledWidgets << fourierMenu;
 
     displayMenu = menuBar()->addMenu(tr("&Settings"));
