@@ -162,7 +162,7 @@ QList<ComplexArray *> ArithmeticDialog::doArithmetic() const
         }
         l_owned = r_owned = true;
     }
-    Operations::ArithOp arith_op;
+    Operations::ArithOp arith_op = Operations::ArithOp(-1);
     switch (op) {
     case 0:
         arith_op = Operations::ADD;
