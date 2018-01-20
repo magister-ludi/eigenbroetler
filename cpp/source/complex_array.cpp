@@ -29,11 +29,7 @@ ComplexArray::ComplexArray(int ww, int hh):
     h(hh),
     vals(NULL),
     fft(false),
-    have_min_max(true),
-    maxCmp(0),
-    minCmp(0),
-    maxMag(0),
-    minMag(0)
+    have_min_max(false)
 {
     ensure_capacity();
 }
@@ -180,11 +176,12 @@ inline uchar rgb2grey(QRgb const& rgb)
     static double const RED_INTENSITY = 0.30;
     static double const GREEN_INTENSITY = 0.59;
     static double const BLUE_INTENSITY = 0.11;
-    return uchar(
-                 ((rgb >> 16) & 0xff) *  RED_INTENSITY +
-                 ((rgb >> 8) & 0xff) *  GREEN_INTENSITY +
-                 ((rgb >> 0) & 0xff) *  BLUE_INTENSITY
-                 );
+    uchar r = (rgb >> 16) & 0xff;
+    uchar g = (rgb >> 8) & 0xff;
+    uchar b = (rgb >> 0) & 0xff;
+    return (r == g && g == b) ?
+        r :
+        uchar(r * RED_INTENSITY + g * GREEN_INTENSITY + b * BLUE_INTENSITY + 0.5);
 }
 
 void ComplexArray::readImage()
