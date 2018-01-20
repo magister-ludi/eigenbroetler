@@ -144,25 +144,6 @@ qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 #add_definitions(-DQT_SHARED -DQT_WEBKIT -D_REENTRANT)
 add_definitions(-DQT_SHARED -D_REENTRANT)
 
-set(Language_Resources )
-set(Languages de)
-foreach(language ${Languages})
-  set(language_file cpp/i18n/eigenbroetler_${language}.ts)
-  add_custom_command(OUTPUT ${language_file}
-    COMMAND lupdate ${CMAKE_CURRENT_BINARY_DIR} cpp -locations absolute -ts ${language_file}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
-  set(language_resource_file eigenbroetler_${language}.qm)
-  add_custom_command(OUTPUT ${language_resource_file}
-    DEPENDS ${language_file}
-    COMMAND lrelease ${language_file} -qm ${language_resource_file}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  add_custom_target(${language}_qm_target
-    DEPENDS ${language_resource_file}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  list(APPEND Language_Resources ${language}_qm_target)
-endforeach(language ${Languages})
-
 add_executable(${GuiApp}
   ${${GuiApp}_Sources}
   ${${GuiApp}_Headers}
@@ -171,7 +152,6 @@ add_executable(${GuiApp}
   ${${GuiApp}_Uifiles}
   ${${GuiApp}_Resources})
 target_link_libraries(${GuiApp} ${QT_QTGUI_LIBRARY} ${CppLibName})
-add_dependencies(${GuiApp} ${Language_Resources})
 
 set_target_properties(${GuiApp}
   PROPERTIES
