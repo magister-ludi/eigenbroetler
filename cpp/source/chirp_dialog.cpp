@@ -41,10 +41,10 @@ ChirpDialog::ChirpDialog(QWidget *p, ArrayWindow *a_in):
         ui.yDenomSpinBox->setValue(y_den);
     }
 
-    ui.xNumSpinBox->setRange(1, 99);
-    ui.xDenomSpinBox->setRange(1, 99);
-    ui.yNumSpinBox->setRange(1, 99);
-    ui.yDenomSpinBox->setRange(1, 99);
+    ui.xNumSpinBox->setRange(1, std::numeric_limits<int>::max());
+    ui.xDenomSpinBox->setRange(1, std::numeric_limits<int>::max());
+    ui.yNumSpinBox->setRange(1, std::numeric_limits<int>::max());
+    ui.yDenomSpinBox->setRange(1, std::numeric_limits<int>::max());
 }
 
 void ChirpDialog::accept()

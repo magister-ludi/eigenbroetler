@@ -41,23 +41,24 @@ PhaseDialog::PhaseDialog(QWidget *p, int order):
         setWindowTitle(tr("Phase offset"));
         ui.xLabel->setText(QString(tr("Phase (fraction of 2%1)")).arg(QChar(0x3c0)));
         ui.xSpinBox->setValue(0.5);
+        ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         ui.ySpinBox->setValue(0);
         ui.yLabel->hide();
         ui.ySpinBox->hide();
         break;
     case 1:
         setWindowTitle(tr("Linear phase"));
-        //ui.xLabel->setText(tr("Factor in &amp;X direction"));
         ui.xSpinBox->setValue(1);
-        //ui.yLabel->setText(tr("Factor in &amp;Y direction"));
         ui.ySpinBox->setValue(1);
+        ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.ySpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         break;
     case 2:
         setWindowTitle(tr("Quadratic phase"));
-        //ui.xLabel->setText(tr("Factor in &amp;X direction"));
         ui.xSpinBox->setValue(1);
-        //ui.yLabel->setText(tr("Factor in &amp;Y direction"));
         ui.ySpinBox->setValue(1);
+        ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.ySpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         break;
     }
 }
@@ -70,7 +71,8 @@ void EigenbroetlerWindow::dislocation()
         if (dlg.exec() == QDialog::Accepted) {
             QList<ComplexArray *> da;
             for (int i = 0; i < a->numDataSets(); ++i)
-                da << Operations::addDislocation(a->getData()[i], dlg.order(), dlg.xpos(), dlg.ypos(), dlg.useAbs());
+                da << Operations::addDislocation(a->getData()[i], dlg.order(),
+                                                 dlg.xpos(), dlg.ypos(), dlg.useAbs());
             newWindow(da, true);
         }
     }
