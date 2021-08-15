@@ -95,7 +95,7 @@ void FormulaDialog::formulaChanged()
 {
     extern Calculator calculator;
     QString const formula(ui.formulaComboBox->currentText());
-    if (calculator.setFormula(formula.toAscii().constData())) {
+    if (calculator.setFormula(formula.toLatin1().constData())) {
         ui.okButton->setText("OK");
         ui.okButton->setEnabled(true);
         ui.errorLabel->setText("");

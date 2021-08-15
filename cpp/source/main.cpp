@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(eigenbrot);
     QApplication app(argc, argv);
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     EigenbroetlerWindow *mainWin = EigenbroetlerWindow::instance();
 #if defined(Q_OS_SYMBIAN)

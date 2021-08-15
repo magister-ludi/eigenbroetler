@@ -15,11 +15,11 @@ DislocationDialog::DislocationDialog(QWidget *p):
     ui.xLabel->setText(tr("&X location"));
     ui.yLabel->setText(tr("&Y location"));
 
-    ui.orderSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+    ui.orderSpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
     ui.orderSpinBox->setValue(1);
-    ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+    ui.xSpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
     ui.xSpinBox->setValue(0);
-    ui.ySpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+    ui.ySpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
     ui.ySpinBox->setValue(0);
 }
 
@@ -41,7 +41,7 @@ PhaseDialog::PhaseDialog(QWidget *p, int order):
         setWindowTitle(tr("Phase offset"));
         ui.xLabel->setText(QString(tr("Phase (fraction of 2%1)")).arg(QChar(0x3c0)));
         ui.xSpinBox->setValue(0.5);
-        ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.xSpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         ui.ySpinBox->setValue(0);
         ui.yLabel->hide();
         ui.ySpinBox->hide();
@@ -50,15 +50,15 @@ PhaseDialog::PhaseDialog(QWidget *p, int order):
         setWindowTitle(tr("Linear phase"));
         ui.xSpinBox->setValue(1);
         ui.ySpinBox->setValue(1);
-        ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
-        ui.ySpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.xSpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.ySpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         break;
     case 2:
         setWindowTitle(tr("Quadratic phase"));
         ui.xSpinBox->setValue(1);
         ui.ySpinBox->setValue(1);
-        ui.xSpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
-        ui.ySpinBox->setRange(-std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.xSpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+        ui.ySpinBox->setRange(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         break;
     }
 }

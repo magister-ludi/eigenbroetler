@@ -8,14 +8,15 @@ http://www.cmake.org/cmake/resources/software.html
 
 eigenbrötler also requires the following software to be installed:
 
- - Qt4
+ - Qt5
  - cfitsio
  - fftw3
 
 Many Linux distributions will provide suitable packages for these. For
-instance openSUSE 12.3 has libqt4-devel, libcfitsio-devel and fftw3-devel. If
-your distribution doesn't provide these packages, they are all open source and
-free. They can be obtained from the following locations:
+instance openSUSE 12.3 has libQt5Core-devel, libQt5Widgets-devel,
+libcfitsio-devel and fftw3-devel. If your distribution doesn't provide these
+packages, they are all open source and free. They can be obtained from the
+following locations:
 
  - Qt open source at http://qt-project.org/
  - fftw3 at http://www.fftw.org/
@@ -32,8 +33,8 @@ following commands at a shell prompt:
     cd build && cmake .. && make
 
 If the build is succesful, a library (libeigenbroetler.so) will be constructed
-in the buld directory, and the application (eigenbroetler) will be constructed
-int the directory above it.
+in the build directory, and the application (eigenbroetler) will be
+constructed int the directory above it.
 
 There is currently no installer for eigenbrötler. Run the application from the
 directory in which is was built.

@@ -1133,7 +1133,7 @@ void yy_delete_buffer(YY_BUFFER_STATE b);
 bool Calculator::setFormula(QString const& formula)
 {
     QString dataString = formula + "\n";
-    YY_BUFFER_STATE b = yy_scan_string(dataString.toAscii().data());
+    YY_BUFFER_STATE b = yy_scan_string(dataString.toLatin1().data());
     yy_switch_to_buffer(b);
     readpos = lastlen = 0;
     frm.clear();

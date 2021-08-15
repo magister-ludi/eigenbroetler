@@ -25,7 +25,7 @@ namespace NSComplex {
 // TODO: for debugging, will be removed
 inline std::ostream& operator<<(std::ostream& o, QString const& s)
 {
-    return o << s.toAscii().data();
+    return o << s.toLatin1().data();
 }
 
 #endif /* GLOBAL_DEFS_INCLUDE */

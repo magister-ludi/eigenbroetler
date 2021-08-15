@@ -31,7 +31,7 @@ ChirpDialog::ChirpDialog(QWidget *p, ArrayWindow *a_in):
     ui.yNumSpinBox->setEnabled(!xy_same);
     ui.yDenomSpinBox->setEnabled(!xy_same);
     if (xy_same) {
-        ui.xy_sameCheckBox->setChecked(Qt::Checked);
+        ui.xy_sameCheckBox->setChecked(true);
         ui.yNumSpinBox->setValue(x_num);
         ui.yDenomSpinBox->setValue(x_den);
     }

@@ -3,7 +3,9 @@
 
 # ########## Project setup ##########
 project(eigenbroetler)
-cmake_minimum_required(VERSION 2.8)
+set(CMP0071 NEW)
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 11)
 
 macro(show arg)
   message(STATUS "===== ${arg}: ${${arg}}")
@@ -17,8 +19,13 @@ execute_process(COMMAND git log -1 "--format=format:\"%H\"%n" HEAD
   OUTPUT_VARIABLE EIGENBROT_GIT_ID
   ERROR_STRIP_TRAILING_WHITESPACE)
 
-include(FindQt4)
-include(${QT_USE_FILE})
+find_package(Qt5 CONFIG COMPONENTS Core Widgets REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(AUTOUIC_SEARCH_PATHS ${TOP}/ui)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(settings)
@@ -29,7 +36,11 @@ find_path (CFITSIO_INCLUDE fitsio.h
 find_library(FFTW3_LIBRARY fftw3)
 
 set(CPP_INCLUDE_PATH ${TOP}/cpp/include)
-include_directories(${CPP_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR} ${CFITSIO_INCLUDE})
+include_directories(${CPP_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR}
+                    ${CFITSIO_INCLUDE}
+)
+include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+
 ###########################################################################
 set(flex_input ${TOP}/cpp/source/calculator_lexer.l)
 set(flex_output ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
@@ -72,7 +83,8 @@ set(${CppLibName}_Headers
   )
 
 add_library(${CppLibName} SHARED ${${CppLibName}_Sources} ${${CppLibName}_Headers})
-target_link_libraries(${CppLibName} ${QT_QTCORE_LIBRARY} ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
+target_link_libraries(${CppLibName} Qt5::Core ${CFITSIO_LIBRARY} ${FFTW3_LIBRARY})
+
 set_target_properties(${CppLibName}
   PROPERTIES
   OUTPUT_NAME eigenbroetler
@@ -125,23 +137,20 @@ set(${GuiApp}_MocHeaders
   ${TOP}/cpp/include/phase_ops.h
   ${TOP}/cpp/include/plotter.h
   )
-
-qt4_wrap_cpp(${GuiApp}_Mocfiles ${${GuiApp}_MocHeaders})
-qt4_wrap_ui(${GuiApp}_Uifiles
-  ${TOP}/cpp/ui/about_dialog.ui
-  ${TOP}/cpp/ui/chirp_dialog.ui
-  ${TOP}/cpp/ui/close_subwindow_dialog.ui
-  ${TOP}/cpp/ui/export_components_dialog.ui
-  ${TOP}/cpp/ui/filter_dialog.ui
-  ${TOP}/cpp/ui/formula_dialog.ui
-  ${TOP}/cpp/ui/pad_dialog.ui
-  ${TOP}/cpp/ui/phase_dialog.ui
-  ${TOP}/cpp/ui/arithmetic_dialog.ui
+set(${GuiApp}_Uifiles
+  ${TOP}/cpp/include/about_dialog.ui
+  ${TOP}/cpp/include/chirp_dialog.ui
+  ${TOP}/cpp/include/close_subwindow_dialog.ui
+  ${TOP}/cpp/include/export_components_dialog.ui
+  ${TOP}/cpp/include/filter_dialog.ui
+  ${TOP}/cpp/include/formula_dialog.ui
+  ${TOP}/cpp/include/pad_dialog.ui
+  ${TOP}/cpp/include/phase_dialog.ui
+  ${TOP}/cpp/include/arithmetic_dialog.ui
   )
 
-qt4_add_resources(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
+set(${GuiApp}_Resources ${TOP}/cpp/source/eigenbrot.qrc)
 
-#add_definitions(-DQT_SHARED -DQT_WEBKIT -D_REENTRANT)
 add_definitions(-DQT_SHARED -D_REENTRANT)
 
 add_executable(${GuiApp}
@@ -151,7 +160,7 @@ add_executable(${GuiApp}
   ${${GuiApp}_Mocfiles}
   ${${GuiApp}_Uifiles}
   ${${GuiApp}_Resources})
-target_link_libraries(${GuiApp} ${QT_QTGUI_LIBRARY} ${CppLibName})
+target_link_libraries(${GuiApp} Qt5::Widgets ${CppLibName})
 
 set_target_properties(${GuiApp}
   PROPERTIES

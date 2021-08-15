@@ -210,7 +210,7 @@ bool ArrayWindow::saveData()
 {
     QString fileTypes(tr("FITS Files (*.fits *.fit);;All files (*.*)"));
     QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
-    QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save, QString()).toString().toAscii());
+    QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save, QString()).toString().toLatin1());
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"),
                                                     dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
     if (!fileName.isEmpty()) {
@@ -268,7 +268,7 @@ void ArrayWindow::exportComponents()
         fileTypes += tr(";;All files (*.*)");
         QSettings settings(EigenbroetlerWindow::app_owner, EigenbroetlerWindow::app_name);
         QString dir = QFile::decodeName(settings.value(EigenbroetlerWindow::last_save,
-                                                       QString()).toString().toAscii());
+                                                       QString()).toString().toLatin1());
         QString fileName = QFileDialog::getSaveFileName(this, tr("Export file"),
                                                         dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
         if (!fileName.isEmpty()) {
@@ -300,11 +300,11 @@ void ArrayWindow::exportComponents()
                 }
                  if (cmp_result & 1) {
                      QImage const& im = (*set)->left;
-                     im.save(base + "-" + lext + count + ext, fmt_str.toAscii().data());
+                     im.save(base + "-" + lext + count + ext, fmt_str.toLatin1().data());
                  }
                  if (cmp_result & 2) {
                      QImage const& im = (*set)->right;
-                     im.save(base + "-" + rext + count + ext, fmt_str.toAscii().data());
+                     im.save(base + "-" + rext + count + ext, fmt_str.toLatin1().data());
                  }
                  if (cmp_result & 4) {
                      QImage combined(2 * (*set)->left.width(),
@@ -313,7 +313,7 @@ void ArrayWindow::exportComponents()
                      QPainter p(&combined);
                      p.drawImage(0, 0, (*set)->left);
                      p.drawImage((*set)->left.width(), 0, (*set)->right);
-                     combined.save(base + "-" + lext + "-" + rext + count + ext, fmt_str.toAscii().data());
+                     combined.save(base + "-" + lext + "-" + rext + count + ext, fmt_str.toLatin1().data());
                  }
             }
         }

@@ -29,9 +29,9 @@ FilterDialog::FilterDialog(QWidget *p, ArrayWindow *a_in):
     QSettings settings(eb->app_owner, eb->app_name);
 
     if (settings.value(pass_name, true).toBool())
-        ui.lowpassButton->setChecked(Qt::Checked);
+        ui.lowpassButton->setChecked(true);
     else
-        ui.highpassButton->setChecked(Qt::Checked);
+        ui.highpassButton->setChecked(true);
 
     int filter = abs(settings.value(filter_name, 0).toInt()) % filters.length();
     filters[filter]->setChecked(true);

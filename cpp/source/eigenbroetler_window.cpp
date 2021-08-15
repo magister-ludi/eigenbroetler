@@ -451,7 +451,7 @@ QString EigenbroetlerWindow::getFileName(QWidget *p)
     fileTypes += tr(";;All files (*.*)");
 
     QSettings settings(app_owner, app_name);
-    QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toAscii());
+    QString dir = QFile::decodeName(settings.value(last_read, QString()).toString().toLatin1());
     QString fileName = QFileDialog::getOpenFileName(p, tr("Read file"),
                                                     dir, fileTypes, 0, QFileDialog::DontUseNativeDialog);
     if (!fileName.isEmpty()) {

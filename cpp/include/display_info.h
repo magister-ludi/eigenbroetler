@@ -3,11 +3,13 @@
 #define DISPLAY_INFO_INCLUDE
 
 #include <global_defs.h>
+#include <QObject>
 #include <QColor>
 #include <QMap>
 #include <QVector>
 
 class DisplayInfo: public QObject {
+    Q_OBJECT
  public:
     enum Scale {
         LINEAR,
@@ -32,7 +34,6 @@ class DisplayInfo: public QObject {
     static void delete_map();
     static DisplayInfo *display_info;
     QMap<QString, ColourMap> colour_maps;
-    Q_OBJECT
 };
 
 inline DisplayInfo const& DisplayInfo::instance()
